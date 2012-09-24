@@ -1,0 +1,17 @@
+enyo.depends(
+    "Helper.js",
+    "ParseXml.js",
+    "Transposer.js",
+    "MySongBook.js",
+    "Preferences.js",
+    "SongList.js",
+    "SongView.js",
+    "Help.js",
+    "InfoDialog.js",
+    "AboutDialog.js",
+    "ListDialog.js",
+    "FontDialog.js",
+    "EditToaster.js",
+    "EditMeta.js",
+    "EditLyrics.js"
+);

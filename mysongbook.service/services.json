@@ -1,0 +1,27 @@
+{
+	"id": "com.michote.mysongbook.service",
+	"description": "FileIO Service",
+	"services": [
+		{
+			"name": "com.michote.mysongbook.service",
+			"description": "FileIO Service",
+			"commands": [
+				{ 
+					"name": "readdir", 
+					"assistant": "ReadDirAssistant",
+					"public": true
+				},
+				{ 
+					"name": "writefile", 
+					"assistant": "WriteFileAssistant",
+					"public": true
+				},
+				{ 
+					"name": "readfile", 
+					"assistant": "ReadFileAssistant",
+					"public": true
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+
+    "Sort Lyric": "Sort lyric by verserorder (e.g. v1 - c - v2 - c ...)",
+
+    "v": "Verse",
+    "c": "Chorus",
+    "e": "Ending",
+    "b": "Bridge",
+    "p": "Pre-Chorus",
+    
+    "music": "music: ",
+    "words": "words: ",
+    "translation": "trans",
+}

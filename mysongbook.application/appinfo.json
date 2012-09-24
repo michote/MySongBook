@@ -1,0 +1,14 @@
+{
+    "id": "com.michote.mysongbook",
+    "version": "0.1.2",
+    "vendor": "michote",
+    "vendortwitter": "@michote_",
+    "type": "web",
+    "main": "index.html",
+    "title": "MySongBook",
+    "uiRevision": 2,
+    "icon" : "images/icon64.png",
+    "splashicon": "images/icon256.png",
+    "copyright": "&copy; 2012 Micha Reischuck",
+    "keywords" : ["SongBook", "OpenLyrics", "Chords", "Lyrics"]
+}

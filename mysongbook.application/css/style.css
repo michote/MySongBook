@@ -1,0 +1,434 @@
+/* ### general background ### */
+.enyo-bg {
+    background-image: url(../images/paper.jpg);
+}
+
+/* ### Toolbars ### */
+.enyo-toolbar {
+    background-color: rgba(1,1,1,0.7);
+}
+
+/* Progressbar */
+.enyo-progress-bar {
+    margin: 8px;
+    height: 12px;
+    border: 1px solid rgba(15, 15, 15, 0.2);
+    border-radius: 5px;
+    background: #B8B8B8 url(../images/gradient-invert.png) repeat-x;
+    background-size: auto 100%;
+    -webkit-border-image: none !important;
+}
+
+.enyo-progress-bar-inner {
+    margin: 0; 
+    height: 100%;
+    border-radius: 5px;
+    background: #9E0508 url(../images/gradient.png) repeat-x;
+    background-size: auto 100%;
+    -webkit-border-image: none !important;
+}
+
+/* ### Button ### */
+.enyo-button {
+    -webkit-border-image: none !important;
+    padding: 8px 12px;
+    color: white;
+    background: #333333 url(../images/gradient.png) repeat-x bottom;
+    border-top: 1px solid rgba(15, 15, 15, 0.2);
+    border-right: 1px solid rgba(15, 15, 15, 0.2);
+    border-left: 1px solid rgba(125, 125, 125, 0.2);
+    border-radius: 5px;
+}
+
+.enyo-button.enyo-button-depressed, .enyo-button.enyo-button-down{
+    -webkit-border-image: none !important;
+    padding: 8px 12px;
+    background: #9E0508 url(../images/gradient-invert.png) repeat-x top;
+    border-top: 1px solid rgba(15, 15, 15, 0.6);
+    border-right: 1px solid rgba(15, 15, 15, 0.3);
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: inset 1px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.enyo-button-affirmative {
+    background-color: #2AA100;
+}
+
+.enyo-button-negative {
+    background-color: #BE0003;
+}
+
+/* ### GroupToolButton ### */
+.enyo-grouped-toolbutton {
+    -webkit-border-image: none !important;
+    padding: 8px 16px;
+    color: white;
+    background: #333333 url(../images/gradient.png) repeat-x bottom;
+    border-top: 1px solid rgba(15, 15, 15, 0.2);
+    border-right: 1px solid rgba(15, 15, 15, 0.2);
+    border-left: 1px solid rgba(125, 125, 125, 0.2);
+}
+
+.enyo-grouped-toolbutton.enyo-button-depressed,
+.enyo-grouped-toolbutton.enyo-button-down {
+    -webkit-border-image: none !important;
+    padding: 8px 16px;
+    background: #9E0508 url(../images/gradient-invert.png) repeat-x top;
+    border-top: 1px solid rgba(15, 15, 15, 0.6);
+    border-right: 1px solid rgba(15, 15, 15, 0.3);
+    border-left:  1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: inset 1px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.enyo-grouped-toolbutton.enyo-first {
+    border-radius: 5px 0 0 5px;
+}
+
+.enyo-grouped-toolbutton.enyo-last {
+    border-radius: 0 5px 5px 0;
+}
+
+/* ### Dialog ### */
+.enyo-scrim.enyo-scrim-dim {
+    opacity: 0.35;
+}
+
+.enyo-modaldialog {
+    border-width: 42px 24px 24px;
+    -webkit-border-image: url(../images/dialog.png) 42 24 24 24 stretch stretch;
+}
+
+.enyo-modaldialog-title {
+    font-size: 1em;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+#mySongBook_errorDialog_modalDialogTitle,
+#mySongBook_listDialog_errorDialog_modalDialogTitle {
+    color: #9E0508;
+}
+
+.enyo-modaldialog-content {
+    padding: 0 5px 10px;
+}
+
+/* Divider */
+.enyo-divider-left-cap {
+    background: url(../images/divider.png) left top repeat-x;
+    margin: 0 6px;
+}
+
+.enyo-divider-caption {
+    color: #9E0508;
+}
+
+/* dropdownmenu */
+.enyo-popup.enyo-popup-menu {
+    -webkit-border-image: url(../images/menu-background.png) 20 20 20 20 repeat repeat;
+    color: white;
+}
+
+.enyo-held {
+    background-color: #9E0508;
+    background-image: -webkit-gradient(linear,center top,center bottom,from(rgba(1,1,1,0)),to(rgba(1,1,1,0.3)));
+}
+
+.enyo-menuitem.enyo-checked.enyo-menucheckitem-caption,
+.enyo-menuitem.enyo-checked .enyo-menucheckitem-caption {
+    background: url(../images/checkmark.png) center right no-repeat;
+}
+
+
+#mySongBook_fontDialog_rowGroup,
+#mySongBook_fontDialog_rowGroup2 {
+    -webkit-border-image: none !important;
+    padding: 8px 12px;
+    color: white;
+    background-color: #333333;
+    margin: 8px 5px !important;
+    border-width: 1px !important;
+    border-top: 1px solid rgba(15, 15, 15, 0.2);
+    border-right: 1px solid rgba(15, 15, 15, 0.2);
+    border-left: 1px solid rgba(125, 125, 125, 0.2);
+    border-radius: 5px;
+}
+
+/* Transposer */
+.enyo-menu-toolbar {
+    margin: 3px;
+}
+
+#mySongBook_songViewPane_transposer {
+    font-weight: bold;
+    padding: 4px;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+.custom-picker {
+    -webkit-border-image: none !important;
+    padding: 3px 8px 0;
+    margin: 3px;
+    min-width: 120px;
+    color: white;
+    font-weight: bold;
+    background: #333 url(../images/gradient.png) repeat-x bottom;
+    border-top: 1px solid rgba(15, 15, 15, 0.2);
+    border-right: 1px solid rgba(15, 15, 15, 0.2);
+    border-left: 1px solid rgba(125, 125, 125, 0.2);
+    border-radius: 5px;
+}
+
+.enyo-picker-button-caption {
+    padding: 0;
+    min-width: 42px;
+    text-align: center;
+}
+
+.enyo-picker-item-selected {
+    font-weight: bold;
+    background-color: rgba(255,255,255,0.5);
+}
+
+#mySongBook_songViewPane_transplus_icon,
+#mySongBook_songViewPane_transminus_icon {
+    width: 20px;
+    margin: -6px -8px -10px -8px;
+}
+
+/* ### SongList ### */
+#mySongBook_songListPane_searchBox {
+    -webkit-border-image: url(../images/input-focus.png) 7 14 repeat repeat;
+    border-width: 7px 14px;
+    margin: 0 5px;
+    margin-top: 2px;
+    height: 2em;
+}
+
+.enyo-spinner {
+    -webkit-box-sizing: border-box;
+    background-image: url(../images/prefs-help.png);
+}
+
+.searchbar {
+    -webkit-border-image: none !important;
+    background-color: rgba(1,1,1,0.5);
+}
+
+.songlisttitle {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.enyo-swipeableitem {
+    min-height: 30px;
+}
+
+.enyo-item.item-not-selected {
+    background-color: rgba(255,255,255,0.5);
+}
+
+.enyo-item.item-selected {
+    background-color: #9E0508;
+    color: white;
+    background-image: -webkit-gradient(linear,center top,center bottom,from(rgba(1,1,1,0)),to(rgba(1,1,1,0.3)));
+    border: none;
+}
+
+/* ### SongView ### */
+#mySongBook_songSlidingPane_client {
+    background-image: url(../images/paper.jpg);
+}
+
+.bg {
+    background-image: url(../images/bg.png);
+    background-repeat:no-repeat;
+    background-position:100% 100%;
+}
+
+.title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 20px;
+    line-height: 46px;
+    font-weight: bold;
+}
+
+.song {
+    color: white;
+    margin-left: 8px;
+}
+
+.copy {
+    font-size: 16px;
+    line-height: 44px;
+    font-weight: bold;
+    color: white;
+    margin: 6px 0 0 52px;
+}
+
+.lyric {
+    margin: 20px;
+    padding: 5px 20px;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.lyric h1 {
+    display: block;
+    font-size: 1.5em;
+    margin: 0.25em 0 0.25em 0.25em;
+    font-weight: bold;
+}
+
+.lyric h2 {
+    display: block;
+    font-size: 1.25em;
+    margin: 0.25em 0 0.25em 0.25em;
+    font-weight: bold;
+}
+
+.lyric h3 {
+    display: block;
+    font-size: 1em;
+    margin: 0.25em 0 0.25em 0.25em;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+    color: #9E0508;
+}
+
+.element {
+    position: relative;
+    float: left;
+    color: #777777;
+    font-weight: bold;
+    width: 45px;
+}
+
+.text {
+    display: block;
+    position: relative;
+    float: left;
+/*
+    width: 100%;
+*/
+    margin: 0 0 0.3em 0;
+}
+
+.text i {
+    color: #777777;
+}
+
+.chordbox {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-pack: start;
+    -webkit-box-align: stretch;
+    float: left;
+    margin: 0 0 0.25em 0;
+}
+
+.chord {
+    font-weight: bold;
+    font-size: 1em;
+    margin: 0 0 -0.2em 0;
+}
+
+.txt {
+    max-width: 100%; 
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1em;
+}
+
+/* ### AboutDialog ### */
+.about {
+    padding: 0 15px 5px;
+    font-size: 0.9em;
+}
+
+/* ### Preferences ### */
+.enyo-toaster {
+    overflow: visible !important;
+}
+
+.enyo-sliding-view-shadow-right {
+position: absolute;
+z-index: 122;
+height: 100%;
+width: 20px;
+top: 0;
+right: -20px;
+background: url(../images/sliding-shadow-right.png) repeat-y;
+background-size: 20px 2px;
+pointer-events: none;
+}
+
+.prefsimage {
+    margin: 0 0 -3px;
+}
+
+.box-center {
+    max-width: 800px;
+    margin: 20px auto 0;
+}
+
+.enyo-toggle-button {
+    margin: 3px;
+    padding: 0;
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+    min-width: 64px;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-border-image: none !important;
+    background: #333333 url(../images/gradient-invert.png) repeat-x top;
+    border-top: 1px solid rgba(15, 15, 15, 0.6);
+    border-right: 1px solid rgba(15, 15, 15, 0.3);
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: inset 1px 2px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.enyo-toggle-button-bar.on {
+    -webkit-border-image: none !important;
+    background: #9E0508 url(../images/gradient-invert.png) repeat-x top;
+    padding: 0 6px;
+    float: left;
+    min-width: 42px;
+    border-radius: 5px 0 0 5px;
+}
+
+.enyo-toggle-button-bar.off {
+    -webkit-border-image: none !important;
+    padding: 0 6px;
+    float: right;
+    min-width: 42px;
+}
+
+.toggle-button-knob {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    background: #F6F6F6 url(../images/gradient.png) repeat-x;
+    background-size: auto 100%;
+}
+
+/* ### Edit ### */
+.enyo-item > .enyo-input {
+    margin: -10px -10px -9px;
+}
+
+.enyo-input.enyo-input-focus {
+    -webkit-border-image: none !important;
+    background-color: rgba(255,255,255,0.5) !important;
+    border-radius: 8px;
+}

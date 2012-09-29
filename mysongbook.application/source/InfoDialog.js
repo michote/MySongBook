@@ -59,7 +59,7 @@ enyo.kind({
     for(j = 0; j < data.songbooks.length; j++) {
       if (data.songbooks[j].No) {
         this.addDiv("songbox", data.songbooks[j].book + ': ' + 
-          data.songbooks[j].No, "");
+          data.songbooks[j].no, "");
       } else {
         this.addDiv("songbox", data.songbooks[j].book, "");
       };

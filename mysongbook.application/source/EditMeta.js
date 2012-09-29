@@ -3,13 +3,17 @@ enyo.kind({
   kind: enyo.VFlexBox,
   published: {
     metadata: {},
-    add: "title"
+    add: "title",
+    button: [],
+    titleCount: 1,
+    authorCount: 1,
+    songbookCount: 1
     },
   components: [
     {name: "addBar", kind: "Toolbar", className: "searchbar",
       components: [
       {kind: "HtmlContent", className: "copy title", content: $L("add new")},
-      {kind: "ListSelector", value: "title", onChange:"toggleAdd", hideArrow: false,
+      {name: "adder", kind: "ListSelector", value: "title", onChange:"toggleAdd",
         className: "enyo-picker-button custom-picker", items: [
         {caption: $L("title"), value: "title"},
         {caption: $L("author"), value: "author"},
@@ -20,38 +24,54 @@ enyo.kind({
     ]},
     {kind: "Scroller", flex: 1, components: [
       {kind:"VFlexBox", className:"box-center", components:[
-        {kind: "RowGroup", caption: $L("Title"), components:[
-          {name: "title", kind: "RichText", hint: "title", value: ""}
+        {name: "titlebox", kind: "RowGroup", caption: $L("Title"), components:[
+          {name: "titlehflex1", kind:"HFlexBox", flex: 1, 
+            style: "padding:0; margin:-10px;", components:[
+            {name: "title1", flex: 1, kind: "Input", hint: "title", value: ""},
+            {name: "titlelang1", kind: "Input", width: "12%", hint: "", value: ""}
+          ]}
         ]},
-        {kind: "RowGroup", caption: $L("Author"), components:[
-          {kind: "Item", tapHighlight: false, layoutKind: "HFlexLayout", 
-            components: [
-            {name: "author", flex: 1, kind: "RichText", hint: "author", value: "", 
-            components: [
-              {name:"toolbarSwitch", kind: "ListSelector", value: "all",
-                onChange:"onchange_toolbarSwitch", hideArrow: false, items: [
-                {caption: $L("all"), value:"all"},
+        {name: "authorbox", kind: "RowGroup", caption: $L("Author"), components:[
+          {name: "authorhflex1", kind:"HFlexBox", flex: 1, 
+            style: "padding:0; margin:-10px;", components:[
+            {name: "author1", flex: 1, kind: "Input", hint: "author", value: "", 
+              components: [
+              {name:"authorSwitch1", kind: "ListSelector", value: null, 
+                style: "padding:0; margin:-10px 0;",
+                onChange:"onchange_author", items: [
+                {caption: $L(""), value: null},
+                {caption: $L("words"), value:"words"},
                 {caption: $L("music"), value:"music"},
                 {caption: $L("translation"), value:"translation"},
               ]}
-            ]}
+            ]},
+            {name: "authorlang1", kind: "Input", width: "10%", hint: "",
+              showing: false, value: ""}
           ]},
         ]},
         {kind: "RowGroup", caption: $L("copyright"), components:[
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {name: "released", kind: "RichText", width: "20%", hint: "releasedate", value: ""},
-            {name: "copyright", flex: 1, kind: "RichText", hint: "copyright holder", value: ""}
+            {name: "released", kind: "Input", width: "20%", hint: "releasedate", value: ""},
+            {name: "copyright", flex: 1, kind: "Input", hint: "copyright holder", value: ""}
           ]},
-          {name: "publisher", kind: "RichText", hint: "pulisher", value: ""}
+          {name: "publisher", kind: "Input", hint: "pulisher", value: ""}
         ]},
-        {kind: "RowGroup", caption: $L("infos"), components:[
+        {name: "songbookbox", kind: "RowGroup", caption: $L("infos"), components:[
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {name: "key", kind: "RichText", width: "33%", hint: "key", value: ""},
-            {name: "tempo", kind: "RichText", width: "34%", hint: "tempo", value: ""},
-            {name: "transposition", kind: "RichText", width: "33%", hint: "transposition", value: ""},
+            {name: "key", kind: "Input", width: "33%", hint: "key", value: ""},
+            {name: "tempo", kind: "Input", width: "34%", hint: "tempo", value: ""},
+            {name: "transposition", kind: "Input", width: "33%", hint: "transposition", value: ""},
           ]},
-          {name: "verseorder", flex: 1, kind: "RichText", hint: "verseorder", value: ""}, // Add buttons here
-          {name: "songbook1", flex: 1, kind: "RichText", hint: "songbook", value: ""}, 
+          {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", 
+            components:[
+            {name: "verseOrder", flex: 1, kind: "Input", hint: "verseorder",
+              value: ""},
+            {name: "versehflex", kind:"HFlexBox", style: "padding:0; margin:0px;"},
+          ]},
+          {name: "songbookhflex1", kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
+            {name: "songbook1", flex: 1, kind: "Input", hint: "songbook", value: ""}, 
+            {name: "no1", kind: "Input", width: "25%", hint: "number", value: ""}
+          ]},
         ]}
       ]}
     ]},
@@ -61,18 +81,186 @@ enyo.kind({
     this.inherited(arguments);
   },
   
+  // Adding new fields
   toggleAdd: function() {
     this.add = this.$.adder.getValue();
   },
   
   addNew: function() {
-    
+    this["add" + this.add.charAt(0).toUpperCase() 
+      + this.add.slice(1)]();
   },
   
+  addTitle: function() {
+    this.titleCount += 1;
+    this.$.titlebox.createComponent(
+      {name: "titlehflex" + this.titleCount, kind:"HFlexBox", flex: 1, 
+        style: "padding:0; margin:-10px;", owner: this, components:[
+        {name: "title" + this.titleCount, flex: 1, kind: "Input", 
+          hint: "title", owner: this, value: ""},
+        {name: "titlelang" + this.titleCount, kind: "Input", width: "12%",
+          hint: "", owner: this, value: ""}
+      ]}
+    );
+    this.$.titlebox.render();
+  },
+  
+  addAuthor: function() {
+    this.authorCount += 1;
+    this.$.authorbox.createComponent(
+      {name: "authorhflex" + this.authorCount, kind:"HFlexBox", flex: 1,
+        style: "padding:0; margin:-10px;", owner: this,  components:[
+        {name: "author" + this.authorCount, owner: this, flex: 1, 
+          kind: "Input", hint: "author", value: "", components: [
+          {name:"authorSwitch" + this.authorCount, owner: this, 
+            kind: "ListSelector", style: "padding:0; margin:-10px 0;", 
+            value: null, onChange: "onchange_author", items: [
+            {caption: $L(""), value: null},
+            {caption: $L("words"), value:"words"},
+            {caption: $L("music"), value:"music"},
+            {caption: $L("translation"), value:"translation"},
+          ]}
+        ]},
+        {name: "authorlang"+this.authorCount, kind: "Input", width: "10%", hint: "",
+          showing: false, owner: this, value: ""}
+      ]}
+    );
+    this.$.authorbox.render();
+  },
+  
+  onchange_author: function(inSender, inValue) {
+    var num = inSender.name.charAt(inSender.name.length-1)
+    if (inValue === "translation") {
+      this.$["authorlang"+num].show();
+    } else {
+      this.$["authorlang"+num].hide();
+    };
+    this.$.authorbox.render();
+  },
+  
+  addSongbook: function() {
+    this.songbookCount += 1;
+    this.$.songbookbox.createComponent(
+      {name: "songbookhflex" + this.songbookCount, kind: "HFlexBox", flex: 1,
+        style: "padding:0; margin:-10px;", owner: this, components: [
+        {name: "songbook" + this.songbookCount, flex: 1, kind: "Input",
+          hint: "songbook", owner: this, value: ""},
+        {name: "no" + this.songbookCount, kind: "Input", width: "25%", 
+          hint: "number", owner: this, value: ""}
+      ]}
+    );
+    this.$.songbookbox.render();
+  },
+  
+  // Add existing data to UI
+  metadataChanged: function() {
+    this.clear();
+    var single = ["released", "copyright", "publisher", "key", "tempo", 
+      "transposition", "verseOrder"];
+    for (i in single) {
+      if (this.metadata[single[i]]) {
+        this.$[single[i]].setValue(this.metadata[single[i]]);
+      };
+    };
+    // Titles
+    var l = this.metadata.titles.length + 1;
+    for (i=1; i < l; i++) {
+      if (i>1) { this.addTitle() };
+      this.$["title" + i].setValue(this.metadata.titles[i-1].title);
+      if (this.metadata.titles[i-1].lang) {
+        this.$["titlelang" + i].setValue(this.metadata.titles[i-1].lang);
+      };
+    };
+    // Authors
+    if (this.metadata.authors) {
+      l = this.metadata.authors.length + 1;
+      for (i=1; i < l; i++) {
+        if (i>1) { this.addAuthor() };
+        this.$["author" + i].setValue(this.metadata.authors[i-1].author);
+        if (this.metadata.authors[i-1].type) {
+          this.$["authorSwitch" + i].setValue(this.metadata.authors[i-1].type);
+          if (this.metadata.authors[i-1].type === "translation") {
+            this.onchange_author({name: "x"+i}, "translation");
+            this.$["authorlang" + i].setValue(this.metadata.authors[i-1].lang);
+          };
+        };
+      };
+    };
+    // Songbooks
+    if (this.metadata.songbooks) {
+      l = this.metadata.songbooks.length + 1;
+      for (i=1; i < l; i++) {
+        if (i>1) { this.addSongbook() };
+          this.$["songbook" + i].setValue(this.metadata.songbooks[i-1].book);
+          if (this.metadata.songbooks[i-1].no) {
+            this.$["no" + i].setValue(this.metadata.songbooks[i-1].no)
+          }
+      };
+    };
+  },
+  
+  buttonChanged: function() {
+    this.$.versehflex.destroyControls();
+    for (i in this.button) {
+      //~ enyo.log(this.button[i]);
+      this.$.versehflex.createComponent(
+        {name: this.button[i], kind: "Button", caption: this.button[i], 
+          owner: this, height: "22px", onclick: "verseButton"}
+      );
+    };
+    this.$.versehflex.render();
+  },
+  
+  verseButton: function(inSender) {
+    var index = this.$.verseOrder.getSelection().start;
+    var text = this.$.verseOrder.getValue();
+    
+    
+    // calculate whitespaces
+    var x = text.charAt(index-1)
+    if (x===0 || x===' ') {
+      var a = '';
+    } else {
+      var a = ' ';
+    };
+    var y = text.charAt(index)
+    if (y===' ') {
+      var b = '';
+    } else {
+      var b = ' ';
+    };
+    
+    enyo.log("index:", index);
+    enyo.log("x:", x);
+    enyo.log("y:", y);
+    
+    this.$.verseOrder.setValue(text.substring(0, index) + a + inSender.name + b 
+      + text.substring(index, text.length));
+
+  },
+  
+  // Remove extra fields
+  clear: function() { // remove added stuff
+    for (j=2; j < this.titleCount+1; j++) {
+      this.$["titlehflex"+j].destroy();
+    };
+    this.titleCount = 1;
+    for (j=2; j < this.authorCount+1; j++) {
+      this.$["authorhflex"+j].destroy();
+    };
+    this.authorCount = 1;
+    for (j=2; j < this.songbookCount+1; j++) {
+      this.$["songbookhflex"+j].destroy();
+    };
+    this.songbookCount = 1;
+  },
+  
+  // get all data from UI
   saveModifications: function() {
     for (i in this.metadata) {
       //~ this.metadata[i] = this.$.metadata.$[i].getValue();
-      enyo.log(this.$.metadata.$[i].getValue());
+      enyo.log(i);
+      //~ enyo.log(this.$.metadata.$[i].getValue());
     };
     this.owner.setMetadata(this.metadata);
   }

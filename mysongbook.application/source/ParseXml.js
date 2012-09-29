@@ -95,7 +95,7 @@ function ParseXml () {}
     if (n[0] != undefined) {
       for (i = 0; i < n.length; i++) {
         names.push({"book": n[i].getAttribute("name"),
-          "No": n[i].getAttribute("entry")});
+          "no": n[i].getAttribute("entry")});
       };
     };
     return names;
@@ -115,7 +115,7 @@ function ParseXml () {}
       } else { 
         data.verseOrder = false;
       } 
-      for(i = 0; i < l.length; i++) { // [verses]
+      for (i = 0; i < l.length; i++) { // [verses]
       
         // check for chords
         if (l[i].getElementsByTagName("chord").length > 0) {
@@ -284,9 +284,7 @@ function ParseXml () {}
     data.copyright = this.get_metadata(xml, "copyright");
     data.released = this.get_metadata(xml, "released");
     data.publisher = this.get_metadata(xml, "publisher");
-    if (this.get_metadata(xml, "verseOrder")) {
-      data.verseOrder = this.get_metadata(xml, "verseOrder").split(" ");
-    };
+    data.verseOrder = this.get_metadata(xml, "verseOrder");
     data.key = this.get_metadata(xml, "key");
     data.tempo = this.get_metadata(xml, "tempo");
     data.ccli = this.get_metadata(xml, "ccliNo");

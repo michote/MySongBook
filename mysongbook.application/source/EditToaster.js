@@ -64,6 +64,7 @@ enyo.kind({
   gotXml: function(inSender, inResponse) {
     this.xml = ParseXml.parse_dom(inResponse);
     this.$.lyricsPane.setLyrics(ParseXml.editLyrics(this.xml));
+    this.$.metaPane.setMetadata(ParseXml.allMetadata(this.xml));
   },
   
   gotXmlFailure: function(inSender, inResponse, inRequest) {
@@ -72,6 +73,8 @@ enyo.kind({
   },
   
   saveClicked: function(s) {
+    this.$.metaPane.saveModifications();
+    this.$.lyricsPane.saveModifications();
     // everything should be saved here
     enyo.log(this.metadata);
     enyo.log(this.lyrics);

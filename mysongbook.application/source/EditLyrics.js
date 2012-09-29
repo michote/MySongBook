@@ -9,7 +9,7 @@ enyo.kind({
     {name: "addBar", kind: "Toolbar", className: "searchbar",
       components: [
       {kind: "HtmlContent", className: "copy title", content: $L("add new")},
-      {name: "adder", kind: "ListSelector", value: "v", onChange:"toggleAdd", hideArrow: false,
+      {name: "adder", kind: "ListSelector", value: "v", onChange:"toggleAdd",
         className: "enyo-picker-button custom-picker", items: [
         {caption: $L("verse"), value: "v"},
         {caption: $L("chorus"), value: "c"},
@@ -31,14 +31,16 @@ enyo.kind({
   
   lyricsChanged: function() {
     this.$.lyric.destroyComponents();
+    var button = []
     for (i in this.lyrics) {
-      this.$.lyric.createComponent({
-        name: i,
-        kind: "RowGroup",
+      this.$.lyric.createComponent(
+        {name: i, kind: "RowGroup",
         caption: $L(i.charAt(0)) + " " + i.substring(1, i.length),
-        components: [{name: i+"text", kind: "RichText", value: this.lyrics[i]}]
-      });
+        components: [{name: i+"text", kind: "RichText", value: this.lyrics[i]}]}
+      );
+      button.push(i);
     };
+    this.owner.$.metaPane.setButton(button);
     this.$.lyric.render();
   },
   
@@ -73,8 +75,4 @@ enyo.kind({
     };
     this.owner.setLyrics(this.lyrics);
   }
-  
-  //~ : function() {
-    //~ 
-  //~ }
 });

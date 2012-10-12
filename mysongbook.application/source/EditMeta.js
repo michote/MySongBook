@@ -1,6 +1,8 @@
 enyo.kind({
   name: "EditMeta",
   kind: enyo.VFlexBox,
+  single: ["released", "copyright", "publisher", "key", "tempo", 
+    "transposition", "verseOrder"],
   published: {
     metadata: {},
     add: "title",
@@ -24,14 +26,14 @@ enyo.kind({
     ]},
     {kind: "Scroller", flex: 1, components: [
       {kind:"VFlexBox", className:"box-center", components:[
-        {name: "titlebox", kind: "RowGroup", caption: $L("Title"), components:[
+        {name: "titlebox", kind: "RowGroup", caption: $L("title"), components:[
           {name: "titlehflex1", kind:"HFlexBox", flex: 1, 
             style: "padding:0; margin:-10px;", components:[
             {name: "title1", flex: 1, kind: "Input", hint: "title", value: ""},
             {name: "titlelang1", kind: "Input", width: "12%", hint: "", value: ""}
           ]}
         ]},
-        {name: "authorbox", kind: "RowGroup", caption: $L("Author"), components:[
+        {name: "authorbox", kind: "RowGroup", caption: $L("author"), components:[
           {name: "authorhflex1", kind:"HFlexBox", flex: 1, 
             style: "padding:0; margin:-10px;", components:[
             {name: "author1", flex: 1, kind: "Input", hint: "author", value: "", 
@@ -135,7 +137,7 @@ enyo.kind({
     } else {
       this.$["authorlang"+num].hide();
     };
-    this.$.authorbox.render();
+    this.$["authorlang"+num].render();
   },
   
   addSongbook: function() {
@@ -155,11 +157,11 @@ enyo.kind({
   // Add existing data to UI
   metadataChanged: function() {
     this.clear();
-    var single = ["released", "copyright", "publisher", "key", "tempo", 
-      "transposition", "verseOrder"];
-    for (i in single) {
-      if (this.metadata[single[i]]) {
-        this.$[single[i]].setValue(this.metadata[single[i]]);
+    for (i in this.single) {
+      if (this.metadata[this.single[i]]) {
+        this.$[this.single[i]].setValue(this.metadata[this.single[i]]);
+      } else {
+        this.$[this.single[i]].setValue("");
       };
     };
     // Titles
@@ -169,6 +171,8 @@ enyo.kind({
       this.$["title" + i].setValue(this.metadata.titles[i-1].title);
       if (this.metadata.titles[i-1].lang) {
         this.$["titlelang" + i].setValue(this.metadata.titles[i-1].lang);
+      } else {
+        this.$["titlelang" + i].setValue("");
       };
     };
     // Authors
@@ -193,8 +197,10 @@ enyo.kind({
         if (i>1) { this.addSongbook() };
           this.$["songbook" + i].setValue(this.metadata.songbooks[i-1].book);
           if (this.metadata.songbooks[i-1].no) {
-            this.$["no" + i].setValue(this.metadata.songbooks[i-1].no)
-          }
+            this.$["no" + i].setValue(this.metadata.songbooks[i-1].no);
+          } else {
+            this.$["no" + i].setValue("");
+          };
       };
     };
   },
@@ -214,27 +220,20 @@ enyo.kind({
   verseButton: function(inSender) {
     var index = this.$.verseOrder.getSelection().start;
     var text = this.$.verseOrder.getValue();
-    
-    
     // calculate whitespaces
     var x = text.charAt(index-1)
-    if (x===0 || x===' ') {
+    if (index===0 || x===' ') {
       var a = '';
     } else {
       var a = ' ';
     };
     var y = text.charAt(index)
-    if (y===' ') {
+    if (y===' ' || index===text.length) {
       var b = '';
     } else {
       var b = ' ';
-    };
-    
-    enyo.log("index:", index);
-    enyo.log("x:", x);
-    enyo.log("y:", y);
-    
-    this.$.verseOrder.setValue(text.substring(0, index) + a + inSender.name + b 
+    };    
+    this.$.verseOrder.setValue(text.substring(0, index) + a + inSender.name + b
       + text.substring(index, text.length));
 
   },
@@ -256,12 +255,64 @@ enyo.kind({
   },
   
   // get all data from UI
-  saveModifications: function() {
-    for (i in this.metadata) {
-      //~ this.metadata[i] = this.$.metadata.$[i].getValue();
-      enyo.log(i);
-      //~ enyo.log(this.$.metadata.$[i].getValue());
+  getAllFields: function() {
+    for (i in this.single) {
+      if (this.$[this.single[i]].getValue()) {
+        this.metadata[this.single[i]] = 
+        this.$[this.single[i]].getValue();
+      };
     };
+    
+    // Titles
+    var titles = [];
+    for (i=1; i < this.titleCount+1; i++) {
+      if (this.$["title" + i].getValue()) {
+        if (this.$["titlelang" + i].getValue()) {
+          titles.push({"title": this.$["title" + i].getValue(), 
+            "lang": this.$["titlelang" + i].getValue()});
+        } else {
+          titles.push({"title": this.$["title" + i].getValue(), 
+            "lang": null});
+        };
+      };
+    };
+    this.metadata.titles = titles;
+    
+    // Authors
+    var names = [];
+    for (i=1; i < this.authorCount+1; i++) {
+      if (this.$["author" + i].getValue()) {
+        var t = this.$["authorSwitch" + i].getValue();
+        if (t === "translation") {
+          names.push({"type":t, "author": this.$["author" + i].getValue(), 
+            "lang": this.$["authorlang" + i].getValue()});
+        } else {
+          names.push({"type":t, "author": this.$["author" + i].getValue()});
+        };
+      };
+    };
+    this.metadata.authors = names;
+    
+    // Songbooks
+    var books = [];
+    for (i=1; i < this.songbookCount+1; i++) {
+      if (this.$["songbook" + i].getValue()) {
+        if (this.$["no" + i].getValue()) {
+          books.push({"book": this.$["songbook" + i].getValue(),
+          "no": this.$["no" + i].getValue()});
+        } else {
+          books.push({"book": this.$["songbook" + i].getValue(),
+          "no": null});
+        };
+      };
+    };
+    this.metadata.songbooks = books;
+    
+    return true;
+  },
+  
+  saveModifications: function() {
+    this.getAllFields();
     this.owner.setMetadata(this.metadata);
   }
   

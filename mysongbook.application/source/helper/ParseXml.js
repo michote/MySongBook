@@ -77,7 +77,7 @@ function ParseXml () {}
     for (i = 0; i < a.length; i++) {
       var t = a[i].type
       if (t === "music" || t === "words") {
-        names.push($L(t) + a[i].author);
+        names.push($L(t+":") + a[i].author);
       } else if (t === "translation") {
         names.push($L(t) + " (" + a[i].lang + "): " + a[i].author);
       } else {
@@ -306,9 +306,6 @@ function ParseXml () {}
       t = t.replace('</lines>', '');
       t = t.replace(/<chord name="/g, '[').replace(/"\/>/g, ']');
       data[id] = t
-      //~ var tmp = document.createElement("div");
-      //~ tmp.appendChild(l[i].getElementsByTagName("lines")[0]);
-      //~ data[id] = tmp.innerHTML;
     };
     
     return data;  

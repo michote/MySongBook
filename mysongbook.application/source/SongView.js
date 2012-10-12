@@ -47,14 +47,12 @@ enyo.kind({
               onChange: "transPick", disabled: true},
             {name: "transplus", icon: "images/plus.png", onclick: "transPlus", disabled: true}
         ]},
-        {name: "editButton", kind: "IconButton", showing: false, // still in Developement
-          icon: "images/edit.png", onclick: "doEdit", disabled: true},
         {name: "lockButton", kind: "IconButton", toggling: true,
           icon: "images/lock-open.png", onclick: "toggleLock"},
         {name: "fontButton", kind: "IconButton",
           icon: "images/font.png", onclick: "showFontDialog"}
       ]},
-      {name: "viewScroller", kind: enyo.Scroller, flex: 1, components: [
+      {name: "viewScroller", kind: "enyoextras.ScrollBarsScroller", flex: 1, components: [
           {name: "lyric", components: [{name: "help", kind: "Help"}], 
             ondragfinish: "songDragFinish"}
         ]
@@ -67,9 +65,15 @@ enyo.kind({
           icon: "images/back.png", onclick : "textBack", width: "75px"},
         {name: "forthButton", kind: "IconButton", disabled: true, 
           icon: "images/forth.png", onclick : "textForth", width: "75px"},
-        {kind: "Spacer"},
-        {name: "infoButton", kind: "IconButton", disabled: true,
-          icon: "images/info.png", onclick: "showInfo"}
+        {kind: "HFlexBox", pack: "start", flex: 1, components : [
+          {name: "playButton", kind: "IconButton", toggling: true, showing: false, // still in Developement
+            icon: "images/play.png", onclick: "togglePlay"},
+          {kind: "Spacer"},
+          {name: "editButton", kind: "IconButton", showing: false, // still in Developement
+            icon: "images/edit.png", onclick: "doEdit", disabled: true},
+          {name: "infoButton", kind: "IconButton", disabled: true,
+            icon: "images/info.png", onclick: "showInfo"}
+        ]}
       ]},
     ]},
     {name: "infoDialog", kind: "InfoDialog"}
@@ -93,8 +97,10 @@ enyo.kind({
   pathChanged: function() {
     if (this.testing) {
       this.$.editButton.show();
+      this.$.playButton.show();
     } else {
       this.$.editButton.hide();
+      this.$.playButton.hide();
     }
     this.$.getXml.setUrl(this.path);
     this.$.getXml.call();
@@ -119,6 +125,12 @@ enyo.kind({
       this.order = (this.data.verseOrder);
       this.textIndex = 0; // reset index
       this.scroll = 0;    // reset scroller
+      // John's code
+      this.duration = 200;  // seconds for song
+      this.intervalSong;
+      this.running = false;
+      this.lyricsCurrRow = 0;
+      // End John's code
       this.$.help.hide();
       this.$.lyric.destroyComponents();
       this.lyricDataSet();
@@ -141,7 +153,39 @@ enyo.kind({
     enyo.log("Parse XML Failure");
     this.owner.showError("reading:" + "</br>" + inRequest.url);
   },
+ 
+  // John's code
+  togglePlay: function() {
+    if (this.$.playButton.getIcon() == "images/play.png") {
+      this.$.playButton.setIcon("images/pause.png");
+      this.$.forthButton.setDisabled(true);
+      this.$.backButton.setDisabled(true);
+      this.textPlay();
+    } else {
+      this.$.playButton.setIcon("images/play.png");
+      this.$.forthButton.setDisabled(false);
+      this.$.backButton.setDisabled(false);
+    };
+  },
   
+  showLyrics: function() {
+    if (this.running) {
+      this.lyricsCurrRow = this.lyricsCurrRow + 1;
+      var x = this.$.lyric.$[this.order[0]].hasNode()
+      this.$.viewScroller.scrollTo(this.lyricsCurrRow + 74 ,0);
+      if (this.lyricsCurrRow > 600) {
+        window.clearInterval(this.intervalSong);
+        this.running = false;
+      }
+    }
+  },
+
+  textPlay: function() {
+    this.running = true;
+    this.intervalSong = window.setInterval(this.showLyrics.bind(this), 150)  //  ms per pixel row
+  },
+  // End John's code
+ 
   // Back and Forth Button
   scrollHelper: function() {
     var x = this.$.lyric.$[this.order[this.textIndex]].hasNode()

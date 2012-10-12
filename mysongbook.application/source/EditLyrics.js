@@ -63,7 +63,7 @@ enyo.kind({
     } else {
       var z = parseInt(e.slice(-1)[0].substring(1, e.slice(-1)[0].length))+1;
     }
-    enyo.log(this.add + z);
+    //~ enyo.log(this.add + z);
     this.lyrics[this.add + z] = "";
     this.setLyrics(this.lyrics);
   },
@@ -71,7 +71,7 @@ enyo.kind({
   saveModifications: function() {
     for (i in this.lyrics) {
       this.lyrics[i] = this.$.lyric.$[i+"text"].getValue();
-      enyo.log(this.$.lyric.$[i+"text"].getValue());
+      //~ enyo.log(this.$.lyric.$[i+"text"].getValue());
     };
     this.owner.setLyrics(this.lyrics);
   }

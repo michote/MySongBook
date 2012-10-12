@@ -1,9 +1,9 @@
 
 enyo.kind({
-  kind : "ModalDialog",
-  name : "InfoDialog",
-  caption : $L("Song Info"),
-  components :[ 
+  kind: "ModalDialog",
+  name: "InfoDialog",
+  caption: $L("Song Info"),
+  components: [ 
     {name: "viewScroller", kind: enyo.Scroller, flex: 1, height: 
       Helper.dialogHeight(), components: [ 
       {name: "copyboxdiv", kind: "Divider", caption: $L("Copyright"),
@@ -57,7 +57,7 @@ enyo.kind({
       this.addDiv("authorbox", data.authors[i], "");
     };
     for(j = 0; j < data.songbooks.length; j++) {
-      if (data.songbooks[j].No) {
+      if (data.songbooks[j].no) {
         this.addDiv("songbox", data.songbooks[j].book + ': ' + 
           data.songbooks[j].no, "");
       } else {

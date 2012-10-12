@@ -1,7 +1,4 @@
 enyo.depends(
-    "Helper.js",
-    "ParseXml.js",
-    "Transposer.js",
     "MySongBook.js",
     "Preferences.js",
     "SongList.js",

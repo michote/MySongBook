@@ -48,9 +48,12 @@
     "noauthor": "Kein Autor angegeben",
     "nopublisher": "Kein Herausgeber angegeben",
     
-    "music": "Musik: ",
-    "words": "Text: ",
+    "music:": "Musik: ",
+    "words:": "Text: ",
     "translation": "Übers",
+    "music": "Musik",
+    "words": "Text",
+    "title": "Titel",
     
     "Song Info": "Informationen zum Lied",
     "Author(s)": "Autor(en)",
@@ -75,7 +78,6 @@
     "Welcome to MySongBook": "Willkommen zu MySongBook",
     "MySongBook is an App to display Songs in ": "MySongBook ist ein App, dass Lieder im ",
     " from the internal storage of your device.": ", die auf dem Gerät gespeichert sind anzeigt.",
-    " from the internal storage of your device.": ", die auf dem Gerät gespeichert sind anzeigt.",
     " You can create custom lists of songs to display.": " Es können eigenen Liedlisten angelegt werden.",
     "Icon Guide": "Symbol Leitfaden",
     "Main View": "Hauptfenster",
@@ -96,7 +98,7 @@
     "adds a new custom List": "Erstellt eine neue eigene Liste",
     "Gesture Guide": "",
     "Swipe to the right to open next song in list": "Nach Rechts wischen, um zum nächsten Lied in der aktuellen Liste zu springen",
-    "Swipe to the leftt to open previous song in list": "Nach Links wischen, um zum vorherigen Lied in der aktuellen Liste zu springen",
+    "Swipe to the left to open previous song in list": "Nach Links wischen, um zum vorherigen Lied in der aktuellen Liste zu springen",
     "Swipe an librarylist item to add it to the current custom list": "Ein Element aus der Bibliotheksliste wischen, um es zur aktuell gewählten Liste hinzuzufügen",
     "Swipe an custom list item to remove it from this list": "Ein Element aus der eigenen Liste wischen, um es aus der liste zu löschen",
     "Swipe a list to remove it": "Eine Liste wischen, um sie zu löschen"

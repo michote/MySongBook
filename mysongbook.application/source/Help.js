@@ -10,7 +10,7 @@ enyo.kind({
         "<img src='images/openlyrics.png' style='display:inline;margin:-5px 0;'>" 
         + "<a href='http://openlyrics.info/'> OpenLyrics XML Standard</a>" +
         $L(" from the internal storage of your device.") + "<br>" + 
-        $L(" You can create custom lists of songs to display." + "<br><br>"),
+        $L(" You can create custom lists of songs to display.") + "<br><br>",
         onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<h2>" + $L("Icon Guide") + "</h2>"},
       
@@ -79,13 +79,17 @@ enyo.kind({
         //~ {kind: "Image", src: "images/edit-help.png"},
         //~ {kind: "HtmlContent", content: $L("")}
       //~ ]},
+      //~ {kind: "HFlexBox", components: [
+        //~ {kind: "Image", src: "images/play-help.png"},
+        //~ {kind: "HtmlContent", content: $L("")}
+      //~ ]},
       
       {kind: "HtmlContent", content: "<h2>" + $L("Gesture Guide") + "</h2>"},
       {kind: "HtmlContent", content: "<h3>" + $L("Main View") + "</h3>"},
       {kind: "HtmlContent", content: 
         '<ul> \
           <li>' + $L("Swipe to the right to open next song in list") + '</li> \
-          <li>' + $L("Swipe to the leftt to open previous song in list") + '</li> \
+          <li>' + $L("Swipe to the left to open previous song in list") + '</li> \
         </ul>'},
       {kind: "HtmlContent", content: "<br>"},
       
@@ -97,24 +101,43 @@ enyo.kind({
           <li>' + $L("Swipe a list to remove it") + '</li> \
         </ul>'},
       {kind: "HtmlContent", content: "<br>"},
+      {kind: "HtmlContent", content: "<h2>" + $L("Contact") + "</h2>"},
+      {kind: "HtmlContent", content: 
+        '<ul> \
+        <li><a href="mailto:reischuck.micha@googlemail.com">Micha Reischuck</a></li> \
+        <li><a href="https://twitter.com/michote_">@michote_</a></li> \
+        <li><a href="http://forums.webosnation.com/webos-homebrew-apps/318615-mysongbook.html">\
+        webOS Nation forum thread</a></li> \
+        </ul>', onLinkClick: "linkClicked"},
+      {kind: "HtmlContent", content: "<br>"},
       {kind: "HtmlContent", content: "<h2>" + $L("Open Source") + "</h2>"},
       {kind: "HtmlContent", content: 'MySongBook is available under the terms \
         of the <a href="http://opensource.org/licenses/mit-license.php">MIT license</a>.',
         onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},
       {kind: "HtmlContent", content: "<h2>" + $L("Changelog") + "</h2>"},
-      {kind: "HtmlContent", content: "Version "+ enyo.fetchAppInfo().version},
+      {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
+      {kind: "HtmlContent", content: 
+        '<ul> \
+          <li>Added spanish translation thanks to ajguns</li> \
+          <li>New scrollbar</li> \
+          <li>Some small bugfixes</li> \
+          <li>More stuff working in dev preview</li> \
+        </ul>'},
+      {kind: "HtmlContent", content: "<b>Version 0.1.2</b>"},
+      {kind: "HtmlContent", content: 
+        '<ul><li>Bugfixes<ul><li>Sort Library fixed</li>\
+        <li>Read Files Dialog fixed</li>\
+        <li>some small other fixes</li>\
+        </ul></li>\
+        <li> Display amount of Songs in List</li>\
+        <li> Development Preview (Editing)</li>\
+        </ul>'},
+      {kind: "HtmlContent", content: "<b>Version 0.1.0</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
           <li>Initial Release</li> \
         </ul>'},
-      {kind: "HtmlContent", content: "<br>"},
-      {kind: "HtmlContent", content: "<h2>" + $L("Contact") + "</h2>"},
-      {kind: "HtmlContent", content: 
-        '<ul> \
-        <li><a href="mailto:reischuck.micha@googlemail.com">Micha Reischuck</a></li> \
-        <li><a href="https://twitter.com/michote_">@michote_</a></li> \
-        </ul>', onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},
       {kind: "HtmlContent", content: "<h2>" + $L("Special Thanks") + "</h2>"},
       {kind: "HtmlContent", content: 

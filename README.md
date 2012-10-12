@@ -1,5 +1,4 @@
-![Logo](https://github.com/michote/MySongBook/raw/master/mysongbook.application/images/icon48.png "Logo")
-MySongBook
+![Logo](https://github.com/michote/MySongBook/raw/master/mysongbook.application/images/icon48.png "Logo") MySongBook
 ==========
 webOS/Enyo-App for displaying OpenLyric
 

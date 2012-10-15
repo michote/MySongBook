@@ -3,5 +3,6 @@ enyo.depends(
     "ParseXml.js",
     "Transposer.js",
     "WriteXml.js",
-    "ScrollBarsScroller.js"
+    "ScrollBarsScroller.js",
+    "cursorScrollBar.js"
 );

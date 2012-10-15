@@ -119,7 +119,7 @@ enyo.kind({
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
-          <li>Fixed some Bugs with lists</li> \
+          <li>Fixed Bugs with lists not added and/or saved</li> \
         </ul>'},
       {kind: "HtmlContent", content: "<b>Version 0.1.4</b>"},
       {kind: "HtmlContent", content: 

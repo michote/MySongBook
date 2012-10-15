@@ -94,8 +94,8 @@ enyo.kind({
       this.$.listName.setValue("");
       this.clearDialog();
     } else {
-          this.$.errorContent.setContent($L("Name is empty"));
-          return
+      this.$.errorContent.setContent($L("Name is empty"));
+      return
     };
   }
   

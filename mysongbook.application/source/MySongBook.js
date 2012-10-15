@@ -313,7 +313,7 @@ enyo.kind({
   },
   
   getPreferencesSuccess: function(inSender, inResponse) {
-    if (inResponse.sortLyric !== undefined) {
+    if (inResponse.sortLyric) {
       this.$.songViewPane.setSort(inResponse.sortLyric);
       this.$.songViewPane.setShow(inResponse.showinToolbar);
       this.$.songViewPane.setShowChords(inResponse.showChords);
@@ -326,8 +326,12 @@ enyo.kind({
       this.$.preferences.setShowComments(inResponse.showComments);
       this.$.preferences.setShowHeadline(inResponse.showHeadline);
       this.$.preferences.setTesting(inResponse.testing);
+    }
+    if (inResponse.css) {
       this.setCss(inResponse.css);
       this.setFont(inResponse.css);
+    };
+    if (inResponse.savedLists) {
       this.savedLists = inResponse.savedLists;
       this.customList = inResponse.customList;
     };

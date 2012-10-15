@@ -119,6 +119,11 @@ enyo.kind({
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
+          <li>Fixed some Bugs with lists</li> \
+        </ul>'},
+      {kind: "HtmlContent", content: "<b>Version 0.1.4</b>"},
+      {kind: "HtmlContent", content: 
+        '<ul> \
           <li>Added spanish translation thanks to ajguns</li> \
           <li>New scrollbar</li> \
           <li>Some small bugfixes</li> \
@@ -142,6 +147,8 @@ enyo.kind({
       {kind: "HtmlContent", content: "<h2>" + $L("Special Thanks") + "</h2>"},
       {kind: "HtmlContent", content: 
         '<ul> \
+          <li>johncc @webosnation for the autoscroll feature</li> \
+          <li>ajguns @webosnation for the spanish translation</li> \
           <li><a href="http://sven-ziegler.com/">Sven Ziegler</a> for giving me\
             an understanding of enyo ;)</li> \
           <li>phoque @developer.palm.com for sharing his "Simple FileIO Service"</li> \

@@ -228,7 +228,7 @@ enyo.kind({
     if (base === "libraryList") {
       if (this.customList) {
         this.customList.content.push(this.searchList.content[inEvent]);
-        this.saveLists();
+        this.addLists();
       } else {
         this.$.songListPane.noList();
       };
@@ -237,14 +237,14 @@ enyo.kind({
         if (this.customList.content[t].path === this.searchList.content[inEvent].path) {
           this.customList.content.splice(t, 1);
           this.searchList.content.splice(inEvent, 1);
-          this.saveLists();
+          this.addLists();
           this.$.songListPane.$.searchList.refresh();
         };
       };
     };
   },
   
-  saveLists: function() {
+  addLists: function() {
     if (this.customList.content.length > 0) {
       for (i in this.savedLists) {
         if (this.savedLists[i].title === this.customList.title) {
@@ -258,7 +258,7 @@ enyo.kind({
   addToList: function(inSender, inEvent) {
     if (this.customList) {
       this.customList.content.push(this.libraryList.content[inEvent]);
-      this.saveLists();
+      this.addLists();
     } else {
       this.$.songListPane.noList();
     };
@@ -267,7 +267,7 @@ enyo.kind({
   removeFromList: function(inSender, inEvent) {
     this.customList.content.splice(inEvent, 1);
     this.$.songListPane.$.customList.refresh();
-    this.saveLists();
+    this.addLists();
   },
   
   // Select and Remove Lists
@@ -277,7 +277,6 @@ enyo.kind({
     this.$.scrim.hide();
     this.$.songListPane.$.listToggle.setValue(1);
     this.$.songListPane.toggleList();
-    this.saveLists();
   },
   
   rmCustomList: function(inSender, inEvent) {
@@ -288,6 +287,7 @@ enyo.kind({
     };
     this.savedLists.splice(inEvent, 1);
     this.$.listDialog.$.customListList.refresh();
+    this.addLists();
   },
   
   // App-Menu

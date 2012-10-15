@@ -79,7 +79,7 @@ enyo.kind({
     if (this.$.listName.getValue() !== "") { 
       for (i in this.owner.savedLists) {
         if (this.owner.savedLists[i].title === this.$.listName.getValue()) {
-          enyo.log(this.$.listName.getValue());
+          //~ enyo.log(this.$.listName.getValue());
           this.$.errorContent.setContent($L("Name already exist"));
           return
         };
@@ -91,6 +91,7 @@ enyo.kind({
           "content": []};
       };
       this.$.customListList.refresh();
+      this.owner.addLists();
       this.$.listName.setValue("");
       this.clearDialog();
     } else {

@@ -15,6 +15,16 @@ enyo.kind({
   events: {
     "onEdit": ""
   },
+  // ### John's ###
+  finished: false,
+  songSecs: 200, // seconds for song
+  intervalSong: 0,
+  running: false,
+  lyricsCurrRow: 0,
+  halfHt: 0,
+  rowsTraversed: 0,
+  cursorRow: 0,
+  // ### end John's ###
   published: {
       path: "",
       data: {},
@@ -52,9 +62,19 @@ enyo.kind({
         {name: "fontButton", kind: "IconButton",
           icon: "images/font.png", onclick: "showFontDialog"}
       ]},
+/*
       {name: "viewScroller", kind: "enyoextras.ScrollBarsScroller", flex: 1, components: [
           {name: "lyric", components: [{name: "help", kind: "Help"}], 
             ondragfinish: "songDragFinish"}
+*/
+      // ### John's ####
+      {name: "viewIncScrollBar", layoutKind: enyo.HFlexLayout, flex: 1, components: [
+        {name: "cursorScrollBar", kind: "cursorScrollBar", onclick: "resetCursorTiming"},
+        {name: "viewScroller", kind: "enyoextras.ScrollBarsScroller", flex: 1, components: [
+            {name: "lyric", components: [{name: "help", kind: "Help"}], 
+              ondragfinish: "songDragFinish"}
+          ]},
+      // ### end John's ###
         ]
       },
       {name: "footerToolbar", kind: "Toolbar", pack : "center" , components: [
@@ -102,6 +122,9 @@ enyo.kind({
       this.$.editButton.hide();
       this.$.playButton.hide();
     }
+    // ### John's Code ###
+    this.initCursor();
+    // ### end John's Code ###
     this.$.getXml.setUrl(this.path);
     this.$.getXml.call();
   },
@@ -143,7 +166,12 @@ enyo.kind({
         this.$.forthButton.setDisabled(true);
       } else {
         this.$.forthButton.setDisabled(false);
-      };
+      }
+      // ### John's ###
+      if (this.data.duration !== undefined) {
+        this.songSecs = this.data.duration
+      }
+      // ### end John's ###
       
       //~ enyo.log(Transposer.transpose("D", this.transpose));
     } ;
@@ -154,37 +182,118 @@ enyo.kind({
     this.owner.showError("reading:" + "</br>" + inRequest.url);
   },
  
-  // John's code
-  togglePlay: function() {
-    if (this.$.playButton.getIcon() == "images/play.png") {
+  // ### John's code ###
+
+  togglePlay: function() { 
+    if (this.$.playButton.getIcon() == "images/play.png") { 
+      // play
+      if (this.lyricsCurrRow !== 0) {
+        // paused
+        this.running = true;
+      } else { 
+        // begining to play
+        this.initForTextPlay();
+        this.running = true;
+        var perRowMSecs = 1000*this.songSecs/this.rowsTraversed;
+        this.intervalSong = window.setInterval(this.showLyrics.bind(this), perRowMSecs)  //  ms per pixel row
+//        this.$.cursorScrollBar.setBpmTimer(120);
+      }  
       this.$.playButton.setIcon("images/pause.png");
+      this.$.playButton.removeClass("enyo-button-depressed");
       this.$.forthButton.setDisabled(true);
       this.$.backButton.setDisabled(true);
-      this.textPlay();
-    } else {
+    } else { 
+      //pause
       this.$.playButton.setIcon("images/play.png");
-      this.$.forthButton.setDisabled(false);
-      this.$.backButton.setDisabled(false);
+      this.$.playButton.removeClass("enyo-button-depressed");
+      this.running = false;
+      if (this.finished) {
+        this.initCursor();
+      }
     };
+  },
+  
+  movingLyrics: function() {
+    if ((this.lyricsCurrRow > this.halfHt) && (this.lyricsCurrRow < (this.rowsTraversed - this.halfHt))) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  resetCursorTiming: function() {
+    // adjust the position of the cursor
+    var yAdj = event.offsetY - this.cursorRow;  
+    var lyricsPrevRow = this.lyricsCurrRow;  // save for later
+    this.lyricsCurrRow = this.lyricsCurrRow + yAdj;
+    if (this.lyricsCurrRow < this.halfHt) {
+      this.cursorRow = this.lyricsCurrRow;
+    } else if (this.lyricsCurrRow > (this.rowsTraversed - this.halfHt)) {
+      this.cursorRow = 2 * this.halfHt - (this.rowsTraversed - this.lyricsCurrRow);
+    } else {
+      this.cursorRow = this.halfHt;
+    }
+    this.$.cursorScrollBar.setY(this.cursorRow);
+    // now adjust the speed of the cursor.
+    this.songSecs = this.songSecs * lyricsPrevRow / this.lyricsCurrRow;
+    window.clearInterval(this.intervalSong);
+    var perRowMSecs = 1000*this.songSecs/this.rowsTraversed;
+    this.intervalSong = window.setInterval(this.showLyrics.bind(this), perRowMSecs)  //  ms per pixel row
+    if (this.data.titles) { var theTitles = ParseXml.titlesToString(this.data.titles); }
+    var minsFull = this.songSecs/60;
+    var mins = Math.floor(minsFull);
+    var secs = Math.floor((minsFull - mins) * 60);
+    var ssecs = secs < 10 ? "0" + secs : "" + secs; 
+    this.$.title.setContent(theTitles + " : " + mins + ":" + ssecs);
   },
   
   showLyrics: function() {
     if (this.running) {
+      if (this.movingLyrics()) {
+        this.$.viewScroller.setScrollTop(this.lyricsCurrRow - this.cursorRow);
+      } else {
+        this.cursorRow = this.cursorRow + 1;
+        this.$.cursorScrollBar.setY(this.cursorRow);
+      }
       this.lyricsCurrRow = this.lyricsCurrRow + 1;
-      var x = this.$.lyric.$[this.order[0]].hasNode()
-      this.$.viewScroller.scrollTo(this.lyricsCurrRow + 74 ,0);
-      if (this.lyricsCurrRow > 600) {
+      if (this.lyricsCurrRow > this.rowsTraversed) {
         window.clearInterval(this.intervalSong);
+        this.$.cursorScrollBar.cursorOff();
+        this.finished = true;
         this.running = false;
       }
     }
   },
 
-  textPlay: function() {
-    this.running = true;
-    this.intervalSong = window.setInterval(this.showLyrics.bind(this), 150)  //  ms per pixel row
+  initCursor: function() {
+    this.cursorRow = 0;
+    this.lyricsCurrRow = 0;
+    this.$.viewScroller.setScrollTop(this.lyricsCurrRow);
+    this.$.cursorScrollBar.setY(this.cursorRow);    
+    this.$.cursorScrollBar.clearCursor();
+    window.clearInterval(this.intervalSong);
+    this.$.playButton.setIcon("images/play.png");
+    this.finished = false;
   },
-  // End John's code
+  
+  initForTextPlay: function() {
+    var ctrls = this.$.lyric.getControls();
+    this.rowsTraversed = this.$.lyric.node.clientHeight;
+    for (i = 0; i < ctrls.length; i++) {
+      if (ctrls[i].name == "scrollspacer") {
+        this.rowsTraversed = this.rowsTraversed - this.$.lyric.node.lastChild.clientHeight;
+      }
+    }
+    this.halfHt = this.$.viewScroller.node.clientHeight / 2;
+    this.$.viewScroller.scrollTo(this.lyricsCurrRow, 0);
+    this.lyricsCurrRow = 0;
+    this.initCursor();
+    // perRowMSecs = 1000*songSecs/this.rowsTraversed;
+    this.$.cursorScrollBar.color = this.$.cursorScrollBar.onColor
+    this.$.cursorScrollBar.node.height = this.$.viewScroller.node.clientHeight;
+  },
+  // ### End John's code ###
+ 
  
   // Back and Forth Button
   scrollHelper: function() {

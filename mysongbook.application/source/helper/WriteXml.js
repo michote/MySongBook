@@ -25,12 +25,15 @@ function WriteXml () {}
     edited.setAttribute("modifiedDate", dateFmt.format(date).replace(' ', 'T'));
     
     // write properties
+    var m = xml.getElementsByTagName("properties")[0];
+    
     // Titles
-    var n = xml.getElementsByTagName("title");
-    for (i = 0; i < n.length; i++) {
-      n[i].parentNode.removeChild(n[i])
+    var n = xml.getElementsByTagName("titles")[0];
+    var fc = n.firstChild; // remove old childs
+    while (fc) {
+        n.removeChild(fc);
+        fc = n.firstChild;
     };
-    n = xml.getElementsByTagName("titles")[0]
     for (i in metadata.titles) {
       var newt=xml.createElement("title");
       newt.appendChild(xml.createTextNode(metadata.titles[i].title));
@@ -41,11 +44,18 @@ function WriteXml () {}
     };
     
     // Authors
-    n = xml.getElementsByTagName("author");
-    for (i = 0; i < n.length; i++) {
-      n[i].parentNode.removeChild(n[i])
-    };
-    n = xml.getElementsByTagName("authors")[0]
+    n = xml.getElementsByTagName("authors")[0];
+    if (n) {
+      fc = n.firstChild; // remove old childs
+      while (fc) {
+        n.removeChild(fc);
+        fc = n.firstChild;
+      };
+    } else {
+      var newas=xml.createElement("authors");
+      m.appendChild(newas);
+      n = newas;
+    }
     for (i in metadata.authors) {
       var newa=xml.createElement("author");
       newa.appendChild(xml.createTextNode(metadata.authors[i].author));
@@ -61,7 +71,6 @@ function WriteXml () {}
     // All single string properties
     var single = ["released", "copyright", "publisher", "key", "tempo", 
       "transposition", "verseOrder"];
-    var m = xml.getElementsByTagName("properties")[0];
     for (i in single) {
       if (metadata[single[i]]) {
         n = xml.getElementsByTagName(single[i])[0];
@@ -77,11 +86,19 @@ function WriteXml () {}
     };
     
     // Songbooks
-    n = xml.getElementsByTagName("songbook");
-    for (i = 0; i < n.length; i++) {
-      n[i].parentNode.removeChild(n[i])
-    };
-    n = xml.getElementsByTagName("songbooks")[0]
+    n = xml.getElementsByTagName("songbooks")[0];
+    if (n) {
+      fc = n.firstChild; // remove old childs
+      while (fc) {
+        n.removeChild(fc);
+        fc = n.firstChild;
+      };
+    } else {
+      var newss=xml.createElement("songbooks");
+      m.appendChild(newss);
+      n = newss;
+    }
+    n = xml.getElementsByTagName("songbooks")[0];
     for (i in metadata.songbooks) {
       var news=xml.createElement("songbook");
       news.setAttribute("name", metadata.songbooks[i].book);
@@ -92,7 +109,7 @@ function WriteXml () {}
     };
     
     // Lyric
-    enyo.log(lyrics);
+    //~ enyo.log(lyrics);
     n = xml.getElementsByTagName("verse");
     var repl = {};
     for (i in lyrics) { // getting nodes by attr 
@@ -105,40 +122,52 @@ function WriteXml () {}
     };
     m = xml.getElementsByTagName("lyrics")[0];
     for (i in lyrics) {
-      //~ var text = lyrics[i] //.replace(/\[/g, "<chord name=\"").replace(/\]/g, "\"\/>");
-      var text = lyrics[i].replace(/\[/g, ",[").replace(/\]/g, "],")
-      text = text.replace(/</g, ",<").replace(/>/g, ">,").split(',');
-      var newe=xml.createElement("lines");
-      for (i in text) {
-        if (text[i].search(/^\[.+\]$/) > -1) { // chords '[X]'
-          enyo.log(text[i]);
+      // Create xml from inputstring
+      var text = lyrics[i].replace(/\[/g,"#[").replace(/\]/g,"]#");
+      text = text.replace(/<br>/g,"#<br>#").replace(/<comment>/g,"#<comment>");
+      text = text.replace(/<\/comment>/g,"</comment>#").split('#');
+      var newl = xml.createElement("lines");
+      for (j in text) {
+        var newe = "";
+        if (text[j].search(/^\[.+\]$/) > -1) { // chords '[X]'
+          newe = xml.createElement("chord");
+          newe.setAttribute("name", text[j].replace(/\[/g,"").replace(/\]/g,""));
+          newl.appendChild(newe);
+        } else if (text[j].search(/<br>/) > -1) { // linebreaks
+          newe = xml.createElement("br");
+          newl.appendChild(newe);
+        } else if (text[j].search(/^\*.+\*$/) > -1) { // comments
+          newe = xml.createElement("comment");
+          var c = text[j].replace(/\*/g,"");
+          newe.appendChild(xml.createTextNode(c));
+          newl.appendChild(newe);
+        } else if (text[j]) { // text
+          newe = xml.createTextNode(text[j]);
+          newl.appendChild(newe);
         };
       };
+      enyo.log(newl);
       
       // Add lyrics to element or create new one
-      //~ if (repl[i]) {
-        //~ n = repl[i].getElementsByTagName("lines")[0];
-        //~ n.childNodes[0].nodeValue = text;
-      //~ } else {
-        //~ var newl=xml.createElement("verse");
-        //~ newl.setAttribute("name", i);
-        //~ var newll=xml.createElement("lines");
-        //~ newll.appendChild(xml.createTextNode(text));
-        //~ newl.appendChild(newll);
-        //~ m.appendChild(newl);
-        //~ 
-      //~ };
+      if (repl[i]) {
+        n = repl[i].getElementsByTagName("lines")[0];
+        repl[i].removeChild(n);
+        repl[i].appendChild(newl);
+      } else {
+        var newv=xml.createElement("verse");
+        newv.setAttribute("name", i);
+        var newll=xml.createElement("lines");
+        newv.appendChild(newl);
+        m.appendChild(newv);
+      };
     };
-    //~ enyo.log(lyrics[i].replace(/\[/g, "<chord name=\"").replace(/\]/g, "\"\/>"));
   
     serializer = new XMLSerializer();
     return serializer.serializeToString(xml);
   };
 
-  WriteXml.create = function (xml) {
+  WriteXml.create = function (name) {
     //~ var xml = document.createElement("song");
-    //~ tmp.appendChild(l[i].getElementsByTagName("lines")[0]);
-    //~ data[id] = tmp.innerHTML;
   };
 
 

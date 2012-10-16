@@ -305,6 +305,7 @@ function ParseXml () {}
       t = t.replace('<lines xmlns="http://openlyrics.info/namespace/2009/song">', '');
       t = t.replace('</lines>', '');
       t = t.replace(/<chord name="/g, '[').replace(/"\/>/g, ']');
+      t = t.replace(/<comment>/g, '*').replace(/<\/comment>/g, '*');
       data[id] = t
     };
     

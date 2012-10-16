@@ -50,7 +50,6 @@ enyo.kind({
       ]}
     ]}
   ],
-    
   
   create: function() {
     this.inherited(arguments);
@@ -86,18 +85,15 @@ enyo.kind({
   saveClicked: function(s) {
     this.$.metaPane.saveModifications();
     this.$.lyricsPane.saveModifications();
-    // everything should be saved here
-    //~ enyo.log(this.metadata);
-    //~ enyo.log(this.lyrics);
-    this.$.displayDialog.openAtCenter();
-    //~ this.$.newText.setValue(JSON.stringify(this.metadata) + "<br>" + JSON.stringify(this.lyrics));
-    //~ this.$.newText.setValue(WriteXml.write(xml, this.metadata, this.lyrics));
-    this.$.newText.setValue(WriteXml.edit(this.xml, this.metadata, this.lyrics));
-    
-    //~ this.close();
+    //~ this.$.displayDialog.openAtCenter();
+    //~ this.$.newText.setValue(WriteXml.edit(this.xml, this.metadata, this.lyrics));
+    this.owner.writeXml(this.element.path, 
+      WriteXml.edit(this.xml, this.metadata, this.lyrics));
+    this.close();
   },
   
   cancelClicked: function() {
+    this.$.newText.setValue("");
     this.$.displayDialog.close();
   },
   

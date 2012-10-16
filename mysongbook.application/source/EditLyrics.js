@@ -1,10 +1,10 @@
 enyo.kind({
   name: "EditLyrics",
   kind: enyo.VFlexBox,
+  add: "v",
   published: {
-    lyrics: {},
-    add: "v"
-    },
+    lyrics: {}
+  },
   components: [
     {name: "addBar", kind: "Toolbar", className: "searchbar",
       components: [
@@ -21,7 +21,9 @@ enyo.kind({
         onclick: "addNew"},
     ]},
     {kind: "Scroller", flex: 1, components: [
-      {name: "lyric", kind:"VFlexBox", className:"box-center"}
+      {kind: "HtmlContent", className: "box-center", style: "color:red;",
+        content: $L("HINT: Use [shift]+[enter] for linebreaks")},
+      {name: "lyric", kind:"VFlexBox", className: "box-center"}
     ]},
   ],
   
@@ -36,7 +38,8 @@ enyo.kind({
       this.$.lyric.createComponent(
         {name: i, kind: "RowGroup",
         caption: $L(i.charAt(0)) + " " + i.substring(1, i.length),
-        components: [{name: i+"text", kind: "RichText", value: this.lyrics[i]}]}
+        components: [{name: i+"text", kind: "RichText", owner: this,
+          value: this.lyrics[i], onkeypress: "handleKeyPress"}]}
       );
       button.push(i);
     };
@@ -67,11 +70,19 @@ enyo.kind({
     this.lyrics[this.add + z] = "";
     this.setLyrics(this.lyrics);
   },
+
+  // Add '<br>' instead of creating a new div  
+  handleKeyPress: function(inSender, inEvent) {
+    if (inEvent.keyCode===13 && !inEvent.shiftKey) {
+      inEvent.preventDefault();
+      inSender.insertAtCursor("<br/>");
+    };
+  },
   
   saveModifications: function() {
     for (i in this.lyrics) {
-      this.lyrics[i] = this.$.lyric.$[i+"text"].getValue();
-      //~ enyo.log(this.$.lyric.$[i+"text"].getValue());
+      this.lyrics[i] = this.$[i+"text"].getValue();
+      //~ enyo.log(this.$[i+"text"].getValue());
     };
     this.owner.setLyrics(this.lyrics);
   }

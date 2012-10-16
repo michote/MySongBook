@@ -248,10 +248,14 @@ enyo.kind({
       this.$["authorhflex"+j].destroy();
     };
     this.authorCount = 1;
+    this.$.author1.setValue("");
+    this.$.authorSwitch1.setValue(null);
     for (j=2; j < this.songbookCount+1; j++) {
       this.$["songbookhflex"+j].destroy();
     };
     this.songbookCount = 1;
+    this.$.songbook1.setValue("");
+    this.$.no1.setValue("");
   },
   
   // get all data from UI

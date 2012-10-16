@@ -35,6 +35,8 @@ enyo.kind({
       method: "open"},
     {name: "readDir", kind: "PalmService", service: "palm://com.michote.mysongbook.service/",
       method: "readdir", onSuccess: "readDirSuccess", onFailure: "readDirFail"},
+    {name: "writeFile", kind: "PalmService", service: "palm://com.michote.mysongbook.service/",
+      method: "writefile", onSuccess: "writeFileSuccess", onFailure: "writeFileFail"},
     {name: "getTitle", kind: "WebService", onSuccess: "gotTitle", 
       onFailure: "gotTitleFailure"},
     // Layout
@@ -91,7 +93,7 @@ enyo.kind({
 
   create: function() {
     this.inherited(arguments);
-    this.$.readDir.call({path: "/media/internal/MySongBook/"});
+    this.$.readDir.call({"path": "/media/internal/MySongBook/"});
     this.$.getPreferencesCall.call(
     {
       "keys": [
@@ -108,6 +110,14 @@ enyo.kind({
     });
   },
   
+  readDirCall: function() {
+    this.libraryList.content = [];
+    this.$.readDir.call({"path": "/media/internal/MySongBook/"});
+    this.$.readFilesDialog.openAtCenter();
+    this.$.fileProgress.setMaximum(4);
+    this.$.fileProgress.setPosition(1);
+  },
+  
   rendered: function() {
     this.inherited(arguments);
     this.$.readFilesDialog.openAtCenter();
@@ -119,7 +129,7 @@ enyo.kind({
   readDirSuccess: function(inSender, inResponse) {
     if (inResponse.files.length === 0) {
       this.$.firstUseDialog.openAtCenter();
-    this.$.readFilesDialog.close();
+      this.$.readFilesDialog.close();
     } else {
       this.$.fileProgress.setMaximum(inResponse.files.length+1);
       this.$.fileProgress.setPosition(1);
@@ -165,6 +175,23 @@ enyo.kind({
     };
   },
   
+  // Writing files
+  writeXml: function(path, content) {
+    //~ enyo.log(path);
+    //~ enyo.log(content);
+    this.$.writeFile.call({"path": path, "content": content});
+  },
+  
+  writeFileSuccess: function(inSender, inResponse) {
+    this.readDirCall();
+    enyo.windows.addBannerMessage("Song saved", "{}");
+  },
+  
+  writeFileFail: function(inSender, inResponse) {
+    enyo.error("write File Failure");
+    this.showError($L("writing:") + "<br> " + inResponse.path); 
+  },
+   
   // Sort Library alphabetically
   sortByTitle: function (a,b) {
     if (a.title < b.title) {
@@ -182,6 +209,9 @@ enyo.kind({
       this.libraryList.content.length + ")");
     this.$.songListPane.$.libraryList.refresh();
     this.$.readFilesDialog.close();
+    if (this.currentIndex >= 0) {
+      this.openSong(this.currentIndex);
+    };
   },
   
   // List Tab  

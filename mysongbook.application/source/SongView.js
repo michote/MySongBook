@@ -25,13 +25,13 @@ enyo.kind({
   rowsTraversed: 0,
   cursorRow: 0,
   // ### end John's ###
+  textIndex: 0,
+  scroll: 0,
+  transpose: 0,
   published: {
       path: "",
       data: {},
       order: [],
-      textIndex: 0,
-      scroll: 0,
-      transpose: 0,
       first: true,
       // Prefs
       sort: false,

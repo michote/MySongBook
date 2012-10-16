@@ -17,7 +17,8 @@ enyo.kind({
   },
   // ### John's ###
   finished: false,
-  songSecs: 200, // seconds for song
+  defaultSongSecs: 200, // seconds for song
+  songSecs: this.defaultSongSecs, 
   intervalSong: 0,
   running: false,
   lyricsCurrRow: 0,
@@ -149,7 +150,7 @@ enyo.kind({
       this.textIndex = 0; // reset index
       this.scroll = 0;    // reset scroller
       // John's code
-      this.duration = 200;  // seconds for song
+      this.duration = this.defaultSongSecs;  // seconds for song
       this.intervalSong;
       this.running = false;
       this.lyricsCurrRow = 0;
@@ -274,6 +275,11 @@ enyo.kind({
     window.clearInterval(this.intervalSong);
     this.$.playButton.setIcon("images/play.png");
     this.finished = false;
+    if (this.data.duration !== undefined) {
+      this.songSecs = this.data.duration;
+    } else {
+      this.songSecs = this.defaultSongSecs;
+    }
   },
   
   initForTextPlay: function() {

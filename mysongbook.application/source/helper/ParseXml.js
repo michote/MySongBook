@@ -253,6 +253,7 @@ function ParseXml () {}
     data.copyright = this.get_metadata(xml, "copyright");
     data.released = this.get_metadata(xml, "released");
     data.publisher = this.get_metadata(xml, "publisher");
+    data.duration = this.get_metadata(xml, "duration");
     if (this.get_metadata(xml, "verseOrder")) {
       data.verseOrder = this.get_metadata(xml, "verseOrder").split(" ");
     };
@@ -284,6 +285,7 @@ function ParseXml () {}
     data.copyright = this.get_metadata(xml, "copyright");
     data.released = this.get_metadata(xml, "released");
     data.publisher = this.get_metadata(xml, "publisher");
+    data.duration = this.get_metadata(xml, "duration");
     data.verseOrder = this.get_metadata(xml, "verseOrder");
     data.key = this.get_metadata(xml, "key");
     data.tempo = this.get_metadata(xml, "tempo");

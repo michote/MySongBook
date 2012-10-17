@@ -197,7 +197,9 @@ enyo.kind({
         this.running = true;
         var perRowMSecs = 1000*this.songSecs/this.rowsTraversed;
         this.intervalSong = window.setInterval(this.showLyrics.bind(this), perRowMSecs)  //  ms per pixel row
-        enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': true});
+        if (window.PalmSystem) {
+          enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': true});
+        }
         //        this.$.cursorScrollBar.setBpmTimer(120);
       }  
       this.$.playButton.setIcon("images/pause.png");
@@ -276,7 +278,9 @@ enyo.kind({
     window.clearInterval(this.intervalSong);
     this.$.playButton.setIcon("images/play.png");
     this.finished = false;
-    enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
+    if (window.PalmSystem) {
+      enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
+    }
     if (this.data.duration !== undefined) {
       this.songSecs = this.data.duration;
     } else {
@@ -456,10 +460,14 @@ enyo.kind({
   toggleLock: function() {
     if (this.$.lockButton.getIcon() == "images/lock-open.png") {
       this.$.lockButton.setIcon("images/lock.png");
-      enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {"blockScreenTimeout" : true});
+      if (window.PalmSystem) {
+        enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {"blockScreenTimeout" : true});
+      }
     } else {
       this.$.lockButton.setIcon("images/lock-open.png");
-      enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {"blockScreenTimeout" : false});
+      if (window.PalmSystem) {
+        enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {"blockScreenTimeout" : false});
+      }
     };
   },
   

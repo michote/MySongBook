@@ -17,7 +17,8 @@ enyo.kind({
   },
   // ### John's ###
   finished: false,
-  songSecs: 200, // seconds for song
+  defaultSongSecs: 200, // seconds for song
+  songSecs: this.defaultSongSecs, 
   intervalSong: 0,
   running: false,
   lyricsCurrRow: 0,
@@ -149,7 +150,7 @@ enyo.kind({
       this.textIndex = 0; // reset index
       this.scroll = 0;    // reset scroller
       // John's code
-      this.duration = 200;  // seconds for song
+      this.duration = this.defaultSongSecs;  // seconds for song
       this.intervalSong;
       this.running = false;
       this.lyricsCurrRow = 0;
@@ -196,7 +197,8 @@ enyo.kind({
         this.running = true;
         var perRowMSecs = 1000*this.songSecs/this.rowsTraversed;
         this.intervalSong = window.setInterval(this.showLyrics.bind(this), perRowMSecs)  //  ms per pixel row
-//        this.$.cursorScrollBar.setBpmTimer(120);
+        enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': true});
+        //        this.$.cursorScrollBar.setBpmTimer(120);
       }  
       this.$.playButton.setIcon("images/pause.png");
       this.$.playButton.removeClass("enyo-button-depressed");
@@ -274,6 +276,12 @@ enyo.kind({
     window.clearInterval(this.intervalSong);
     this.$.playButton.setIcon("images/play.png");
     this.finished = false;
+    enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
+    if (this.data.duration !== undefined) {
+      this.songSecs = this.data.duration;
+    } else {
+      this.songSecs = this.defaultSongSecs;
+    }
   },
   
   initForTextPlay: function() {
@@ -281,7 +289,7 @@ enyo.kind({
     this.rowsTraversed = this.$.lyric.node.clientHeight;
     for (i = 0; i < ctrls.length; i++) {
       if (ctrls[i].name == "scrollspacer") {
-        this.rowsTraversed = this.rowsTraversed - this.$.lyric.node.lastChild.clientHeight;
+        this.rowsTraversed = this.rowsTraversed - this.$.lyric.node.lastChild.clientHeight + 20;
       }
     }
     this.halfHt = this.$.viewScroller.node.clientHeight / 2;

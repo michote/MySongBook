@@ -3,14 +3,14 @@ enyo.kind({
   kind: enyo.VFlexBox,
   single: ["released", "copyright", "publisher", "key", "tempo", 
     "transposition", "verseOrder"],
+  add: "title",
+  titleCount: 1,
+  authorCount: 1,
+  songbookCount: 1,
   published: {
     metadata: {},
-    add: "title",
-    button: [],
-    titleCount: 1,
-    authorCount: 1,
-    songbookCount: 1
-    },
+    button: []
+  },
   components: [
     {name: "addBar", kind: "Toolbar", className: "searchbar",
       components: [

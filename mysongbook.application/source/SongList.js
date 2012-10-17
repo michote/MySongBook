@@ -11,18 +11,16 @@
 enyo.kind({
   name: "SongList",
   kind: enyo.SlidingView,
-  layoutKind: enyo.VFlexLayout, 
+  layoutKind: enyo.VFlexLayout,
+  searchF: "titles",
+  searchCount: {"a": [], "b": []},
+  xmlList: [], 
   events: {
     "onShowPrefs": "",
     "onSearchList": "",
     "onListTap": "",
     "onAddList": "",
     "onRmList": ""
-  },
-  published: {
-      searchF: "titles",
-      searchCount: {"a": [], "b": []},
-      xmlList: []
   },
   components: [
     {name: "getXml", kind: "WebService", onSuccess: "gotXml", 
@@ -290,22 +288,15 @@ enyo.kind({
   },
   
   openList: function() {
-    this.owner.$.scrim.show();
     this.owner.$.listDialog.openAtCenter();
   },
   
   noList: function() {
-    this.owner.$.scrim.show();
     this.$.errorDialog.openAtCenter();
   },
   
   noListClicked: function() {
     this.$.errorDialog.close();
     this.owner.$.listDialog.openAtCenter();
-  },
-    
-  handleKeyPress: function(inSender, inEvent) {
-    var key = String.fromCharCode(inEvent.charCode).toUpperCase();
-    enyo.log("Last key pressed: " + key);
-  },
+  }
 });

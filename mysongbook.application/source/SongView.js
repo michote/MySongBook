@@ -29,10 +29,10 @@ enyo.kind({
   textIndex: 0,
   scroll: 0,
   transpose: 0,
+  order: [],
   published: {
       path: "",
       data: {},
-      order: [],
       first: true,
       // Prefs
       sort: false,
@@ -450,7 +450,6 @@ enyo.kind({
   },
   
   showInfo: function() {
-    this.owner.$.scrim.show();
     this.$.infoDialog.openAtCenter();
     this.$.infoDialog.destroy();
     this.$.infoDialog.infoset(this.data);
@@ -472,7 +471,6 @@ enyo.kind({
   },
   
   showFontDialog: function() {
-    this.owner.$.scrim.show();
     this.owner.$.fontDialog.openAtCenter()
   },
   

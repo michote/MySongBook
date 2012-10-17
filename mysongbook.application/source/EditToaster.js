@@ -7,9 +7,9 @@ enyo.kind({
   dismissWithClick: false,
   scrim: true,
   style: "height:100%;",
+  xml: "",
   published: {
     element: "",
-    xml: "",
     metadata: {},
     lyrics: {}
   },
@@ -76,8 +76,10 @@ enyo.kind({
   
   gotXml: function(inSender, inResponse) {
     this.xml = ParseXml.parse_dom(inResponse);
-    this.$.lyricsPane.setLyrics(ParseXml.editLyrics(this.xml));
-    this.$.metaPane.setMetadata(ParseXml.allMetadata(this.xml));
+    this.lyrics = ParseXml.editLyrics(this.xml);
+    this.$.lyricsPane.setLyrics(this.lyrics);
+    this.metadata = ParseXml.allMetadata(this.xml);
+    this.$.metaPane.setMetadata(this.metadata);
   },
   
   gotXmlFailure: function(inSender, inResponse, inRequest) {

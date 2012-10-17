@@ -3,9 +3,7 @@ enyo.kind({
   kind: enyo.ModalDialog,
   layoutKind:"VFlexLayout",
   caption : $L("About"),
-  events: {
-    onCancel: ""
-  },
+  scrim: true,
   components :[ 
     {kind: "VFlexBox", pack: "start", components : [
       {className: "about", content: "<b>MySongBook &ndash; v. "
@@ -19,9 +17,10 @@ enyo.kind({
       {kind: "Image", src: "images/icon128.png"},
     ]},
     {kind: "HFlexBox", pack: "center", components : [
-      {kind: "Button", flex: 0, caption : $L("Close"), width: "150px", onclick : "doCancel"}
+      {kind: "Button", flex: 0, caption : $L("Close"), width: "150px", onclick : "closeClicked"}
     ]}
   ],
+  
   linkClicked: function (inSender, inUrl) {
     if (window.PalmSystem) {
       this.owner.$.AppManService.call({target: inUrl});
@@ -29,5 +28,9 @@ enyo.kind({
       window.open(inUrl, '_blank');
       window.focus();
     };
+  },
+  
+  closeClicked: function(sender) {
+    this.close();
   }
 });

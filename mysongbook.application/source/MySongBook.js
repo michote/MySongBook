@@ -11,17 +11,17 @@
 enyo.kind({
   name: "MySongBook",
   kind: enyo.VFlexBox,
+  pathCount: {"a": [], "b": []},
+  errorList: [],
   published: {
     libraryList: {"content": []},
-    pathCount: {"a": [], "b": []},
-    errorList: [],
     savedLists: [],
     customList: undefined,
     searchList: {"content": []},
     css: {},
     currentList: "libraryList",
     currentIndex: undefined
-    },
+  },
   components: [
     // Services
     {kind: "ApplicationEvents", onBack: "goBack"},
@@ -57,13 +57,13 @@ enyo.kind({
         {name: "fileProgress", kind: "ProgressBar"}
     ]},
     {name: "errorDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
-      caption: $L("Error!"), components :[
+      caption: $L("Error!"), scrim: true, components :[
         {name: "errorContent", kind: "HtmlContent", style:"margin: 10px 0;",
           content:""},
         {kind: "Button", caption: $L("Close"), onclick: "closeClicked"}
     ]},
     {name: "firstUseDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
-      caption: $L("First Use"), components :[
+      caption: $L("First Use"), scrim: true, components :[
         {name: "content", kind: "HtmlContent", style:"margin: 10px 0;",
           content: $L("No songfiles found!") + $L(" Please add ") +
           "<img src='images/openlyrics.png' style='display:inline;margin:-5px 0;'>"
@@ -79,9 +79,8 @@ enyo.kind({
     {name: "listDialog", kind: "ListDialog", onSelect: "selectCustomList",
       onListRm: "rmCustomList"},
     {kind: "FontDialog"},
-    {kind: "Scrim", onclick: "closeClicked"},
     {name: "preferences", kind: "Preferences", onReceive: "preferencesReceived",
-        onSave: "preferencesSaved", onBack: "goBack"},
+      onSave: "preferencesSaved", onBack: "goBack"},
     {name: "editToaster", kind: "Edit"},
     // Menu 
     {name: "appMenu", kind: "AppMenu", components: [
@@ -304,7 +303,6 @@ enyo.kind({
   selectCustomList: function(inSender, inEvent) {
     this.customList = this.savedLists[inEvent.rowIndex];
     this.$.listDialog.close();
-    this.$.scrim.hide();
     this.$.songListPane.$.listToggle.setValue(1);
     this.$.songListPane.toggleList();
   },
@@ -328,7 +326,6 @@ enyo.kind({
     this.$.appMenu.close();
   },
   showAbout: function() {
-    this.$.scrim.show();
     this.$.aboutDialog.openAtCenter();
   },
   showHelp: function() {
@@ -407,27 +404,18 @@ enyo.kind({
   
   // Error Dialog
   showError: function(content) {
-    this.$.scrim.show();
     this.$.errorDialog.openAtCenter();
     this.$.errorContent.setContent(content);
   },
   
-  closeClicked: function(inSender) { //close any Dialog
-    this.$.aboutDialog.close()
-    this.$.readFilesDialog.close()
+  closeClicked: function(sender) {
     this.$.errorDialog.close();
-    this.$.firstUseDialog.close()
-    this.$.listDialog.close()
-    this.$.fontDialog.close()
-    this.$.preferences.close()
-    this.$.editToaster.close()
-    this.$.scrim.hide();
+    this.$.firstUseDialog.close();
   },
   
   // go Back
   goBack: function(inSender, inEvent) {
     this.$.songSlidingPane.back(inEvent);
-    this.closeClicked();
     inEvent.stopPropagation();
   },
   

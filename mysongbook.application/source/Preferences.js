@@ -103,7 +103,6 @@ enyo.kind({
     this.$.toolbarSwitch.setValue(this.showinToolbar);
     this.$.toggleChords.setState(this.showChords);
     this.$.toggleComments.setState(this.showComments);
-    enyo.log(this.$.toggleHeadline.getState(), this.showHeadline);
     this.$.toggleHeadline.setState(this.showHeadline);
     this.$.testingToggle.setState(this.testing);
   },
@@ -127,32 +126,32 @@ enyo.kind({
   
   // toggle and change Events
   toggleSortLyrics: function() {
-    enyo.log("SortLyric toggled", this.$.sortLyrics.getState());
+    //~ enyo.log("SortLyric toggled", this.$.sortLyrics.getState());
     this.sortLyric = this.$.sortLyrics.getState();
   },
   
   onchange_toolbarSwitch: function () {
-    enyo.log("ToolbarSwitch toggled", this.$.toolbarSwitch.getValue());
+    //~ enyo.log("ToolbarSwitch toggled", this.$.toolbarSwitch.getValue());
     this.showinToolbar = this.$.toolbarSwitch.getValue();
   },
   
   toggleShowChords: function () {
-    enyo.log("ShowChords toggled", this.$.toggleChords.getState());
+    //~ enyo.log("ShowChords toggled", this.$.toggleChords.getState());
     this.showChords = this.$.toggleChords.getState();
   },
   
   toggleShowComments: function () {
-    enyo.log("Show Comments toggled", this.$.toggleComments.getState());
+    //~ enyo.log("Show Comments toggled", this.$.toggleComments.getState());
     this.showComments = this.$.toggleComments.getState();
   },
   
   toggleTesting: function () {
-    enyo.log("Testing toggled", this.$.testingToggle.getState());
+    //~ enyo.log("Testing toggled", this.$.testingToggle.getState());
     this.testing = this.$.testingToggle.getState();
   },
   
   toggleShowHeadline: function () {
-    enyo.log("Headline toggled", this.$.toggleHeadline.getState());
+    //~ enyo.log("Headline toggled", this.$.toggleHeadline.getState());
     this.showHeadline = this.$.toggleHeadline.getState();
   }
   

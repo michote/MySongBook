@@ -3,13 +3,15 @@ enyo.kind({
   kind: enyo.ModalDialog,
   layoutKind:"VFlexLayout",
   caption : $L("Manage Lists"),
+  scrim: true,
   events: {
     onSelect: "",
     onListRm: ""
   },
   components :[ 
     // ListDialog
-    {name: "customListList",kind: "VirtualList", flex: 1, height: Helper.dialogHeight(), onSetupRow: "getCustomLists", 
+    {name: "customListList",kind: "VirtualList", flex: 1, 
+      height: Helper.dialogHeight(), onSetupRow: "getCustomLists", 
       onclick: "doSelect", components: [
         {name: "listListItem", kind: enyo.SwipeableItem, onConfirm: "doListRm",
             confirmCaption: $L("Delete"), cancelCaption: $L("Cancel "), 
@@ -27,7 +29,7 @@ enyo.kind({
     
     // newListDialog
     {name: "newListDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
-      caption: $L("New List"), components :[
+      caption: $L("New List"), scrim: true, components :[
         {name: "errorContent", kind: "HtmlContent", 
           style: "color: #9E0508; margin: 0 10px", content: ""},
         {kind: "RowGroup", caption: $L("Listname"), components: [
@@ -35,7 +37,7 @@ enyo.kind({
         ]},
         {kind: "HFlexBox", pack: "center", components : [
           {kind: "Button", className: "enyo-button-negative", flex: 1, 
-            caption: $L("Cancel"), onclick: "cancelClicked2"},
+            caption: $L("Cancel"), onclick: "clearDialog"},
           {kind: "Button", className: "enyo-button-affirmative", flex: 1, 
             caption: $L("Save"), onclick: "saveClicked"}
         ]}
@@ -60,7 +62,6 @@ enyo.kind({
   },
   
   cancelClicked: function() {
-    this.owner.$.scrim.hide();
     this.close();
   },
   
@@ -69,10 +70,6 @@ enyo.kind({
     this.$.listName.setValue("");
     this.$.errorContent.setContent("");
     this.$.newListDialog.close();
-  },
-  
-  cancelClicked2: function() {
-    this.clearDialog();
   },
   
   saveClicked: function(s) {

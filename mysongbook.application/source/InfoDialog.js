@@ -3,6 +3,7 @@ enyo.kind({
   kind: "ModalDialog",
   name: "InfoDialog",
   caption: $L("Song Info"),
+  scrim: true,
   components: [ 
     {name: "viewScroller", kind: enyo.Scroller, flex: 1, height: 
       Helper.dialogHeight(), components: [ 
@@ -75,6 +76,5 @@ enyo.kind({
   
   cancelClicked: function(sender) {
     this.close();
-    this.owner.owner.$.scrim.hide();
   }
 });

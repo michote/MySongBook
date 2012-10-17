@@ -3,6 +3,9 @@ enyo.kind({
   kind: enyo.Toaster,
   flyInFrom: "top",
   width: Helper.toasterWidth(),
+  autoClose: false,
+  dismissWithClick: false,
+  scrim: true,
   style: "height:100%;",
   published: {
     element: "",

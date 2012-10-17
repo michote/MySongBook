@@ -10,19 +10,23 @@
 
 function WriteXml () {}
 
-  // DOM Parser
-  WriteXml.edit = function (xml, metadata, lyrics) {
-    
-    // write edit information
-    var edited = xml.getElementsByTagName("song")[0]
-    edited.setAttribute("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
+  WriteXml.date = function () {
     var date = new Date();
     var dateFmt = new enyo.g11n.DateFmt({
       locale: enyo.g11n.currentLocale(),
       date: "yyyy-MM-dd",
       time: "hh:mm:ss"
     });
-    edited.setAttribute("modifiedDate", dateFmt.format(date).replace(' ', 'T'));
+    return dateFmt.format(date).replace(' ', 'T')
+  };
+
+  // DOM Parser
+  WriteXml.edit = function (xml, metadata, lyrics) {
+    
+    // write edit information
+    var edited = xml.getElementsByTagName("song")[0]
+    edited.setAttribute("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
+    edited.setAttribute("modifiedDate", WriteXml.date());
     
     // write properties
     var m = xml.getElementsByTagName("properties")[0];
@@ -167,7 +171,11 @@ function WriteXml () {}
   };
 
   WriteXml.create = function (name) {
-    //~ var xml = document.createElement("song");
+    var xml = document.createElement("song");
+    xml.setAttribute("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
+    xml.setAttribute("modifiedDate", WriteXml.date());
+    
+    enyo.log(xml);
   };
 
 

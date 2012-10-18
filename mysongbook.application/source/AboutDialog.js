@@ -4,6 +4,7 @@ enyo.kind({
   layoutKind:"VFlexLayout",
   caption : $L("About"),
   scrim: true,
+  onBack: "closeClicked",
   components :[ 
     {kind: "VFlexBox", pack: "start", components : [
       {className: "about", content: "<b>MySongBook &ndash; v. "

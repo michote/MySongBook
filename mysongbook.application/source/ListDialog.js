@@ -4,6 +4,7 @@ enyo.kind({
   layoutKind:"VFlexLayout",
   caption : $L("Manage Lists"),
   scrim: true,
+  onBack: "clearDialog",
   events: {
     onSelect: "",
     onListRm: ""

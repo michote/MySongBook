@@ -4,6 +4,7 @@ enyo.kind({
   layoutKind:"VFlexLayout",
   caption: $L("Font Settings"),
   scrim: true,
+  onBack: "cancelClicked",
   components: [ 
     {kind: "RowGroup", components: [
       {kind: "LabeledContainer", label: $L("Font size:"), components: [

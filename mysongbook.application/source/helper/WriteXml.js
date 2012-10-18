@@ -127,9 +127,9 @@ function WriteXml () {}
     m = xml.getElementsByTagName("lyrics")[0];
     for (i in lyrics) {
       // Create xml from inputstring
-      var text = lyrics[i].replace(/\[/g,"#[").replace(/\]/g,"]#");
-      text = text.replace(/<br>/g,"#<br>#").replace(/<comment>/g,"#<comment>");
-      text = text.replace(/<\/comment>/g,"</comment>#").split('#');
+      var text = lyrics[i].replace(/\[/g,"$[").replace(/\]/g,"]$");
+      text = text.replace(/<br>/g,"$<br>$").replace(/<comment>/g,"$<comment>");
+      text = text.replace(/<\/comment>/g,"</comment>$").split('$');
       var newl = xml.createElement("lines");
       for (j in text) {
         var newe = "";

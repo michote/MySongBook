@@ -4,6 +4,7 @@ enyo.kind({
   name: "InfoDialog",
   caption: $L("Song Info"),
   scrim: true,
+  onBack: "cancelClicked",
   components: [ 
     {name: "viewScroller", kind: enyo.Scroller, flex: 1, height: 
       Helper.dialogHeight(), components: [ 

@@ -240,6 +240,7 @@ enyo.kind({
       this.cursorRow = this.lyricsCurrRow;
     } else if (this.lyricsCurrRow > (this.rowsTraversed - this.halfHt)) {
       this.cursorRow = 2 * this.halfHt - (this.rowsTraversed - this.lyricsCurrRow);
+      this.$.viewScroller.setScrollTop(this.lyricsCurrRow - this.cursorRow);  // cursor below half, lyrics won't move
     } else {
       this.cursorRow = this.halfHt;
     }

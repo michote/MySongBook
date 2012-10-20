@@ -29,7 +29,10 @@ enyo.kind({
   textIndex: 0,
   scroll: 0,
   transpose: 0,
-  order: [],
+  order: [],  
+  events: {
+    "onEdit": ""
+  },
   published: {
       path: "",
       data: {},
@@ -79,9 +82,11 @@ enyo.kind({
         ]
       },
       {name: "footerToolbar", kind: "Toolbar", pack : "center" , components: [
-        {kind:"GrabButton"},
-        {name: "copy", kind: "HtmlContent", className: "copy title", 
-          content: "&copy; michote", flex: 1},
+        {kind: "HFlexBox", pack: "start", flex: 1, components : [
+          {kind:"GrabButton"},
+          {name: "copy", kind: "HtmlContent", className: "copy title", 
+            content: "&copy; michote", flex: 1},
+        ]},
         {name: "backButton", kind: "IconButton", disabled: true,
           icon: "images/back.png", onclick : "textBack", width: "75px"},
         {name: "forthButton", kind: "IconButton", disabled: true, 
@@ -108,6 +113,7 @@ enyo.kind({
       this.$.forthButton.hide();
       this.$.spacer.hide();
       this.$.transposergr.hide();
+      this.$.editButton.hide();
     };
     if (!window.PalmSystem) {
       this.$.lockButton.hide();
@@ -346,7 +352,6 @@ enyo.kind({
     };
   },
   
-  
   // Swipe left and right
   songDragFinish: function(inSender, event) {
     var o = this.owner
@@ -515,8 +520,6 @@ enyo.kind({
       value += 12;
     };
     this.transpose = value;
-
-    //~ enyo.log("transpose:", this.transpose);
     this.pathChanged();    
   },
   

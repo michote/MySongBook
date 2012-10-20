@@ -13,6 +13,8 @@ enyo.kind({
   kind: enyo.VFlexBox,
   pathCount: {"a": [], "b": []},
   errorList: [],
+  dirPath: "/media/internal/MySongBook/",
+  newSong: undefined,
   published: {
     libraryList: {"content": []},
     savedLists: [],
@@ -81,10 +83,27 @@ enyo.kind({
     {kind: "FontDialog"},
     {name: "preferences", kind: "Preferences", onReceive: "preferencesReceived",
       onSave: "preferencesSaved", onBack: "goBack"},
+    {name: "newSongDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
+      caption: $L("New song"), scrim: true, components: [
+        {name: "songErrorContent", kind: "HtmlContent", 
+          style: "color: #9E0508; margin: 0 10px", content: ""},
+        {kind: "RowGroup", caption: $L("Song name"), components: [
+          {name: "songName", kind: "Input", hint: $L("Enter songname"), flex: 1,
+            onkeypress: "handleKeyPress"}
+        ]},
+        {kind: "HFlexBox", pack: "center", components : [
+          {kind: "Button", className: "enyo-button-negative", flex: 1, 
+            caption: $L("Cancel"), onclick: "closeClicked"},
+          {kind: "Button", className: "enyo-button-affirmative", flex: 1, 
+            caption: $L("Save"), onclick: "createSong"}
+        ]}
+      ]
+    },
     {name: "editToaster", kind: "Edit"},
     // Menu 
     {name: "appMenu", kind: "AppMenu", components: [
       {caption: $L("Preferences"), onclick: "showPreferences"},
+      //~ {caption: $L("Create new song"), onclick: "openCreateSong"},
       {caption: $L("About"), onclick: "showAbout"},
       {caption: $L("Help"), onclick: "showHelp"}
     ]}
@@ -92,7 +111,7 @@ enyo.kind({
 
   create: function() {
     this.inherited(arguments);
-    this.$.readDir.call({"path": "/media/internal/MySongBook/"});
+    this.$.readDir.call({"path": this.dirPath});
     this.$.getPreferencesCall.call(
     {
       "keys": [
@@ -111,7 +130,7 @@ enyo.kind({
   
   readDirCall: function() {
     this.libraryList.content = [];
-    this.$.readDir.call({"path": "/media/internal/MySongBook/"});
+    this.$.readDir.call({"path": this.dirPath});
     this.$.readFilesDialog.openAtCenter();
     this.$.fileProgress.setMaximum(4);
     this.$.fileProgress.setPosition(1);
@@ -166,29 +185,12 @@ enyo.kind({
   
   gotTitleFailure: function(inSender, inResponse, inRequest) {
     enyo.error("Parse Title Failure");
-    this.errorList.push(inRequest.url.replace("/media/internal/MySongBook/",""));
+    this.errorList.push(inRequest.url.replace(this.dirPath,""));
     this.pathCount.b.push(1);
     if (this.pathCount.b.length === this.pathCount.a.length) {
       this.sortAndRefresh();
       this.showError($L("reading:") + "<br>" + this.errorList.join(" <br>"));
     };
-  },
-  
-  // Writing files
-  writeXml: function(path, content) {
-    //~ enyo.log(path);
-    //~ enyo.log(content);
-    this.$.writeFile.call({"path": path, "content": content});
-  },
-  
-  writeFileSuccess: function(inSender, inResponse) {
-    this.readDirCall();
-    enyo.windows.addBannerMessage("Song saved", "{}");
-  },
-  
-  writeFileFail: function(inSender, inResponse) {
-    enyo.error("write File Failure");
-    this.showError($L("writing:") + "<br> " + inResponse.path); 
   },
    
   // Sort Library alphabetically
@@ -234,13 +236,6 @@ enyo.kind({
     } else {
       this.$.songListPane.$[this.currentList].refresh();
     };
-      
-  },
-  
-  // Edit Song
-  editSong: function () {
-    this.$.editToaster.openAtCenter();
-    this.$.editToaster.setElement(this[this.currentList].content[this.currentIndex]);
   },
   
   // Adjust Font
@@ -251,7 +246,7 @@ enyo.kind({
     };
   },
   
-  // Custom Lists
+  // ### Custom Lists ###
   searchSwipe: function(inSender, inEvent) {
     var base = this.$.songListPane.oldList;
     if (base === "libraryList") {
@@ -322,19 +317,22 @@ enyo.kind({
   openAppMenuHandler: function() {
     this.$.appMenu.open();
   },
+  
   closeAppMenuHandler: function() {
     this.$.appMenu.close();
   },
+  
   showAbout: function() {
     this.$.aboutDialog.openAtCenter();
   },
+  
   showHelp: function() {
     this.$.songViewPane.showHelp();
     this.$.songViewPane.$.viewScroller.scrollIntoView(0, 0);
     !Helper.smScr() || this.$.songSlidingPane.selectViewByName('songViewPane');
   },
   
-  // Preferences
+  // ### Preferences ###
   showPreferences: function() {
     this.$.preferences.openAtCenter();
   },
@@ -402,6 +400,73 @@ enyo.kind({
     this.$.preferences.close();
   },
   
+  // ### XML-wirting stuff ###
+  
+  // Edit Song
+  editSong: function () {
+    this.$.editToaster.openAtCenter();
+    this.$.editToaster.setElement(this[this.currentList].content[this.currentIndex]);
+  },
+  
+  // Writing files
+  writeXml: function(path, content) {
+    //~ enyo.log(path);
+    //~ enyo.log(content);
+    this.$.writeFile.call({"path": path, "content": content});
+  },
+  
+  writeFileSuccess: function(inSender, inResponse) {
+    this.readDirCall();
+    enyo.windows.addBannerMessage("Song saved", "{}");
+    if (this.newSong) {
+      this.$.editToaster.openAtCenter();
+      this.$.editToaster.setElement(this.newSong);
+      //~ this.libraryList.content.push(this.newSong);
+      //~ this.sortAndRefresh();
+      //~ enyo.log(this.libraryList.content);
+    };
+  },
+  
+  writeFileFail: function(inSender, inResponse) {
+    enyo.error("write File Failure");
+    this.showError($L("writing:") + "<br> " + inResponse.path); 
+  },
+
+  // Create Song
+  openCreateSong: function() {
+    this.$.newSongDialog.openAtCenter();
+    this.$.songName.setValue("");
+    this.$.songName.forceFocus();
+  },
+  
+  handleKeyPress: function(inSender, inEvent) {
+    if (inEvent.keyCode===13) {
+      this.createSong();
+    } else if (inEvent.keyCode===47) {
+      inEvent.preventDefault();
+    };
+  },
+  
+  createSong: function() {
+    var songt = this.$.songName.getValue();
+    var path = songt.replace(/\s+/g, "_") + ".xml"; 
+    var e = false;
+    for (i in this.libraryList.content) {
+      var p = this.libraryList.content[i].path.split('/')
+      if (path===p[p.length-1]) {
+        this.$.songErrorContent.setContent($L("Name already exist"));
+        e = true;
+      }
+    };
+    if (!e) {
+      path = this.dirPath + path;
+      this.writeXml(path, WriteXml.create(songt));
+      this.$.newSongDialog.close();
+      this.currentIndex = 0;
+      this.newSong = {"path": path, "title": songt};
+    };
+  },
+  
   // Error Dialog
   showError: function(content) {
     this.$.errorDialog.openAtCenter();
@@ -411,6 +476,7 @@ enyo.kind({
   closeClicked: function(sender) {
     this.$.errorDialog.close();
     this.$.firstUseDialog.close();
+    this.$.newSongDialog.close();
   },
   
   // go Back

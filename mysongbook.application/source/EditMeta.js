@@ -2,7 +2,7 @@ enyo.kind({
   name: "EditMeta",
   kind: enyo.VFlexBox,
   single: ["released", "copyright", "publisher", "key", "tempo", 
-    "transposition", "verseOrder"],
+    "transposition", "verseOrder", "duration"],
   add: "title",
   titleCount: 1,
   authorCount: 1,
@@ -60,9 +60,10 @@ enyo.kind({
         ]},
         {name: "songbookbox", kind: "RowGroup", caption: $L("infos"), components:[
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {name: "key", kind: "Input", width: "33%", hint: "key", value: ""},
-            {name: "tempo", kind: "Input", width: "34%", hint: "tempo", value: ""},
-            {name: "transposition", kind: "Input", width: "33%", hint: "transposition", value: ""},
+            {name: "key", kind: "Input", width: "25%", hint: "key", value: ""},
+            {name: "tempo", kind: "Input", width: "25%", hint: "tempo", value: ""},
+            {name: "duration", kind: "Input", width: "25%", hint: "duration", value: ""},
+            {name: "transposition", kind: "Input", width: "25%", hint: "transposition", value: ""},
           ]},
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", 
             components:[

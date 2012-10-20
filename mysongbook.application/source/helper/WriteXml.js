@@ -15,9 +15,14 @@ function WriteXml () {}
     var dateFmt = new enyo.g11n.DateFmt({
       locale: enyo.g11n.currentLocale(),
       date: "yyyy-MM-dd",
-      time: "hh:mm:ss"
+      time: "HH:mm:ss"
     });
     return dateFmt.format(date).replace(' ', 'T')
+  };
+  
+  WriteXml.seralize = function (xml) {
+    serializer = new XMLSerializer();
+    return serializer.serializeToString(xml);
   };
 
   // DOM Parser
@@ -74,7 +79,7 @@ function WriteXml () {}
     
     // All single string properties
     var single = ["released", "copyright", "publisher", "key", "tempo", 
-      "transposition", "verseOrder"];
+      "transposition", "verseOrder", "duration"];
     for (i in single) {
       if (metadata[single[i]]) {
         n = xml.getElementsByTagName(single[i])[0];
@@ -165,17 +170,42 @@ function WriteXml () {}
         m.appendChild(newv);
       };
     };
-  
-    serializer = new XMLSerializer();
-    return serializer.serializeToString(xml);
+    
+    return WriteXml.seralize(xml);
   };
 
-  WriteXml.create = function (name) {
-    var xml = document.createElement("song");
-    xml.setAttribute("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
-    xml.setAttribute("modifiedDate", WriteXml.date());
+  WriteXml.create = function (title) {
+    var xml = document;
     
-    enyo.log(xml);
+    var s = xml.createElement("song");
+    // Metatags
+    s.setAttribute("xmlns", "http://openlyrics.info/namespace/2009/song");
+    s.setAttribute("version","0.8");
+    s.setAttribute("createdIn","MySongBook "+enyo.fetchAppInfo().version);
+    s.setAttribute("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
+    s.setAttribute("modifiedDate", WriteXml.date());
+    //~ xml.appendChild(s);
+    
+    // Metadata/Properties
+    var p = xml.createElement("properties");
+    var tt = xml.createElement("titles");
+    var t = xml.createElement("title");
+    t.appendChild(xml.createTextNode(title));
+    tt.appendChild(t);
+    p.appendChild(tt);
+    s.appendChild(p);
+    
+    // Lyrics
+    var l = xml.createElement("lyrics");
+    var v = xml.createElement("verse");
+    v.setAttribute("name", "v1");
+    var ll = xml.createElement("lines");
+    v.appendChild(ll);
+    l.appendChild(v);
+    s.appendChild(l);
+    
+    enyo.log(WriteXml.seralize(s));
+    return WriteXml.seralize(s);
   };
 
 

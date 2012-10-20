@@ -26,7 +26,7 @@ enyo.kind({
       ]},
       {kind: "HFlexBox", components: [
         {kind: "Image", src: "images/font-help.png"},
-        {kind: "HtmlContent", content: $L("change fontsize and linespacing")}
+        {kind: "HtmlContent", content: $L("change fontsize and linespacing") + "<br><br>"}
       ]},
       {kind: "HFlexBox", components: [
         {kind: "Image", src: "images/back-help.png"},
@@ -36,6 +36,18 @@ enyo.kind({
         {kind: "Image", src: "images/forth-help.png"},
         {kind: "HtmlContent", content: $L("scrolls lyrics forth depending on verseorder")}
       ]},
+      //~ {kind: "HFlexBox", components: [
+        //~ {kind: "Image", src: "images/play-help.png"},
+        //~ {kind: "HtmlContent", content: $L("start autoscroll")}
+      //~ ]},
+      //~ {kind: "HFlexBox", components: [
+        //~ {kind: "Image", src: "images/pause-help.png"},
+        //~ {kind: "HtmlContent", content: $L("pause autoscroll")}
+      //~ ]},
+      //~ {kind: "HFlexBox", components: [
+        //~ {kind: "Image", src: "images/edit-help.png"},
+        //~ {kind: "HtmlContent", content: $L("edit current song")}
+      //~ ]},
       {kind: "HFlexBox", components: [
         {kind: "Image", src: "images/info-help.png"},
         {kind: "HtmlContent", content: $L("shows songinfo") + "<br><br>"}
@@ -75,14 +87,6 @@ enyo.kind({
         {kind: "Image", src: "images/add-help.png"},
         {kind: "HtmlContent", content: $L("adds a new custom List") + "<br><br>"}
       ]},
-      //~ {kind: "HFlexBox", components: [
-        //~ {kind: "Image", src: "images/edit-help.png"},
-        //~ {kind: "HtmlContent", content: $L("")}
-      //~ ]},
-      //~ {kind: "HFlexBox", components: [
-        //~ {kind: "Image", src: "images/play-help.png"},
-        //~ {kind: "HtmlContent", content: $L("")}
-      //~ ]},
       
       {kind: "HtmlContent", content: "<h2>" + $L("Gesture Guide") + "</h2>"},
       {kind: "HtmlContent", content: "<h3>" + $L("Main View") + "</h3>"},
@@ -101,12 +105,15 @@ enyo.kind({
           <li>' + $L("Swipe a list to remove it") + '</li> \
         </ul>'},
       {kind: "HtmlContent", content: "<br>"},
+      {kind: "HtmlContent", content: "<h2><a href='http://dl.dropbox.com/u/1429945/MySongBook%20Documentation/index.html'>"
+        + "Online Documentation</a></h2>", onLinkClick: "linkClicked"},
+      {kind: "HtmlContent", content: "<br>"},
       {kind: "HtmlContent", content: "<h2>" + $L("Contact") + "</h2>"},
       {kind: "HtmlContent", content: 
         '<ul> \
         <li><a href="mailto:reischuck.micha@googlemail.com">Micha Reischuck</a></li> \
         <li><a href="https://twitter.com/michote_">@michote_</a></li> \
-        <li><a href="http://forums.webosnation.com/webos-homebrew-apps/318615-mysongbook.html">\
+        <li><a href="http://forums.webosnation.com/webos-homebrhttp://dl.dropbox.com/u/1429945/MySongBook%20Documentation/index.htmlew-apps/318615-mysongbook.html">\
         webOS Nation forum thread</a></li> \
         </ul>', onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},
@@ -117,6 +124,12 @@ enyo.kind({
       {kind: "HtmlContent", content: "<br>"},
       {kind: "HtmlContent", content: "<h2>" + $L("Changelog") + "</h2>"},
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
+      {kind: "HtmlContent", content: 
+        '<ul> \
+          <li>Bugfixing in editing</li> \
+          <li>Some cleanup</li> \
+        </ul>'},
+      {kind: "HtmlContent", content: "<b>Version 0.1.8</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
           <li>Added XML-Editing for Betatesting</li> \

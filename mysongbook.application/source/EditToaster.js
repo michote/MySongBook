@@ -29,16 +29,18 @@ enyo.kind({
         {name: "title", kind: "HtmlContent", flex: 1, className: "song title",
           content: $L("Title"), style: "text-align: right; padding-right: 8px;"}
       ]},
-      {name: "editPane", kind: "Pane", flex: 1, transitionKind: enyo.transitions.Simple, 
-        components: [
+      {name: "editPane", kind: "Pane", flex: 1, 
+        transitionKind: enyo.transitions.Simple, components: [
         {name: "metaPane", kind: "EditMeta"},
         {name: "lyricsPane", kind: "EditLyrics"},
       ]},
       {name: "footerToolbar", kind: "Toolbar", pack : "center", components: [
-        {kind: "Button", className: "enyo-button-negative",
-          caption: $L("Cancel"), width: "15%", onclick: "closeThis"},
+        {kind: "Button", className: "enyo-button-negative", 
+          caption: $L("Discard"), style: "width:15%; min-width:100px",
+            onclick: "closeThis"},
         {kind: "Button", className: "enyo-button-affirmative", 
-          caption: $L("Save"), width: "15%", onclick: "saveClicked"}
+          caption: $L("Done"), style: "width:15%; min-width:100px",
+          onclick: "saveClicked"}
       ]}
     ]},
     {className: "enyo-sliding-view-shadow-right"},

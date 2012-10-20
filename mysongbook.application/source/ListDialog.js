@@ -34,7 +34,8 @@ enyo.kind({
         {name: "errorContent", kind: "HtmlContent", 
           style: "color: #9E0508; margin: 0 10px", content: ""},
         {kind: "RowGroup", caption: $L("Listname"), components: [
-          {name: "listName", kind: "Input", hint: $L("Enter listname"), flex: 1}
+          {name: "listName", kind: "Input", hint: $L("Enter listname"), flex: 1,
+            onkeypress: "handleKeyPress"}
         ]},
         {kind: "HFlexBox", pack: "center", components : [
           {kind: "Button", className: "enyo-button-negative", flex: 1, 
@@ -71,6 +72,12 @@ enyo.kind({
     this.$.listName.setValue("");
     this.$.errorContent.setContent("");
     this.$.newListDialog.close();
+  },
+  
+  handleKeyPress: function(inSender, inEvent) {
+    if (inEvent.keyCode===13) {
+      this.saveClicked();
+    };
   },
   
   saveClicked: function(s) {

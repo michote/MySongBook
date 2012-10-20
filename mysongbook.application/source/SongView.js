@@ -155,12 +155,6 @@ enyo.kind({
       this.order = (this.data.verseOrder);
       this.textIndex = 0; // reset index
       this.scroll = 0;    // reset scroller
-      // John's code
-      this.duration = this.defaultSongSecs;  // seconds for song
-      this.intervalSong;
-      this.running = false;
-      this.lyricsCurrRow = 0;
-      // End John's code
       this.$.help.hide();
       this.$.lyric.destroyComponents();
       this.lyricDataSet();
@@ -174,12 +168,6 @@ enyo.kind({
       } else {
         this.$.forthButton.setDisabled(false);
       }
-      // ### John's ###
-      if (this.data.duration !== undefined) {
-        this.songSecs = this.data.duration
-      }
-      // ### end John's ###
-      
       //~ enyo.log(Transposer.transpose("D", this.transpose));
     } ;
   },
@@ -202,7 +190,7 @@ enyo.kind({
         this.initForTextPlay();
         this.running = true;
         var perRowMSecs = 1000*this.songSecs/this.rowsTraversed;
-        this.intervalSong = window.setInterval(this.showLyrics.bind(this), perRowMSecs)  //  ms per pixel row
+        this.intervalSong = window.setInterval(enyo.bind(this, "showLyrics"), perRowMSecs);
         if (window.PalmSystem) {
           enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': true});
         }
@@ -240,7 +228,7 @@ enyo.kind({
       this.cursorRow = this.lyricsCurrRow;
     } else if (this.lyricsCurrRow > (this.rowsTraversed - this.halfHt)) {
       this.cursorRow = 2 * this.halfHt - (this.rowsTraversed - this.lyricsCurrRow);
-      this.$.viewScroller.setScrollTop(this.lyricsCurrRow - this.cursorRow);  // cursor below half, lyrics won't move
+      this.$.viewScroller.setScrollTop(this.lyricsCurrRow - this.cursorRow);
     } else {
       this.cursorRow = this.halfHt;
     }
@@ -249,13 +237,13 @@ enyo.kind({
     this.songSecs = this.songSecs * lyricsPrevRow / this.lyricsCurrRow;
     window.clearInterval(this.intervalSong);
     var perRowMSecs = 1000*this.songSecs/this.rowsTraversed;
-    this.intervalSong = window.setInterval(this.showLyrics.bind(this), perRowMSecs)  //  ms per pixel row
+    this.intervalSong = window.setInterval(enyo.bind(this, "showLyrics"), perRowMSecs);
     if (this.data.titles) { var theTitles = ParseXml.titlesToString(this.data.titles); }
     var minsFull = this.songSecs/60;
     var mins = Math.floor(minsFull);
     var secs = Math.floor((minsFull - mins) * 60);
-    var ssecs = secs < 10 ? "0" + secs : "" + secs; 
-    this.$.title.setContent(theTitles + " : " + mins + ":" + ssecs);
+    var ssecs = (secs < 10 ? "0" : "") + secs; 
+    this.$.title.setContent(theTitles + " - " + mins + ":" + ssecs);
   },
   
   showLyrics: function() {
@@ -288,11 +276,15 @@ enyo.kind({
     if (window.PalmSystem) {
       enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
     }
-    if (this.data.duration !== undefined) {
+    if (this.data.duration) {
       this.songSecs = this.data.duration;
     } else {
       this.songSecs = this.defaultSongSecs;
     }
+    if (this.data.titles) { 
+      var theTitles = ParseXml.titlesToString(this.data.titles); 
+      this.$.title.setContent(theTitles);
+      }
   },
   
   initForTextPlay: function() {
@@ -305,9 +297,7 @@ enyo.kind({
     }
     this.halfHt = this.$.viewScroller.node.clientHeight / 2;
     this.$.viewScroller.scrollTo(this.lyricsCurrRow, 0);
-    this.lyricsCurrRow = 0;
     this.initCursor();
-    // perRowMSecs = 1000*songSecs/this.rowsTraversed;
     this.$.cursorScrollBar.color = this.$.cursorScrollBar.onColor
     this.$.cursorScrollBar.node.height = this.$.viewScroller.node.clientHeight;
   },

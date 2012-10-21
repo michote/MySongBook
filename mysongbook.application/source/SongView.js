@@ -273,7 +273,7 @@ enyo.kind({
     window.clearInterval(this.intervalSong);
     this.$.playButton.setIcon("images/play.png");
     this.finished = false;
-    if (window.PalmSystem) {
+    if (window.PalmSystem && (this.$.lockButton.getIcon() == "images/lock-open.png")) {
       enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
     }
     if (this.data.duration) {

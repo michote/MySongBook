@@ -274,10 +274,14 @@
 }
 
 .lyric {
-    margin: 20px 20px 20px 0;
+    margin: 20px;
     padding: 5px 20px;
     background-color: rgba(255,255,255,0.5);
     border-radius: 5px;
+}
+
+.lyric cursor {
+    margin: 20px 20px 20px 0;
 }
 
 .lyric h1 {

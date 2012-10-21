@@ -273,6 +273,8 @@ enyo.kind({
     window.clearInterval(this.intervalSong);
     this.$.playButton.setIcon("images/play.png");
     this.finished = false;
+//    this.$.lyric.setClassName("lyric");
+    this.$.cursorScrollBar.node.hidden = true;
     if (window.PalmSystem && (this.$.lockButton.getIcon() == "images/lock-open.png")) {
       enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
     }
@@ -300,6 +302,8 @@ enyo.kind({
     this.initCursor();
     this.$.cursorScrollBar.color = this.$.cursorScrollBar.onColor
     this.$.cursorScrollBar.node.height = this.$.viewScroller.node.clientHeight;
+//    this.$.lyric.setClassName("lyric cursor");
+    this.$.cursorScrollBar.node.hidden = false;;
   },
   // ### End John's code ###
  

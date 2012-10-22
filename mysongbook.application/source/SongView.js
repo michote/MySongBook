@@ -11,10 +11,7 @@
 enyo.kind({
   name: "SongView",
   kind: enyo.SlidingView,
-  layoutKind: enyo.VFlexLayout, 
-  events: {
-    "onEdit": ""
-  },
+  layoutKind: enyo.VFlexLayout,
   // ### John's ###
   finished: false,
   defaultSongSecs: 200, // seconds for song
@@ -30,6 +27,7 @@ enyo.kind({
   scroll: 0,
   transpose: 0,
   order: [],  
+  fullscreen: false,
   events: {
     "onEdit": ""
   },
@@ -76,7 +74,7 @@ enyo.kind({
         {name: "cursorScrollBar", kind: "cursorScrollBar", onclick: "resetCursorTiming"},
         {name: "viewScroller", kind: "enyoextras.ScrollBarsScroller", flex: 1, components: [
             {name: "lyric", components: [{name: "help", kind: "Help"}], 
-              ondragfinish: "songDragFinish"}
+              ondragfinish: "songDragFinish", ondblclick: "onDoubleClick"}
           ]},
       // ### end John's ###
         ]
@@ -360,6 +358,23 @@ enyo.kind({
       };
     };
   },
+  
+  // Maximize view on doubleclick
+  onDoubleClick : function( ) {
+    this.fullscreen = !this.fullscreen;
+    if (this.fullscreen === true) {
+      this.$.headerToolbar.hide(); 
+      this.$.footerToolbar.hide();
+      this.owner.$.songSlidingPane.selectViewByName('songViewPane'); 
+    } else {
+      this.$.headerToolbar.show(); 
+      this.$.footerToolbar.show();
+      this.owner.$.songSlidingPane.selectViewByName('songListPane'); 
+    };
+    if (window.PalmSystem) {
+      enyo.setFullScreen(this.fullscreen);
+    }
+  }, 
   
   // set Data
   metaDataSet: function() {

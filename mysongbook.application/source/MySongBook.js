@@ -14,7 +14,7 @@ enyo.kind({
   pathCount: {"a": [], "b": []},
   errorList: [],
   dirPath: "/media/internal/MySongBook/",
-  newSong: undefined,
+  newSong: false,
   published: {
     libraryList: {"content": []},
     savedLists: [],
@@ -103,7 +103,7 @@ enyo.kind({
     // Menu 
     {name: "appMenu", kind: "AppMenu", components: [
       {caption: $L("Preferences"), onclick: "showPreferences"},
-      //~ {caption: $L("Create new song"), onclick: "openCreateSong"},
+      {caption: $L("Create new song"), onclick: "openCreateSong"},
       {caption: $L("About"), onclick: "showAbout"},
       {caption: $L("Help"), onclick: "showHelp"}
     ]}
@@ -179,7 +179,20 @@ enyo.kind({
     this.pathCount.b.push(1);
     if (this.pathCount.b.length === this.pathCount.a.length) {
       this.sortAndRefresh();
-      //~ enyo.log(this.libraryList);
+      if (this.newSong) { // Open new created song 
+        this.$.songListPane.toggleLibrary();
+        this.$.songListPane.$.listToggle.setValue(0);
+        for (i in this.libraryList.content) {
+          if (this.libraryList.content[i].path === this.newSong.path) {
+            this.setCurrentIndex(i);
+          };
+        };
+        this.newSong = false;
+        this.$.songListPane.$.libraryList.punt();
+        //~ this.$.songListPane.$.libraryList.update();
+        //~ this.$.songListPane.$.libraryList.updateRow();
+        this.editSong();
+      };
     };
   },
   
@@ -217,15 +230,14 @@ enyo.kind({
   
   // List Tab  
   setIndex: function(inSender, inEvent) {
-    this.setCurrentIndex(inEvent.rowIndex)
+    this.setCurrentIndex(inEvent.rowIndex);
     //~ enyo.log("index changed");
   },
   
   openSong: function(index) {
     this.$.songViewPane.setPath(this[this.currentList].content[index].path);
     this.$.songViewPane.setFirst(true);
-    // mark selcted row
-    this.$.songListPane.$[this.currentList].refresh();
+    this.$.songListPane.$[this.currentList].refresh(); // mark selcted row
     this.$.songViewPane.$.viewScroller.scrollIntoView(0, 0);
     !Helper.smScr() || this.$.songSlidingPane.selectViewByName('songViewPane');
   },
@@ -418,13 +430,6 @@ enyo.kind({
   writeFileSuccess: function(inSender, inResponse) {
     this.readDirCall();
     enyo.windows.addBannerMessage("Song saved", "{}");
-    if (this.newSong) {
-      this.$.editToaster.openAtCenter();
-      this.$.editToaster.setElement(this.newSong);
-      //~ this.libraryList.content.push(this.newSong);
-      //~ this.sortAndRefresh();
-      //~ enyo.log(this.libraryList.content);
-    };
   },
   
   writeFileFail: function(inSender, inResponse) {
@@ -436,6 +441,7 @@ enyo.kind({
   openCreateSong: function() {
     this.$.newSongDialog.openAtCenter();
     this.$.songName.setValue("");
+    this.$.songErrorContent.setContent("");
     this.$.songName.forceFocus();
   },
   
@@ -462,7 +468,6 @@ enyo.kind({
       path = this.dirPath + path;
       this.writeXml(path, WriteXml.create(songt));
       this.$.newSongDialog.close();
-      this.currentIndex = 0;
       this.newSong = {"path": path, "title": songt};
     };
   },

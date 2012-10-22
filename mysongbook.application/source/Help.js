@@ -94,6 +94,7 @@ enyo.kind({
         '<ul> \
           <li>' + $L("Swipe to the right to open next song in list") + '</li> \
           <li>' + $L("Swipe to the left to open previous song in list") + '</li> \
+          <li>' + $L("Doubletab maximizes mainview") + '</li> \
         </ul>'},
       {kind: "HtmlContent", content: "<br>"},
       
@@ -126,6 +127,8 @@ enyo.kind({
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
+          <li>Added: Doubletab maximizes mainview</li> \
+          <li>Added: Create new Songs (Beta!)</li> \
           <li>Bugfixing in editing</li> \
           <li>Some cleanup</li> \
         </ul>'},
@@ -167,8 +170,7 @@ enyo.kind({
         '<ul> \
           <li>johncc @webosnation for the autoscroll feature</li> \
           <li>ajguns @webosnation for the spanish translation</li> \
-          <li><a href="http://sven-ziegler.com/">Sven Ziegler</a> for giving me\
-            an understanding of enyo ;)</li> \
+          <li>@svzi for giving me an understanding of enyo ;)</li> \
           <li>phoque @developer.palm.com for sharing his "Simple FileIO Service"</li> \
         </ul>', onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},

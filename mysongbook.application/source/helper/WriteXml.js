@@ -155,7 +155,7 @@ function WriteXml () {}
           newl.appendChild(newe);
         };
       };
-      enyo.log(newl);
+      //~ enyo.log(newl);
       
       // Add lyrics to element or create new one
       if (repl[i]) {
@@ -204,7 +204,7 @@ function WriteXml () {}
     l.appendChild(v);
     s.appendChild(l);
     
-    enyo.log(WriteXml.seralize(s));
+    //~ enyo.log(WriteXml.seralize(s));
     return WriteXml.seralize(s);
   };
 

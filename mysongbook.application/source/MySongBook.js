@@ -103,7 +103,7 @@ enyo.kind({
     // Menu 
     {name: "appMenu", kind: "AppMenu", components: [
       {caption: $L("Preferences"), onclick: "showPreferences"},
-      {caption: $L("Create new song"), onclick: "openCreateSong"},
+      {name: "createNewSong", caption: $L("Create new song"), onclick: "openCreateSong", showing: false},
       {caption: $L("About"), onclick: "showAbout"},
       {caption: $L("Help"), onclick: "showHelp"}
     ]}
@@ -188,9 +188,7 @@ enyo.kind({
           };
         };
         this.newSong = false;
-        this.$.songListPane.$.libraryList.punt();
-        //~ this.$.songListPane.$.libraryList.update();
-        //~ this.$.songListPane.$.libraryList.updateRow();
+        this.$.songListPane.$.libraryList.updateRow();
         this.editSong();
       };
     };
@@ -328,6 +326,8 @@ enyo.kind({
   // App-Menu
   openAppMenuHandler: function() {
     this.$.appMenu.open();
+    enyo.log(this.$.songViewPane.testing);
+    this.$.createNewSong.setShowing(this.$.songViewPane.testing);
   },
   
   closeAppMenuHandler: function() {
@@ -350,20 +350,20 @@ enyo.kind({
   },
   
   getPreferencesSuccess: function(inSender, inResponse) {
-    if (inResponse.sortLyric) {
+    if (inResponse.sortLyric != undefined) {
       this.$.songViewPane.setSort(inResponse.sortLyric);
       this.$.songViewPane.setShow(inResponse.showinToolbar);
       this.$.songViewPane.setShowChords(inResponse.showChords);
       this.$.songViewPane.setShowComments(inResponse.showComments);
       this.$.songViewPane.setShowHeadline(inResponse.showHeadline);
-      this.$.songViewPane.setTesting(inResponse.testing);
       this.$.preferences.setSortLyric(inResponse.sortLyric);
       this.$.preferences.setShowinToolbar(inResponse.showinToolbar);
       this.$.preferences.setShowChords(inResponse.showChords);
       this.$.preferences.setShowComments(inResponse.showComments);
       this.$.preferences.setShowHeadline(inResponse.showHeadline);
+      this.$.songViewPane.setTesting(inResponse.testing);
       this.$.preferences.setTesting(inResponse.testing);
-    }
+    };
     if (inResponse.css) {
       this.setCss(inResponse.css);
       this.setFont(inResponse.css);
@@ -408,6 +408,7 @@ enyo.kind({
     this.$.songViewPane.setShowComments(inComments);
     this.$.songViewPane.setShowHeadline(inHead);
     this.$.songViewPane.setTesting(inTesting);
+    this.$.createNewSong.setShowing(inTesting);
     this.setCurrentIndex(this.currentIndex);
     this.$.preferences.close();
   },

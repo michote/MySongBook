@@ -128,7 +128,7 @@ enyo.kind({
       {kind: "HtmlContent", content: 
         '<ul> \
           <li>Added: Doubletab maximizes mainview</li> \
-          <li>Added: Create new Songs (Beta!)</li> \
+          <li>Added: Create new Songs (Betatesting!)</li> \
           <li>Bugfixing in editing</li> \
           <li>Some cleanup</li> \
         </ul>'},

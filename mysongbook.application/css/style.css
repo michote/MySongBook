@@ -280,8 +280,14 @@
     border-radius: 5px;
 }
 
-.lyric cursor {
-    margin: 20px 20px 20px 0;
+.lyricwc {
+    margin-left: 10px;
+}
+
+.cursor {
+    position: absolute;
+    padding-right: 30px;
+    z-index: 1; 
 }
 
 .lyric h1 {

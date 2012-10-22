@@ -5,7 +5,8 @@ enyo.kind({
     canvas: "",
     context: "",
     domAttributes: { 
-      width: "20px",
+      width: "40px",
+      hidden: true
     },
   ms8: 0,
   eighthCycle: 0,
@@ -25,9 +26,7 @@ enyo.kind({
   drawCanvas: function() {
     this.context.fillStyle=this.color;
     this.context.beginPath();
-//    this.context.arc(18,this.cursorRow,30,2.74,3.54,false);
-//    this.context.lineTo(18,this.cursorRow);
-    this.context.arc(13,this.cursorRow,6,1.05,5.23,true);
+    this.context.arc(33,this.cursorRow,6,1.42,4.86,true);
     this.context.lineTo(0,this.cursorRow-11);
     this.context.lineTo(0,this.cursorRow+11);
     this.context.closePath();

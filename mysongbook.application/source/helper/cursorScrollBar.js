@@ -1,13 +1,12 @@
 enyo.kind({
   name: "cursorScrollBar", 
   kind: enyo.Control,
-    nodeTag: "canvas",
-    canvas: "",
-    context: "",
-    domAttributes: { 
-      width: "40px",
-      hidden: true
-    },
+  nodeTag: "canvas",
+  canvas: "",
+  context: "",
+  domAttributes: { 
+    width: "20px"
+  },
   ms8: 0,
   eighthCycle: 0,
   start: 0,
@@ -26,7 +25,8 @@ enyo.kind({
   drawCanvas: function() {
     this.context.fillStyle=this.color;
     this.context.beginPath();
-    this.context.arc(33,this.cursorRow,6,1.42,4.86,true);
+    //~ this.context.arc(33,this.cursorRow,6,1.42,4.86,true);
+    this.context.arc(13,this.cursorRow,6,1.05,5.23,true);
     this.context.lineTo(0,this.cursorRow-11);
     this.context.lineTo(0,this.cursorRow+11);
     this.context.closePath();

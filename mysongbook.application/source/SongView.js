@@ -12,7 +12,6 @@ enyo.kind({
   name: "SongView",
   kind: enyo.SlidingView,
   layoutKind: enyo.VFlexLayout,
-  finished: true,
   defaultSongSecs: 200, // seconds for song
   songSecs: this.defaultSongSecs, 
   intervalSong: 0,
@@ -123,9 +122,7 @@ enyo.kind({
       this.$.editButton.hide();
       this.$.playButton.hide();
     }
-    if (this.finished) {
-      this.initCursor();
-    }
+    this.initCursor();
     this.$.getXml.setUrl(this.path);
     this.$.getXml.call();
   },
@@ -309,6 +306,7 @@ enyo.kind({
  
   // ### Scrolling Button/Keypress ###
   scrollHelper: function() {
+    enyo.log(this.textIndex);
     var x = this.$.lyric.$[this.order[this.textIndex]].hasNode()
     var ePos = enyo.dom.calcNodeOffset(x).top - 74; // element offset - Toolbar and margin
     this.scroll = this.$.viewScroller.$.scroll.y;   // scroll position
@@ -322,7 +320,12 @@ enyo.kind({
     } else if (this.textIndex === (this.data.verseOrder.length-1)) {
       this.$.forthButton.setDisabled(true);
     };
-    this.scrollHelper();
+    if (this.textIndex === (this.data.verseOrder.length+1)) {
+      this.nextSong();
+    };
+    if (this.textIndex <= (this.data.verseOrder.length-1)) {
+      this.scrollHelper();
+    };
   },
   
   textBack: function() {
@@ -332,35 +335,49 @@ enyo.kind({
     } else if (this.textIndex === (this.data.verseOrder.length-2)) {
       this.$.forthButton.setDisabled(false);
     };
-    this.scrollHelper();
+    if (this.textIndex === -2) {
+      this.prevSong();
+    };
+    if (this.textIndex >= 0) {
+      this.scrollHelper();
+    };
   },
   
   handleKeyPress: function(inSender, inEvent) {
     k = inEvent.keyCode
     //~ enyo.log(k);
-    if ((k===33 || k===38 || k===37 || k===32) && this.textIndex > 0) { // PageUp
+    if ((k===33 || k===38 || k===37 || k===32) && this.textIndex > -2) { // PageUp
       this.textBack();
     } else if ((k===34 || k===40 || k===39 || k===13)
-      && this.textIndex < this.data.verseOrder.length-1) { // PageDown
+      && this.textIndex < this.data.verseOrder.length+1) { // PageDown
       this.textForth();
+    };
+  },
+  
+  // Go to next/prev song
+  nextSong: function() {
+    var o = this.owner
+    if (o.currentIndex >= 0 && 
+      o.currentIndex < o[o.currentList].content.length-1) {
+      enyo.log("next Song");
+      o.setCurrentIndex(o.currentIndex+1);
+    };
+  },
+  
+  prevSong: function() {
+    if (this.owner.currentIndex > 0) {
+      enyo.log("prev Song");
+      this.owner.setCurrentIndex(this.owner.currentIndex-1);
     };
   },
   
   // Swipe left and right
   songDragFinish: function(inSender, event) {
-    var o = this.owner
     if (+event.dx > 120) {
-      if (o.currentIndex >= 0 && 
-        o.currentIndex < o[o.currentList].content.length-1) {
-        enyo.log("dragged to the right");
-        o.setCurrentIndex(o.currentIndex+1);
-      };
+      this.nextSong();
     };
     if (+event.dx < -120) {
-      if (o.currentIndex > 0) {
-        enyo.log("dragged to the left");
-        o.setCurrentIndex(o.currentIndex-1);
-      };
+      this.prevSong();
     };
   },
   
@@ -435,7 +452,8 @@ enyo.kind({
           };
           this.$.lyric.createComponent({
             name: i,
-            kind: "HtmlContent",
+            kind: "HFlexBox",
+            flex: 1,
             className: "lyric",
             content: t + formL[i][1]
           });

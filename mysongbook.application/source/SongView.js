@@ -12,7 +12,7 @@ enyo.kind({
   name: "SongView",
   kind: enyo.SlidingView,
   layoutKind: enyo.VFlexLayout,
-  finished: false,
+  finished: true,
   defaultSongSecs: 200, // seconds for song
   songSecs: this.defaultSongSecs, 
   intervalSong: 0,
@@ -123,7 +123,9 @@ enyo.kind({
       this.$.editButton.hide();
       this.$.playButton.hide();
     }
-    this.initCursor();
+    if (this.finished) {
+      this.initCursor();
+    }
     this.$.getXml.setUrl(this.path);
     this.$.getXml.call();
   },
@@ -265,7 +267,6 @@ enyo.kind({
     this.$.playButton.setIcon("images/play.png");
     this.finished = false;
     this.$.cursorScrollBar.hide();
-    this.$.lyric.removeClass("lyricwc");
     if (window.PalmSystem && (this.$.lockButton.getIcon() == "images/lock-open.png")) {
       enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
     };
@@ -278,6 +279,9 @@ enyo.kind({
       var theTitles = ParseXml.titlesToString(this.data.titles); 
       this.$.title.setContent(theTitles);
     };
+    this.$.infoButton.setDisabled(false);
+    this.$.editButton.setDisabled(false);
+    this.$.fontButton.setDisabled(false);
   },
   
   initForTextPlay: function() {
@@ -292,8 +296,10 @@ enyo.kind({
     this.$.viewScroller.scrollTo(this.lyricsCurrRow, 0);
     this.$.cursorScrollBar.color = this.$.cursorScrollBar.onColor
     this.$.cursorScrollBar.node.height = this.$.viewScroller.node.clientHeight;
-    this.$.lyric.setClassName("lyricwc");
     this.$.cursorScrollBar.show();
+    this.$.infoButton.setDisabled(true);
+    this.$.editButton.setDisabled(true);
+    this.$.fontButton.setDisabled(true);
   },
  
  
@@ -523,7 +529,7 @@ enyo.kind({
       value += 12;
     };
     this.transpose = value;
-    this.pathChanged();    
+    this.renderLyrics(this.xml);    
   },
   
   transPlus: function() {

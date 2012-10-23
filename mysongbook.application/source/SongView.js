@@ -123,7 +123,9 @@ enyo.kind({
       this.$.editButton.hide();
       this.$.playButton.hide();
     }
-    this.initCursor();
+    if (this.finished) {
+      this.initCursor();
+    }
     this.$.getXml.setUrl(this.path);
     this.$.getXml.call();
   },
@@ -527,7 +529,7 @@ enyo.kind({
       value += 12;
     };
     this.transpose = value;
-    this.pathChanged();    
+    this.renderLyrics(this.xml);    
   },
   
   transPlus: function() {

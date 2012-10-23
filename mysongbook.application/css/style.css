@@ -280,13 +280,9 @@
     border-radius: 5px;
 }
 
-.lyricwc {
-    margin-left: 10px;
-}
-
 .cursor {
     position: absolute;
-    padding-right: 30px;
+    padding-right: 20px;
     z-index: 1; 
 }
 

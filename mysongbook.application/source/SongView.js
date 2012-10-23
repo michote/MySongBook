@@ -129,7 +129,11 @@ enyo.kind({
   },
   
   gotXml: function(inSender, inResponse) {
-    var xml = ParseXml.parse_dom(inResponse)
+    this.xml = ParseXml.parse_dom(inResponse);
+    this.renderLyrics(this.xml);
+  },
+    
+  renderLyrics: function(xml) {
     var transposition = ParseXml.get_metadata(xml, "transposition");
     if (transposition && this.first) {
       this.transpose = parseInt(transposition);
@@ -355,7 +359,7 @@ enyo.kind({
   },
   
   // Maximize view on doubleclick
-  onDoubleClick : function( ) {
+  onDoubleClick: function() {
     this.fullscreen = !this.fullscreen;
     if (this.fullscreen === true) {
       this.$.headerToolbar.hide(); 
@@ -523,7 +527,7 @@ enyo.kind({
       value += 12;
     };
     this.transpose = value;
-    this.pathChanged();    
+    this.renderLyrics(this.xml);    
   },
   
   transPlus: function() {

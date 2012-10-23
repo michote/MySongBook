@@ -278,6 +278,10 @@ enyo.kind({
       var theTitles = ParseXml.titlesToString(this.data.titles); 
       this.$.title.setContent(theTitles);
     };
+    this.$.infoButton.show();
+    this.$.transposergr.show();
+    this.$.editButton.show();
+    this.$.fontButton.show();
   },
   
   initForTextPlay: function() {
@@ -294,6 +298,10 @@ enyo.kind({
     this.$.cursorScrollBar.node.height = this.$.viewScroller.node.clientHeight;
     this.$.lyric.setClassName("lyricwc");
     this.$.cursorScrollBar.show();
+    this.$.infoButton.hide();
+    this.$.transposergr.hide();
+    this.$.editButton.hide();
+    this.$.fontButton.hide();
   },
  
  

@@ -136,7 +136,7 @@ function ParseXml () {}
                   lines += "<div class='chordbox'><div class='chord'>"
                   if (transp) { // Transposer
                     var chord = line[j].getAttribute("name")
-                    if (chord.indexOf("/") >= 0) { // Handle Chords with / eg "E/D"
+                    if (chord.indexOf("/") >= 0) { // Handle Chords with "/" e.g. "E/D"
                       chord = chord.split("/")
                       lines += Transposer.transpose(chord[0], transp) + "/" + 
                         Transposer.transpose(chord[1], transp) + "&nbsp;&nbsp;"
@@ -162,11 +162,14 @@ function ParseXml () {}
                   };
                 };
               } else {
-                var x = line[j].nodeValue.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;"); //keep leeding and ending whitespaces
+                var x = line[j].nodeValue //keep leeding and ending whitespaces
                 if (x !== '') { // don't add empty divs
-                  if (trigger && (x !== '')) { // for line starting without chord
+                  if (trigger) { // for line starting without chord
                     trigger = false;
                     lines += "<div class='chordbox'><div class='chord'>&nbsp;</div>";
+                    x = x.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;");
+                  } else {
+                    x = x.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;");
                   };
                   lines += "<div class='txt'>" + x + "</div></div>";
                 };

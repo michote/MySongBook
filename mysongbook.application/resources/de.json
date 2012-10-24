@@ -101,5 +101,29 @@
     "Swipe to the left to open previous song in list": "Nach Links wischen, um zum vorherigen Lied in der aktuellen Liste zu springen",
     "Swipe an librarylist item to add it to the current custom list": "Ein Element aus der Bibliotheksliste wischen, um es zur aktuell gewählten Liste hinzuzufügen",
     "Swipe an custom list item to remove it from this list": "Ein Element aus der eigenen Liste wischen, um es aus der liste zu löschen",
-    "Swipe a list to remove it": "Eine Liste wischen, um sie zu löschen"
+    "Swipe a list to remove it": "Eine Liste wischen, um sie zu löschen",
+    "Doubletab maximizes mainview": "Doppeltab maximiert die Liedanzeige",
+    
+    "Create new song": "Neues Lied erstellen",
+    "Refresh Library": "Bibliothek auffrischen",
+    "start autoscroll": "Starte die Autoscroll-Funktion",
+    "pause autoscroll": "Pausiere die Autoscroll-Funktion",
+    "edit current song": "Bearbeite das aktuelle Lied",
+    "New song": "Neues Lied",
+    "Songname": "Name des Liedes",
+    "Enter songname": "Name des Liedes",
+    "Song saved": "Lied gespeichert",
+    
+    "Edit": "Bearbeite",
+    "Discard": "Verwerfen",
+    "add new": "Füge hinzu:",
+    "songbook": "Liederbuch",
+    "no": "Nr",
+    "release date": "Erschein. Datum",
+    "copyright holder": "Copyright Inhaber",
+    "pulisher": "Herausgeber",
+    "key": "Tonart",
+    "transposition": "Transponierung",
+    "duration": "Dauer",
+    "verseorder": "Reihenfolge"
 }

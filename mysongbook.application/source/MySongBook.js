@@ -87,7 +87,7 @@ enyo.kind({
       caption: $L("New song"), scrim: true, components: [
         {name: "songErrorContent", kind: "HtmlContent", 
           style: "color: #9E0508; margin: 0 10px", content: ""},
-        {kind: "RowGroup", caption: $L("Song name"), components: [
+        {kind: "RowGroup", caption: $L("Songname"), components: [
           {name: "songName", kind: "Input", hint: $L("Enter songname"), flex: 1,
             onkeypress: "handleKeyPress"}
         ]},
@@ -104,6 +104,7 @@ enyo.kind({
     {name: "appMenu", kind: "AppMenu", components: [
       {caption: $L("Preferences"), onclick: "showPreferences"},
       {name: "createNewSong", caption: $L("Create new song"), onclick: "openCreateSong", showing: false},
+      {caption: $L("Refresh Library"), onclick: "showAbout"},
       {caption: $L("About"), onclick: "showAbout"},
       {caption: $L("Help"), onclick: "showHelp"}
     ]}
@@ -430,7 +431,7 @@ enyo.kind({
   
   writeFileSuccess: function(inSender, inResponse) {
     this.readDirCall();
-    enyo.windows.addBannerMessage("Song saved", "{}");
+    enyo.windows.addBannerMessage($L("Song saved"), "{}");
   },
   
   writeFileFail: function(inSender, inResponse) {

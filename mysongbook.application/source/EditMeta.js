@@ -29,14 +29,14 @@ enyo.kind({
         {name: "titlebox", kind: "RowGroup", caption: $L("title"), components:[
           {name: "titlehflex1", kind:"HFlexBox", flex: 1, 
             style: "padding:0; margin:-10px;", components:[
-            {name: "title1", flex: 1, kind: "Input", hint: "title", value: ""},
-            {name: "titlelang1", kind: "Input", width: "12%", hint: "", value: ""}
+            {name: "title1", flex: 1, kind: "Input", hint: $L("title")},
+            {name: "titlelang1", kind: "Input", width: "12%", hint: ""}
           ]}
         ]},
         {name: "authorbox", kind: "RowGroup", caption: $L("author"), components:[
           {name: "authorhflex1", kind:"HFlexBox", flex: 1, 
             style: "padding:0; margin:-10px;", components:[
-            {name: "author1", flex: 1, kind: "Input", hint: "author", value: "", 
+            {name: "author1", flex: 1, kind: "Input", hint: $L("author"), 
               components: [
               {name:"authorSwitch1", kind: "ListSelector", value: null, 
                 style: "padding:0; margin:-10px 0;",
@@ -48,32 +48,56 @@ enyo.kind({
               ]}
             ]},
             {name: "authorlang1", kind: "Input", width: "10%", hint: "",
-              showing: false, value: ""}
+              showing: false}
           ]},
         ]},
         {kind: "RowGroup", caption: $L("copyright"), components:[
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {name: "released", kind: "Input", width: "20%", hint: "releasedate", value: ""},
-            {name: "copyright", flex: 1, kind: "Input", hint: "copyright holder", value: ""}
+            {content: $L("release date") + ":", style: "padding:5px;", width: "12%", 
+              className: "editlabel"},
+            {name: "released", kind: "Input", width: "20%", hint: $L("release date")},
+            {content: $L("copyright holder") + ":", style: "padding:5px;", width: "12%", 
+              className: "editlabel"},
+            {name: "copyright", flex: 1, kind: "Input", hint: $L("copyright holder")}
           ]},
-          {name: "publisher", kind: "Input", hint: "pulisher", value: ""}
+          {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
+            {content: $L("pulisher") + ":", style: "padding: 10px 5px;", width: "15%", 
+              className: "editlabel"},
+            {name: "publisher", kind: "Input", hint: $L("pulisher"), flex: 1}
+          ]},
         ]},
         {name: "songbookbox", kind: "RowGroup", caption: $L("infos"), components:[
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {name: "key", kind: "Input", width: "25%", hint: "key", value: ""},
-            {name: "tempo", kind: "Input", width: "25%", hint: "tempo", value: ""},
-            {name: "duration", kind: "Input", width: "25%", hint: "duration", value: ""},
-            {name: "transposition", kind: "Input", width: "25%", hint: "transposition", value: ""},
+            {content: $L("key") + ":", style: "padding:10px 5px;", width: "10%", 
+              className: "editlabel"},
+            {name: "key", kind: "Input", flex: 1, hint: $L("key")},
+            {content: $L("transposition") + ":", style: "padding:10px 5px;", width: "20%", 
+              className: "editlabel"},
+            {name: "transposition", kind: "Input", flex: 1, hint: $L("transposition")},
+          ]},
+          {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
+            {content: $L("tempo") + ":", style: "padding:10px 5px;", width: "10%", 
+              className: "editlabel"},
+            {name: "tempo", kind: "Input", flex: 1, hint: $L("tempo")},
+            {content: $L("duration") + ":", style: "padding:10px 5px;", width: "20%", 
+              className: "editlabel"},
+            {name: "duration", kind: "Input", flex: 1, hint: $L("duration")},
           ]},
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", 
             components:[
-            {name: "verseOrder", flex: 1, kind: "Input", hint: "verseorder",
-              value: ""},
+            {content: $L("verseorder") + ":", style: "padding: 10px 5px;", width: "15%", 
+              className: "editlabel"},
+            {name: "verseOrder", flex: 1, kind: "Input", hint: $L("verseorder")},
             {name: "versehflex", kind:"HFlexBox", style: "padding:0; margin:0px;"},
           ]},
-          {name: "songbookhflex1", kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {name: "songbook1", flex: 1, kind: "Input", hint: "songbook", value: ""}, 
-            {name: "no1", kind: "Input", width: "25%", hint: "number", value: ""}
+          {name: "songbookhflex1", kind:"HFlexBox", flex: 1, style: 
+            "padding:0; margin:-10px;", components:[
+            {content: $L("songbook") + ":", style: "padding:10px 5px;", width: "15%", 
+              className: "editlabel"},
+            {name: "songbook1", flex: 1, kind: "Input", hint: $L("songbook")}, 
+            {content: $L("no") + ":", style: "padding:10px 5px;", width: "5%", 
+              className: "editlabel"},
+            {name: "no1", kind: "Input", width: "15%", hint: "number"}
           ]},
         ]}
       ]}
@@ -100,9 +124,9 @@ enyo.kind({
       {name: "titlehflex" + this.titleCount, kind:"HFlexBox", flex: 1, 
         style: "padding:0; margin:-10px;", owner: this, components:[
         {name: "title" + this.titleCount, flex: 1, kind: "Input", 
-          hint: "title", owner: this, value: ""},
+          hint: "title", owner: this},
         {name: "titlelang" + this.titleCount, kind: "Input", width: "12%",
-          hint: "", owner: this, value: ""}
+          hint: "", owner: this}
       ]}
     );
     this.$.titlebox.render();
@@ -114,7 +138,7 @@ enyo.kind({
       {name: "authorhflex" + this.authorCount, kind:"HFlexBox", flex: 1,
         style: "padding:0; margin:-10px;", owner: this,  components:[
         {name: "author" + this.authorCount, owner: this, flex: 1, 
-          kind: "Input", hint: "author", value: "", components: [
+          kind: "Input", hint: "author", components: [
           {name:"authorSwitch" + this.authorCount, owner: this, 
             kind: "ListSelector", style: "padding:0; margin:-10px 0;", 
             value: null, onChange: "onchange_author", items: [
@@ -125,7 +149,7 @@ enyo.kind({
           ]}
         ]},
         {name: "authorlang"+this.authorCount, kind: "Input", width: "10%", hint: "",
-          showing: false, owner: this, value: ""}
+          showing: false, owner: this}
       ]}
     );
     this.$.authorbox.render();
@@ -146,10 +170,14 @@ enyo.kind({
     this.$.songbookbox.createComponent(
       {name: "songbookhflex" + this.songbookCount, kind: "HFlexBox", flex: 1,
         style: "padding:0; margin:-10px;", owner: this, components: [
+        {content: $L("songbook") + ":", style: "padding:10px 5px;",
+          width: "15%", className: "editlabel"},
         {name: "songbook" + this.songbookCount, flex: 1, kind: "Input",
-          hint: "songbook", owner: this, value: ""},
-        {name: "no" + this.songbookCount, kind: "Input", width: "25%", 
-          hint: "number", owner: this, value: ""}
+          hint: "songbook", owner: this},
+        {content: $L("no") + ":", style: "padding:10px 5px;", width: "5%",
+          className: "editlabel"},
+        {name: "no" + this.songbookCount, kind: "Input", width: "15%", 
+          hint: "number", owner: this}
       ]}
     );
     this.$.songbookbox.render();

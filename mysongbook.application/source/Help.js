@@ -36,14 +36,14 @@ enyo.kind({
         {kind: "Image", src: "images/forth-help.png"},
         {kind: "HtmlContent", content: $L("scrolls lyrics forth depending on verseorder")}
       ]},
-      //~ {kind: "HFlexBox", components: [
-        //~ {kind: "Image", src: "images/play-help.png"},
-        //~ {kind: "HtmlContent", content: $L("start autoscroll")}
-      //~ ]},
-      //~ {kind: "HFlexBox", components: [
-        //~ {kind: "Image", src: "images/pause-help.png"},
-        //~ {kind: "HtmlContent", content: $L("pause autoscroll")}
-      //~ ]},
+      {kind: "HFlexBox", components: [
+        {kind: "Image", src: "images/play-help.png"},
+        {kind: "HtmlContent", content: $L("start autoscroll")}
+      ]},
+      {kind: "HFlexBox", components: [
+        {kind: "Image", src: "images/pause-help.png"},
+        {kind: "HtmlContent", content: $L("pause autoscroll")}
+      ]},
       //~ {kind: "HFlexBox", components: [
         //~ {kind: "Image", src: "images/edit-help.png"},
         //~ {kind: "HtmlContent", content: $L("edit current song")}
@@ -127,6 +127,13 @@ enyo.kind({
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
+          <li>Autoscroll out of beta</li> \
+          <li>Translations updated</li> \
+          <li>Bugfixing in editing and parsing</li> \
+        </ul>'},
+      {kind: "HtmlContent", content: "<b>Version 0.2.0</b>"},
+      {kind: "HtmlContent", content: 
+        '<ul> \
           <li>Added: Doubletab maximizes mainview</li> \
           <li>Added: Create new Songs (Betatesting!)</li> \
           <li>Bugfixing in editing</li> \
@@ -150,29 +157,29 @@ enyo.kind({
           <li>Some small bugfixes</li> \
           <li>More stuff working in dev preview</li> \
         </ul>'},
-      {kind: "HtmlContent", content: "<b>Version 0.1.2</b>"},
-      {kind: "HtmlContent", content: 
-        '<ul><li>Bugfixes<ul><li>Sort Library fixed</li>\
-        <li>Read Files Dialog fixed</li>\
-        <li>some small other fixes</li>\
-        </ul></li>\
-        <li> Display amount of Songs in List</li>\
-        <li> Development Preview (Editing)</li>\
-        </ul>'},
-      {kind: "HtmlContent", content: "<b>Version 0.1.0</b>"},
-      {kind: "HtmlContent", content: 
-        '<ul> \
-          <li>Initial Release</li> \
-        </ul>'},
-      {kind: "HtmlContent", content: "<br>"},
-      {kind: "HtmlContent", content: "<h2>" + $L("Special Thanks") + "</h2>"},
-      {kind: "HtmlContent", content: 
-        '<ul> \
-          <li>johncc @webosnation for the autoscroll feature</li> \
-          <li>ajguns @webosnation for the spanish translation</li> \
-          <li>@svzi for giving me an understanding of enyo ;)</li> \
-          <li>phoque @developer.palm.com for sharing his "Simple FileIO Service"</li> \
-        </ul>', onLinkClick: "linkClicked"},
+      //~ {kind: "HtmlContent", content: "<b>Version 0.1.2</b>"},
+      //~ {kind: "HtmlContent", content: 
+        //~ '<ul><li>Bugfixes<ul><li>Sort Library fixed</li>\
+        //~ <li>Read Files Dialog fixed</li>\
+        //~ <li>some small other fixes</li>\
+        //~ </ul></li>\
+        //~ <li> Display amount of Songs in List</li>\
+        //~ <li> Development Preview (Editing)</li>\
+        //~ </ul>'},
+      //~ {kind: "HtmlContent", content: "<b>Version 0.1.0</b>"},
+      //~ {kind: "HtmlContent", content: 
+        //~ '<ul> \
+          //~ <li>Initial Release</li> \
+        //~ </ul>'},
+      //~ {kind: "HtmlContent", content: "<br>"},
+      //~ {kind: "HtmlContent", content: "<h2>" + $L("Special Thanks") + "</h2>"},
+      //~ {kind: "HtmlContent", content: 
+        //~ '<ul> \
+          //~ <li>johncc @webosnation for the autoscroll feature</li> \
+          //~ <li>ajguns @webosnation for the spanish translation</li> \
+          //~ <li>@svzi for giving me an understanding of enyo ;)</li> \
+          //~ <li>phoque @developer.palm.com for sharing his "Simple FileIO Service"</li> \
+        //~ </ul>', onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},
     ]}
   ],

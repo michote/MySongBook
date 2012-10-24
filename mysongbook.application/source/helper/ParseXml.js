@@ -162,14 +162,14 @@ function ParseXml () {}
                   };
                 };
               } else {
-                var x = line[j].nodeValue //keep leeding and ending whitespaces
-                if (x !== '') { // don't add empty divs
+                var x = line[j].nodeValue.replace(/^[\s\xA0]+/, " ");
+                if (x !== " ") { // don't add empty divs
                   if (trigger) { // for line starting without chord
                     trigger = false;
                     lines += "<div class='chordbox'><div class='chord'>&nbsp;</div>";
-                    x = x.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;");
+                    x = x.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); // keep only ending whitespace on beginning of line
                   } else {
-                    x = x.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;");
+                    x = x.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;"); // keep leeding and ending whitespaces
                   };
                   lines += "<div class='txt'>" + x + "</div></div>";
                 };

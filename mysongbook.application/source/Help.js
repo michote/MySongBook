@@ -129,6 +129,7 @@ enyo.kind({
         '<ul> \
           <li>Autoscroll out of beta</li> \
           <li>Translations updated</li> \
+          <li>Labels for editing properties</li> \
           <li>Bugfixing in editing and parsing</li> \
         </ul>'},
       {kind: "HtmlContent", content: "<b>Version 0.2.0</b>"},

@@ -104,7 +104,7 @@ enyo.kind({
     {name: "appMenu", kind: "AppMenu", components: [
       {caption: $L("Preferences"), onclick: "showPreferences"},
       {name: "createNewSong", caption: $L("Create new song"), onclick: "openCreateSong", showing: false},
-      {caption: $L("Refresh Library"), onclick: "showAbout"},
+      {caption: $L("Refresh Library"), onclick: "readDirCall"},
       {caption: $L("About"), onclick: "showAbout"},
       {caption: $L("Help"), onclick: "showHelp"}
     ]}
@@ -315,7 +315,7 @@ enyo.kind({
   
   rmCustomList: function(inSender, inEvent) {
     if (this.customList && this.savedLists[inEvent].title === this.customList.title) {
-      this.customList = undefined; // no List selcted
+      this.customList = undefined; // no List selected
       this.$.songListPane.$.listToggle.setValue(0);
       this.$.songListPane.toggleLibrary();
     };
@@ -470,7 +470,7 @@ enyo.kind({
       path = this.dirPath + path;
       this.writeXml(path, WriteXml.create(songt));
       this.$.newSongDialog.close();
-      this.newSong = {"path": path, "title": songt};
+      this.newSong = {"path": path};
     };
   },
   

@@ -356,12 +356,12 @@ enyo.kind({
       this.$.songViewPane.setShow(inResponse.showinToolbar);
       this.$.songViewPane.setShowChords(inResponse.showChords);
       this.$.songViewPane.setShowComments(inResponse.showComments);
-      this.$.songViewPane.setShowHeadline(inResponse.showHeadline);
+      //~ this.$.songViewPane.setShowHeadline(inResponse.showHeadline);
       this.$.preferences.setSortLyric(inResponse.sortLyric);
       this.$.preferences.setShowinToolbar(inResponse.showinToolbar);
       this.$.preferences.setShowChords(inResponse.showChords);
       this.$.preferences.setShowComments(inResponse.showComments);
-      this.$.preferences.setShowHeadline(inResponse.showHeadline);
+      //~ this.$.preferences.setShowHeadline(inResponse.showHeadline);
       this.$.songViewPane.setTesting(inResponse.testing);
       this.$.preferences.setTesting(inResponse.testing);
     };
@@ -407,7 +407,7 @@ enyo.kind({
     this.$.songViewPane.setShow(inShow);
     this.$.songViewPane.setShowChords(inChords);
     this.$.songViewPane.setShowComments(inComments);
-    this.$.songViewPane.setShowHeadline(inHead);
+    //~ this.$.songViewPane.setShowHeadline(inHead);
     this.$.songViewPane.setTesting(inTesting);
     this.$.createNewSong.setShowing(inTesting);
     this.setCurrentIndex(this.currentIndex);

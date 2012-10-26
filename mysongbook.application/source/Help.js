@@ -128,6 +128,8 @@ enyo.kind({
       {kind: "HtmlContent", content: 
         '<ul> \
           <li>Autoscroll out of beta</li> \
+          <li>Now displays multiple lines and parts</li> \
+          <li>Songelement Headline removed</li> \
           <li>Translations updated</li> \
           <li>Labels for editing properties</li> \
           <li>Bugfixing in editing and parsing</li> \

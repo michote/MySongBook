@@ -37,7 +37,7 @@ enyo.kind({
       show: "copyright",
       showChords: true,
       showComments: true,
-      showHeadline: false,
+      //~ showHeadline: false,
       testing: false
   },
   components: [
@@ -442,22 +442,35 @@ enyo.kind({
         } else { //~ disply lyrics without verseOrder
           formL = d.lyrics
         };
+        //~ for (var i in formL) {
+          //~ if (this.showHeadline) {
+            //~ var t = "<h1>" + $L(formL[i][0].charAt(0)) + " " 
+              //~ + formL[i][0].substring(1, formL[i][0].length) + "</h1>";
+          //~ } else {
+            //~ var t = "<div class='element'>" + $L(formL[i][0].charAt(0)).charAt(0)
+              //~ + formL[i][0].substring(1, formL[i][0].length) + ":</div>";
+          //~ };
+          //~ this.$.lyric.createComponent({
+            //~ name: i,
+            //~ kind: "HFlexBox",
+            //~ flex: 1,
+            //~ className: "lyric",
+            //~ content: t + formL[i][1]
+          //~ });
+        //~ };
         for (var i in formL) {
-          if (this.showHeadline) {
-            var t = "<h1>" + $L(formL[i][0].charAt(0)) + " " 
-              + formL[i][0].substring(1, formL[i][0].length) + "</h1>";
-          } else {
-            var t = "<div class='element'>" + $L(formL[i][0].charAt(0)).charAt(0)
-              + formL[i][0].substring(1, formL[i][0].length) + ":</div>";
-          };
+          var t = $L(i.charAt(0)).charAt(0) + i.substring(1, i.length) + ":";
           this.$.lyric.createComponent({
             name: i,
             kind: "HFlexBox",
             flex: 1,
             className: "lyric",
-            content: t + formL[i][1]
-          });
+            components: [
+              {content: t, className: "element"},
+              {content: formL[i], kind: "VFlexBox", flex: 1}
+          ]});
         };
+          
       };
       this.$.lyric.render();
       var x = this.$.lyric.node.lastChild.clientHeight;

@@ -101,6 +101,112 @@ function ParseXml () {}
     return names;
   };
   
+  // Parse a single <lines> tag
+  ParseXml.parselines = function (line, haschords, showChords, showComments, transp) {
+    var lines = "<div class='text'>";
+    var trigger = true; // for line starting without chord
+    var commenttrigger = false; //remove br after comment
+    for(j = 0; j < line.length; j++) {
+      // handle lyrics with chords 
+      if (haschords && showChords) { 
+        if (line[j].nodeValue === null) { // node is htmltag
+          //~ enyo.log(j, line[j].tagName);
+          if (line[j].tagName === "chord") {
+            trigger = false;
+            lines += "<div class='chordbox'><div class='chord'>"
+            if (transp) { // Transposer
+              var chord = line[j].getAttribute("name")
+              if (chord.indexOf("/") >= 0) { // Handle Chords with "/" e.g. "E/D"
+                chord = chord.split("/")
+                lines += Transposer.transpose(chord[0], transp) + "/" + 
+                  Transposer.transpose(chord[1], transp) + "&nbsp;&nbsp;"
+                    + "</div>";
+              } else {
+                lines += Transposer.transpose(chord, transp) + 
+                  "&nbsp;&nbsp;" + "</div>";
+              };
+            } else {
+              lines += line[j].getAttribute("name") + "&nbsp;&nbsp;" + "</div>";
+            };
+            if (line[j+1] && (line[j+1].nodeValue === null || // catch chord at line end
+              line[j+1].nodeValue.replace(/^[\s\xA0]+/, "") === "")) { 
+              lines += "<div class='txt'> </div></div>";
+            } else if (!line[j+1] && !trigger) { // also catch chord at line end
+              lines += "<div class='txt'> </div></div>";
+            };
+          } else if(line[j].tagName === "br") {
+            trigger = true;
+            lines += "<div style='clear:both;'></div>"; 
+          } else if (line[j].tagName === "comment") {
+            if (showComments) {
+              lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
+            } else {
+              lines += "<span style='line-height: 0;'></span>"
+            };
+          };
+        } else {
+          //~ enyo.log(j, line[j].nodeValue);
+          var x = line[j].nodeValue.replace(/^[\s\xA0]+/, " ");
+          if (x !== " ") { // don't add empty divs
+            if (trigger) { // for line starting without chord
+              trigger = false;
+              lines += "<div class='chordbox'><div class='chord'>&nbsp;</div>";
+              x = x.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); // keep only ending whitespace on beginning of line
+            } else {
+              x = x.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;"); // keep leeding and ending whitespaces
+            };
+            lines += "<div class='txt'>" + x + "</div></div>";
+          };
+        };
+      // handle lyrics with chords but don't show chords 
+      } else if (haschords && !showChords) { 
+        if (line[j].nodeValue === null) { // node is htmltag
+          if (line[j].tagName === "chord") {
+          } else if(line[j].tagName === "br") {
+            if (commenttrigger) {
+              commenttrigger = false;
+            } else {
+              lines += "<br>";
+            };
+          } else if (line[j].tagName === "comment") {
+            if (showComments) {
+              lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
+            } else {
+              commenttrigger = true;
+            };
+          };
+        } else {
+          var x = line[j].nodeValue.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); //strip nodevalue
+          if (x !== '') { // don't add empty divs
+            lines += x;
+          };
+        };
+      // handle lyrics without chords
+      } else { 
+        if (line[j].nodeValue === null) { 
+          if (line[j].tagName === "br") {
+            if (commenttrigger) {
+              commenttrigger = false;
+            } else {
+              lines += "<br>";
+            };
+          } else if (line[j].tagName === "comment") {
+            if (showComments) {
+              lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
+            } else {
+              commenttrigger = true;
+            };
+          };
+        } else {
+          lines += line[j].nodeValue; 
+        };
+      };
+    };
+    lines += "</div><div style='clear:both;'></div>"; 
+    
+    return lines
+  };
+  
   // ###Lyrics, Chords, Verseorder ###
   ParseXml.get_lyrics = function (xml, vo, showChords, showComments, transp) {
     var data = {}
@@ -123,109 +229,23 @@ function ParseXml () {}
         }
         
         // get versename and lyrics as html-string
-        var line = l[i].getElementsByTagName("lines")[0].childNodes;
-        var lines = "<div class='text'>";
-        var trigger = true; // for line starting without chord
-        var commenttrigger = false; //remove br after comment
-        for(j = 0; j < line.length; j++) {
-            // handle lyrics with chords 
-            if (data.haschords && showChords) { 
-              if (line[j].nodeValue === null) { // node is htmltag
-                if (line[j].tagName === "chord") {
-                  trigger = false;
-                  lines += "<div class='chordbox'><div class='chord'>"
-                  if (transp) { // Transposer
-                    var chord = line[j].getAttribute("name")
-                    if (chord.indexOf("/") >= 0) { // Handle Chords with "/" e.g. "E/D"
-                      chord = chord.split("/")
-                      lines += Transposer.transpose(chord[0], transp) + "/" + 
-                        Transposer.transpose(chord[1], transp) + "&nbsp;&nbsp;"
-                          + "</div>";
-                    } else {
-                      lines += Transposer.transpose(chord, transp) + 
-                        "&nbsp;&nbsp;" + "</div>";
-                    };
-                  } else {
-                    lines += line[j].getAttribute("name") + "&nbsp;&nbsp;" + "</div>";
-                  };
-                  if (line[j+1] && line[j+1].nodeValue === null) { // catch chord at line end
-                    lines += "<div class='txt'> </div></div>";
-                  }
-                } else if(line[j].tagName === "br") {
-                  trigger = true;
-                  lines += "<div style='clear:both;'></div>"; 
-                } else if (line[j].tagName === "comment") {
-                  if (showComments) {
-                    lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
-                  } else {
-                    lines += "<span style='line-height: 0;'></span>"
-                  };
-                };
-              } else {
-                var x = line[j].nodeValue.replace(/^[\s\xA0]+/, " ");
-                if (x !== " ") { // don't add empty divs
-                  if (trigger) { // for line starting without chord
-                    trigger = false;
-                    lines += "<div class='chordbox'><div class='chord'>&nbsp;</div>";
-                    x = x.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); // keep only ending whitespace on beginning of line
-                  } else {
-                    x = x.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;"); // keep leeding and ending whitespaces
-                  };
-                  lines += "<div class='txt'>" + x + "</div></div>";
-                };
-              };
-              if (j === line.length-1 && lines.slice(-12) !== "</div></div>") { // catch chord at verse end
-                lines += "<div class='txt'> </div></div>";
-              };
-            // handle lyrics with chords but don't show chords 
-            } else if (data.haschords && !showChords) { 
-              if (line[j].nodeValue === null) { // node is htmltag
-                if (line[j].tagName === "chord") {
-                } else if(line[j].tagName === "br") {
-                  if (commenttrigger) {
-                    commenttrigger = false;
-                  } else {
-                    lines += "<br>";
-                  };
-                } else if (line[j].tagName === "comment") {
-                  if (showComments) {
-                    lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
-                  } else {
-                    commenttrigger = true;
-                  };
-                };
-              } else {
-                var x = line[j].nodeValue.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); //strip nodevalue
-                if (x !== '') { // don't add empty divs
-                  lines += x;
-                };
-              };
-            // handle lyrics without chords
-            } else { 
-              if (line[j].nodeValue === null) { 
-                if (line[j].tagName === "br") {
-                  if (commenttrigger) {
-                    commenttrigger = false;
-                  } else {
-                    lines += "<br>";
-                  };
-                } else if (line[j].tagName === "comment") {
-                  if (showComments) {
-                    lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
-                  } else {
-                    commenttrigger = true;
-                  };
-                };
-              } else {
-                lines += line[j].nodeValue; 
-              };
-            };
-        };
-        lines += "</div><div style='clear:both;'></div>"; 
+        var line = [];
+        for (k=0; k<l[i].childElementCount; k++) {
+          line = line.concat(l[i].getElementsByTagName("lines")[k]);
+        }
+        var lines = "";
+        for (m=0; m < line.length; m++) {
+          if (line[m].getAttribute("part") !== null) {
+            lines += "<font color='#9E0508'><i>" + line[m].getAttribute("part")
+              + "</i></font><br>";
+          }
+          lines += ParseXml.parselines(line[m].childNodes, data.haschords, 
+            showChords, showComments, transp);
+        }  
         
         // add lyrics[id] = [name, lyrics]
         var id = l[i].getAttribute("name");
-        data.lyrics[id] = [id,lines];
+        data.lyrics[id] = lines;
         
         // create verseOrder
         if (crOrder) {

@@ -313,21 +313,12 @@ a {
 }
 
 .element {
-    position: relative;
-    float: left;
+    width: 45px;
     color: #777777;
     font-weight: bold;
-    width: 45px;
 }
 
 .text {
-    display: block;
-    position: relative;
-    float: left;
-/*
-    width: 100%;
-*/
-    margin: 0 0 0.3em 0;
 }
 
 .text i {

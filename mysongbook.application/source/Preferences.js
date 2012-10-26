@@ -15,7 +15,7 @@ enyo.kind({
     sortLyric: true,
     showinToolbar: "copyright",
     showChords: true,
-    showComments: true,
+    showComments: false,
     showHeadline: false,
     testing: false
   },
@@ -63,16 +63,16 @@ enyo.kind({
               ]},
               {kind: "LabeledContainer", caption: $L("Show Comments"),
                 components: [
-                  {kind: "ToggleButton", name: "toggleComments", state: true,
+                  {kind: "ToggleButton", name: "toggleComments", state: false,
                     onChange: "toggleShowComments", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
-              ]},
-              {kind: "LabeledContainer", caption: $L("Show elementname (e.g. Verse 1) as Headline"),
-                components: [
-                  {kind: "ToggleButton", name: "toggleHeadline", state: false,
-                    onChange: "toggleShowHeadline", onLabel: $L("yes"), offLabel: $L("no"),
-                    components:[{className: "toggle-button-knob"}]}
               ]}
+              //~ {kind: "LabeledContainer", caption: $L("Show elementname (e.g. Verse 1) as Headline"),
+                //~ components: [
+                  //~ {kind: "ToggleButton", name: "toggleHeadline", state: false,
+                    //~ onChange: "toggleShowHeadline", onLabel: $L("yes"), offLabel: $L("no"),
+                    //~ components:[{className: "toggle-button-knob"}]}
+              //~ ]}
             ]},
             {kind: "RowGroup", caption: $L("Developement Settings"), components:[
               {kind: "HFlexBox", components: [
@@ -103,7 +103,7 @@ enyo.kind({
     this.$.toolbarSwitch.setValue(this.showinToolbar);
     this.$.toggleChords.setState(this.showChords);
     this.$.toggleComments.setState(this.showComments);
-    this.$.toggleHeadline.setState(this.showHeadline);
+    //~ this.$.toggleHeadline.setState(this.showHeadline);
     this.$.testingToggle.setState(this.testing);
   },
   
@@ -113,7 +113,7 @@ enyo.kind({
       "showinToolbar": this.showinToolbar,
       "showChords": this.showChords,
       "showComments": this.showComments,
-      "showHeadline": this.showHeadline,
+      //~ "showHeadline": this.showHeadline,
       "testing": this.testing
     });
     this.doSave(this.sortLyric, this.showinToolbar, this.showChords, 

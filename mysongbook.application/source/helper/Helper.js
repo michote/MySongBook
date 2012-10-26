@@ -55,7 +55,7 @@ function Helper() {}
     //~ enyo.log("order2: " + order2);
     for (i = 0; i < order.length; i++) {
       if (lyrics[order[i]] !== undefined) {
-        newLyrics[order2[i]] = [order[i],lyrics[order[i]][1]];
+        newLyrics[order2[i]] = lyrics[order[i]];
       };
     };
     return newLyrics;

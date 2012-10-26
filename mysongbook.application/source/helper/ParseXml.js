@@ -245,7 +245,7 @@ function ParseXml () {}
         
         // add lyrics[id] = [name, lyrics]
         var id = l[i].getAttribute("name");
-        data.lyrics[id] = lines;
+        data.lyrics[id] = [id, lines];
         
         // create verseOrder
         if (crOrder) {

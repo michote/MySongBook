@@ -439,7 +439,7 @@ enyo.kind({
         if (this.sort) { //~ display lyrics like verseOrder
           formL = Helper.orderLyrics(d.lyrics, this.order);
           this.order = Helper.handleDoubles(this.order);
-        } else { //~ disply lyrics without verseOrder
+        } else { //~ display lyrics without verseOrder
           formL = d.lyrics
         };
         //~ for (var i in formL) {
@@ -459,7 +459,9 @@ enyo.kind({
           //~ });
         //~ };
         for (var i in formL) {
-          var t = $L(i.charAt(0)).charAt(0) + i.substring(1, i.length) + ":";
+          enyo.log("i", i);
+          var t = $L(formL[i][0].charAt(0)).charAt(0)
+            + formL[i][0].substring(1, formL[i][0].length) + ":";
           this.$.lyric.createComponent({
             name: i,
             kind: "HFlexBox",
@@ -467,7 +469,7 @@ enyo.kind({
             className: "lyric",
             components: [
               {content: t, className: "element"},
-              {content: formL[i], kind: "VFlexBox", flex: 1}
+              {content: formL[i][1], kind: "VFlexBox", flex: 1}
           ]});
         };
           

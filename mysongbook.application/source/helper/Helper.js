@@ -50,12 +50,12 @@ function Helper() {}
   Helper.orderLyrics = function(lyrics, order) {
     var newLyrics = {};
     var order2 = this.handleDoubles(order);
-    //~ enyo.log("lyrics: " + lyrics);
-    //~ enyo.log("order: " + order);
-    //~ enyo.log("order2: " + order2);
+    enyo.log("lyrics: " + lyrics);
+    enyo.log("order: " + order);
+    enyo.log("order2: " + order2);
     for (i = 0; i < order.length; i++) {
       if (lyrics[order[i]] !== undefined) {
-        newLyrics[order2[i]] = lyrics[order[i]];
+        newLyrics[order2[i]] = [order[i],lyrics[order[i]][1]];
       };
     };
     return newLyrics;

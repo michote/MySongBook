@@ -156,12 +156,14 @@ enyo.kind({
       // Buttons
       this.enableTransposer(this.data.key, this.data.haschords, this.transpose);
       this.$.infoButton.setDisabled(false);
-      this.$.editButton.setDisabled(false);
-      this.$.backButton.setDisabled(true); 
-      if (this.data.verseOrder && (this.textIndex === (this.data.verseOrder.length-1))) {
-        this.$.forthButton.setDisabled(true);
-      } else {
-        this.$.forthButton.setDisabled(false);
+      if (this.finished) {  // auto-scroll not active
+        this.$.editButton.setDisabled(false);
+        this.$.backButton.setDisabled(true); 
+        if (this.data.verseOrder && (this.textIndex === (this.data.verseOrder.length-1))) {
+          this.$.forthButton.setDisabled(true);
+        } else {
+          this.$.forthButton.setDisabled(false);
+        }
       }
       //~ enyo.log(Transposer.transpose("D", this.transpose));
     } ;
@@ -271,16 +273,10 @@ enyo.kind({
     if (window.PalmSystem && (this.$.lockButton.getIcon() == "images/lock-open.png")) {
       enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
     };
-    if (this.data.duration) {
-      this.songSecs = this.data.duration;
-    } else {
-      this.songSecs = this.defaultSongSecs;
-    };
     if (this.data.titles) { 
       var theTitles = ParseXml.titlesToString(this.data.titles); 
       this.$.title.setContent(theTitles);
     };
-    this.$.infoButton.setDisabled(false);
     this.$.editButton.setDisabled(false);
     this.$.fontButton.setDisabled(false);
   },
@@ -295,10 +291,14 @@ enyo.kind({
     };
     this.halfHt = this.$.viewScroller.node.clientHeight / 2;
     this.$.viewScroller.scrollTo(this.lyricsCurrRow, 0);
+    if (this.data.duration) {
+      this.songSecs = this.data.duration;
+    } else {
+      this.songSecs = this.defaultSongSecs;
+    };
     this.$.cursorScrollBar.color = this.$.cursorScrollBar.onColor
     this.$.cursorScrollBar.node.height = this.$.viewScroller.node.clientHeight;
     this.$.cursorScrollBar.show();
-    this.$.infoButton.setDisabled(true);
     this.$.editButton.setDisabled(true);
     this.$.fontButton.setDisabled(true);
   },

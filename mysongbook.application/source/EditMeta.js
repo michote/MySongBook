@@ -95,9 +95,9 @@ enyo.kind({
             {content: $L("songbook") + ":", style: "padding:10px 5px;", width: "15%", 
               className: "editlabel"},
             {name: "songbook1", flex: 1, kind: "Input", hint: $L("songbook")}, 
-            {content: $L("no") + ":", style: "padding:10px 5px;", width: "5%", 
+            {content: $L("no.") + ":", style: "padding:10px 5px;", width: "5%", 
               className: "editlabel"},
-            {name: "no1", kind: "Input", width: "15%", hint: "number"}
+            {name: "no1", kind: "Input", width: "15%", hint: $L("number")}
           ]},
         ]}
       ]}
@@ -174,10 +174,10 @@ enyo.kind({
           width: "15%", className: "editlabel"},
         {name: "songbook" + this.songbookCount, flex: 1, kind: "Input",
           hint: "songbook", owner: this},
-        {content: $L("no") + ":", style: "padding:10px 5px;", width: "5%",
+        {content: $L("no.") + ":", style: "padding:10px 5px;", width: "5%",
           className: "editlabel"},
         {name: "no" + this.songbookCount, kind: "Input", width: "15%", 
-          hint: "number", owner: this}
+          hint: $L("number"), owner: this}
       ]}
     );
     this.$.songbookbox.render();

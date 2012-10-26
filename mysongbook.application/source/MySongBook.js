@@ -20,7 +20,7 @@ enyo.kind({
     savedLists: [],
     customList: undefined,
     searchList: {"content": []},
-    css: {},
+    css: undefined,
     currentList: "libraryList",
     currentIndex: undefined
   },

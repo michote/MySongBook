@@ -110,3 +110,10 @@ function Helper() {}
     return false;
   };
   
+  Helper.setItem = function(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
+  
+  Helper.getItem = function(key) {
+    return JSON.parse(localStorage.getItem(key));
+  }

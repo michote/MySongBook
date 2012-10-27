@@ -31,14 +31,20 @@ enyo.kind({
   published: {
       path: "",
       data: {},
+      xml: undefined,
       first: true,
       // Prefs
-      sort: false,
-      show: "copyright",
-      showChords: true,
-      showComments: true,
-      showHeadline: true,
-      testing: false
+      //~ testing: false,
+      showPrefs: {
+        sortLyrics: true,
+        showinToolbar: "copyright",
+        showChords: true,
+        showComments: false,
+        showName: true,
+        showTransposer: true,
+        showScroll: true,
+        showAuto: true
+      }
   },
   components: [
     {kind: "ApplicationEvents", onKeydown: "handleKeyPress"},
@@ -88,8 +94,8 @@ enyo.kind({
           {name: "playButton", kind: "IconButton", toggling: true,
             icon: "images/play.png", onclick: "togglePlay"},
           {kind: "Spacer"},
-          {name: "editButton", kind: "IconButton", showing: false, // still in Developement
-            icon: "images/edit.png", onclick: "doEdit", disabled: true},
+          {name: "editButton", kind: "IconButton", icon: "images/edit.png",
+            onclick: "doEdit", disabled: true},
           {name: "infoButton", kind: "IconButton", disabled: true,
             icon: "images/info.png", onclick: "showInfo"}
         ]}
@@ -100,26 +106,28 @@ enyo.kind({
   
   create: function() {
     this.inherited(arguments);
-    // hide Stuff on Phone
-    if (Helper.smScr()) {
-      this.$.backButton.hide();
-      this.$.forthButton.hide();
-      this.$.spacer.hide();
-      this.$.transposergr.hide();
-      this.$.editButton.hide();
-    };
     if (!window.PalmSystem) {
       this.$.lockButton.hide();
     };
   },
   
+  showPrefsChanged: function() {
+    if (this.xml) {
+      this.renderLyrics(this.xml);
+    } else {
+      this.buttons();
+    }
+  },
+  
+  buttons: function() {
+    this.$.backButton.setShowing(this.showPrefs.showScroll);
+    this.$.forthButton.setShowing(this.showPrefs.showScroll);
+    this.$.transposergr.setShowing(this.showPrefs.showTransposer);
+    this.$.playButton.setShowing(this.showPrefs.showAuto);
+  },
+  
   // get xml lyricdata
   pathChanged: function() {
-    if (this.testing) {
-      this.$.editButton.show();
-    } else {
-      this.$.editButton.hide();
-    }
     this.initCursor();
     this.$.getXml.setUrl(this.path);
     this.$.getXml.call();
@@ -131,6 +139,7 @@ enyo.kind({
   },
     
   renderLyrics: function(xml) {
+    this.buttons();
     var transposition = ParseXml.get_metadata(xml, "transposition");
     if (transposition && this.first) {
       this.transpose = parseInt(transposition);
@@ -141,8 +150,8 @@ enyo.kind({
     } else {
       this.first = false;
     }
-    this.data = ParseXml.parse(xml, this.showChords, this.showComments, this.transpose);
-    //~ this.myDebug(this.data);
+    this.data = ParseXml.parse(xml, this.showPrefs.showChords, 
+      this.showPrefs.showComments, this.transpose);
     if (this.data.titles !== undefined) {
       this.metaDataSet();
       this.order = (this.data.verseOrder);
@@ -157,13 +166,13 @@ enyo.kind({
       if (this.finished) {  // auto-scroll not active
         this.$.editButton.setDisabled(false);
         this.$.backButton.setDisabled(true); 
-        if (this.data.verseOrder && (this.textIndex === (this.data.verseOrder.length-1))) {
+        if (this.data.verseOrder && 
+          (this.textIndex === (this.data.verseOrder.length-1))) {
           this.$.forthButton.setDisabled(true);
         } else {
           this.$.forthButton.setDisabled(false);
         }
       }
-      //~ enyo.log(Transposer.transpose("D", this.transpose));
     } ;
   },
   
@@ -410,14 +419,14 @@ enyo.kind({
     } else {
       var y = ""
     }
-    if (d[this.show]) {
-      if (this.show === "authors") {
+    if (d[this.showPrefs.showinToolbar]) {
+      if (this.showPrefs.showinToolbar === "authors") {
         this.$.copy.setContent(y + ParseXml.authorsToString(d.authors).join(", "));
       } else {
-        this.$.copy.setContent("&copy; " + y + d[this.show]);
+        this.$.copy.setContent("&copy; " + y + d[this.showPrefs.showinToolbar]);
       };
     } else {
-      this.$.copy.setContent("&copy; " + y + $L("no" + this.show));
+      this.$.copy.setContent("&copy; " + y + $L("no" + this.showPrefs.showinToolbar));
     };
   },
   
@@ -432,7 +441,7 @@ enyo.kind({
         lyrics = $L(d.lyrics);
       } else { 
         var formL = {};
-        if (this.sort) { //~ display lyrics like verseOrder
+        if (this.showPrefs.sortLyrics) { //~ display lyrics like verseOrder
           formL = Helper.orderLyrics(d.lyrics, this.order);
           this.order = Helper.handleDoubles(this.order);
         } else { //~ display lyrics without verseOrder
@@ -440,7 +449,7 @@ enyo.kind({
         };
         // Create lyric divs
         for (var i in formL) {
-          if (this.showHeadline) {
+          if (this.showPrefs.showName) {
             var t = $L(formL[i][0].charAt(0)).charAt(0)
               + formL[i][0].substring(1, formL[i][0].length) + ":";
             this.$.lyric.createComponent({
@@ -482,6 +491,7 @@ enyo.kind({
   showHelp: function() { 
     this.$.lyric.destroyComponents();
     this.owner.setCurrentIndex(undefined);
+    this.setXml(undefined);
     this.$.title.setContent($L("Help"));
     this.$.copy.setContent("&copy; michote");
     this.$.infoButton.setDisabled(true);
@@ -570,14 +580,5 @@ enyo.kind({
   
   transPick: function() {
     this.setTrans(Transposer.getDelta(this.data.key, this.$.transposer.getValue()));
-  },
-  
-  // Debugging
-  myDebug: function (data) {
-    // Ausgabe:
-    enyo.log(data.titles);
-    enyo.log(data.authors);
-    enyo.log(data.copyright);
-    //~ enyo.log(data.lyrics);
   }
 });

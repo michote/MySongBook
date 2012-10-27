@@ -44,10 +44,10 @@ enyo.kind({
         {kind: "Image", src: "images/pause-help.png"},
         {kind: "HtmlContent", content: $L("pause autoscroll")}
       ]},
-      //~ {kind: "HFlexBox", components: [
-        //~ {kind: "Image", src: "images/edit-help.png"},
-        //~ {kind: "HtmlContent", content: $L("edit current song")}
-      //~ ]},
+      {kind: "HFlexBox", components: [
+        {kind: "Image", src: "images/edit-help.png"},
+        {kind: "HtmlContent", content: $L("edit current song")}
+      ]},
       {kind: "HFlexBox", components: [
         {kind: "Image", src: "images/info-help.png"},
         {kind: "HtmlContent", content: $L("shows songinfo") + "<br><br>"}
@@ -127,6 +127,12 @@ enyo.kind({
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
+          <li>Create and Edit Songs out of Beta</li> \
+          <li>Toggle show Buttons</li> \
+        </ul>'},
+      {kind: "HtmlContent", content: "<b>Version 0.2.2</b>"},
+      {kind: "HtmlContent", content: 
+        '<ul> \
           <li>Autoscroll out of beta</li> \
           <li>Now displays multiple lines and parts</li> \
           <li>Songelement Headline removed</li> \
@@ -152,14 +158,14 @@ enyo.kind({
         '<ul> \
           <li>Fixed Bugs with lists not added and/or saved</li> \
         </ul>'},
-      {kind: "HtmlContent", content: "<b>Version 0.1.4</b>"},
-      {kind: "HtmlContent", content: 
-        '<ul> \
-          <li>Added spanish translation thanks to ajguns</li> \
-          <li>New scrollbar</li> \
-          <li>Some small bugfixes</li> \
-          <li>More stuff working in dev preview</li> \
-        </ul>'},
+      //~ {kind: "HtmlContent", content: "<b>Version 0.1.4</b>"},
+      //~ {kind: "HtmlContent", content: 
+        //~ '<ul> \
+          //~ <li>Added spanish translation thanks to ajguns</li> \
+          //~ <li>New scrollbar</li> \
+          //~ <li>Some small bugfixes</li> \
+          //~ <li>More stuff working in dev preview</li> \
+        //~ </ul>'},
       //~ {kind: "HtmlContent", content: "<b>Version 0.1.2</b>"},
       //~ {kind: "HtmlContent", content: 
         //~ '<ul><li>Bugfixes<ul><li>Sort Library fixed</li>\

@@ -81,8 +81,7 @@ enyo.kind({
     {name: "listDialog", kind: "ListDialog", onSelect: "selectCustomList",
       onListRm: "rmCustomList"},
     {kind: "FontDialog"},
-    {name: "preferences", kind: "Preferences", onReceive: "preferencesReceived",
-      onSave: "preferencesSaved", onBack: "goBack"},
+    {name: "preferences", kind: "Preferences", onBack: "goBack"},
     {name: "newSongDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
       caption: $L("New song"), scrim: true, components: [
         {name: "songErrorContent", kind: "HtmlContent", 
@@ -103,7 +102,7 @@ enyo.kind({
     // Menu 
     {name: "appMenu", kind: "AppMenu", components: [
       {caption: $L("Preferences"), onclick: "showPreferences"},
-      {name: "createNewSong", caption: $L("Create new song"), onclick: "openCreateSong", showing: false},
+      {caption: $L("Create new song"), onclick: "openCreateSong"},
       {caption: $L("Refresh Library"), onclick: "readDirCall"},
       {caption: $L("About"), onclick: "showAbout"},
       {caption: $L("Help"), onclick: "showHelp"}
@@ -113,20 +112,7 @@ enyo.kind({
   create: function() {
     this.inherited(arguments);
     this.$.readDir.call({"path": this.dirPath});
-    this.$.getPreferencesCall.call(
-    {
-      "keys": [
-        "sortLyric", 
-        "showinToolbar",
-        "savedLists",
-        "customList",
-        "css",
-        "showChords",
-        "showComments",
-        "showHeadline",
-        "testing"
-        ]
-    });
+    this.getPreferences();
   },
   
   readDirCall: function() {
@@ -287,7 +273,7 @@ enyo.kind({
         };
       };
     };
-    this.saveLists(this.savedLists, this.customList);
+    this.saveLists();
   },
   
   addToList: function(inSender, inEvent) {
@@ -327,8 +313,6 @@ enyo.kind({
   // App-Menu
   openAppMenuHandler: function() {
     this.$.appMenu.open();
-    enyo.log(this.$.songViewPane.testing);
-    this.$.createNewSong.setShowing(this.$.songViewPane.testing);
   },
   
   closeAppMenuHandler: function() {
@@ -346,72 +330,28 @@ enyo.kind({
   },
   
   // ### Preferences ###
-  showPreferences: function() {
+  showPreferences: function () {
     this.$.preferences.openAtCenter();
   },
   
-  getPreferencesSuccess: function(inSender, inResponse) {
-    if (inResponse.sortLyric != undefined) {
-      this.$.songViewPane.setSort(inResponse.sortLyric);
-      this.$.songViewPane.setShow(inResponse.showinToolbar);
-      this.$.songViewPane.setShowChords(inResponse.showChords);
-      this.$.songViewPane.setShowComments(inResponse.showComments);
-      this.$.songViewPane.setShowHeadline(inResponse.showHeadline);
-      this.$.preferences.setSortLyric(inResponse.sortLyric);
-      this.$.preferences.setShowinToolbar(inResponse.showinToolbar);
-      this.$.preferences.setShowChords(inResponse.showChords);
-      this.$.preferences.setShowComments(inResponse.showComments);
-      this.$.preferences.setShowHeadline(inResponse.showHeadline);
-      this.$.songViewPane.setTesting(inResponse.testing);
-      this.$.preferences.setTesting(inResponse.testing);
-    };
-    if (inResponse.css) {
-      this.setCss(inResponse.css);
-      this.setFont(inResponse.css);
-    };
-    if (inResponse.savedLists) {
-      this.savedLists = inResponse.savedLists;
-      this.customList = inResponse.customList;
-    };
-    enyo.log("got Preferences from Localstorage");
+  getPreferences: function () {
+    if (Helper.getItem("css")) {
+      this.setCss(Helper.getItem("css"));
+      this.setFont(Helper.getItem("css"));
+    }
+    this.customList = Helper.getItem("customList");
+    if (Helper.getItem("savedLists")) {
+      this.savedLists = Helper.getItem("savedLists");
+    }
   },
   
-  getPreferencesFailure: function(inSender, inResponse) {
-    enyo.log("got failure from getPreferences");
-  },
-  
-  setPreferencesSuccess: function(inSender, inResponse) {
-    enyo.log("got success from setPreferences");
-  },
-  
-  setPreferencesFailure: function(inSender, inResponse) {
-    enyo.log("got failure from setPreferences");
-  },
-  
-  saveLists: function(inSaved, inCustom) {
-    this.$.setPreferencesCall.call({
-      "savedLists": inSaved,
-      "customList": inCustom
-    });
+  saveLists: function () {
+    Helper.setItem("savedLists", this.savedLists);
+    Helper.setItem("customList", this.customList);
   },
   
   saveCss: function(inCss) {
-    this.$.setPreferencesCall.call({
-      "css": inCss
-    });
-  },
-  
-  preferencesSaved: function(inSender, inSort, inShow, inChords, inComments,
-    inHead, inTesting) {
-    this.$.songViewPane.setSort(inSort);
-    this.$.songViewPane.setShow(inShow);
-    this.$.songViewPane.setShowChords(inChords);
-    this.$.songViewPane.setShowComments(inComments);
-    this.$.songViewPane.setShowHeadline(inHead);
-    this.$.songViewPane.setTesting(inTesting);
-    this.$.createNewSong.setShowing(inTesting);
-    this.setCurrentIndex(this.currentIndex);
-    this.$.preferences.close();
+    Helper.setItem("css", inCss);
   },
   
   // ### XML-wirting stuff ###

@@ -126,5 +126,10 @@
     "key": "Tonart",
     "transposition": "Transponierung",
     "duration": "Dauer",
-    "verseorder": "Reihenfolge"
+    "verseorder": "Reihenfolge",
+    
+    "Button Settings": "Button Einstellungen",
+    "Show Transposer": "Zeige Transponierer",
+    "Show Scrollbuttons": "Zeige Scrollbutton",
+    "Show Autoscrollbutton": "Zeige Autoscrollbutton"
 }

@@ -7,16 +7,17 @@ enyo.kind({
   dismissWithClick: false,
   scrim: true,
   style: "height:100%;",
-  events: {
-    onSave: "",
-    onCancel: ""
-  },
   published: {
-    sortLyric: true,
-    showinToolbar: "copyright",
-    showChords: true,
-    showComments: false,
-    showHeadline: true,
+    showPrefs: {
+      sortLyrics: true,
+      showinToolbar: "copyright",
+      showChords: true,
+      showComments: false,
+      showName: true,
+      showTransposer: true,
+      showScroll: true,
+      showAuto: true
+    },
     testing: false
   },
   components: [ 
@@ -42,14 +43,14 @@ enyo.kind({
               {kind: "LabeledContainer", caption: $L("Sort Lyric"),
                 components: [
                   {kind: "ToggleButton", name: "sortLyrics", state: false,
-                    onChange: "toggleSortLyrics", onLabel: $L("yes"), offLabel: $L("no"),
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
               ]},
               {kind: "Item", tapHighlight: false, layoutKind: "HFlexLayout", 
                 components: [
-                {flex:1, content:$L("Show in bottom toolbar:")},
-                {name:"toolbarSwitch", kind: "ListSelector", value: "copyright", 
-                  onChange:"onchange_toolbarSwitch", hideArrow: false, items: [
+                {flex: 1, content:$L("Show in bottom toolbar:")},
+                {name: "showinToolbar", kind: "ListSelector", value: "copyright", 
+                  onChange:"toggle", hideArrow: false, items: [
                   {caption: $L("copyright"), value:"copyright"},
                   {caption: $L("author"), value:"authors"},
                   {caption: $L("publisher"), value:"publisher"},
@@ -57,33 +58,53 @@ enyo.kind({
               ]},
               {kind: "LabeledContainer", caption: $L("Show Chords"),
                 components: [
-                  {kind: "ToggleButton", name: "toggleChords", state: true,
-                    onChange: "toggleShowChords", onLabel: $L("yes"), offLabel: $L("no"),
+                  {kind: "ToggleButton", name: "showChords", state: true,
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
               ]},
               {kind: "LabeledContainer", caption: $L("Show Comments"),
                 components: [
-                  {kind: "ToggleButton", name: "toggleComments", state: false,
-                    onChange: "toggleShowComments", onLabel: $L("yes"), offLabel: $L("no"),
+                  {kind: "ToggleButton", name: "showComments", state: false,
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
               ]},
               {kind: "LabeledContainer", caption: $L("Show elementname (e.g. V1:)"),
                 components: [
-                  {kind: "ToggleButton", name: "toggleHeadline", state: true,
-                    onChange: "toggleShowHeadline", onLabel: $L("yes"), offLabel: $L("no"),
+                  {kind: "ToggleButton", name: "showName", state: true,
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
               ]}
             ]},
-            {kind: "RowGroup", caption: $L("Developement Settings"), components:[
-              {kind: "HFlexBox", components: [
-                  {kind: "HtmlContent", flex: 1, content: "Enable features in \
-                    development.<br><span style='color:red;'>This comes without \
-                    any warranty and may destroy yout data!</span>"},
-                  {kind: "ToggleButton", name: "testingToggle", state: false,
-                    onChange: "toggleTesting", onLabel: $L("yes"), offLabel: $L("no"),
+            {kind: "RowGroup", caption: $L("Button Settings"), components:[
+              {kind: "LabeledContainer", caption: $L("Show Transposer"),
+                components: [
+                  {kind: "ToggleButton", name: "showTransposer", state: true,
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
+                    components:[{className: "toggle-button-knob"}]}
+              ]},
+              {kind: "LabeledContainer", caption: $L("Show Scrollbuttons"),
+                components: [
+                  {kind: "ToggleButton", name: "showScroll", state: true,
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
+                    components:[{className: "toggle-button-knob"}]}
+              ]},
+              {kind: "LabeledContainer", caption: $L("Show Autoscrollbutton"),
+                components: [
+                  {kind: "ToggleButton", name: "showAuto", state: true,
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
               ]}
             ]},
+            //~ {kind: "RowGroup", caption: $L("Developement Settings"), components:[
+              //~ {kind: "HFlexBox", components: [
+                  //~ {kind: "HtmlContent", flex: 1, content: "Enable features in \
+                    //~ development.<br><span style='color:red;'>This comes without \
+                    //~ any warranty and may destroy yout data!</span>"},
+                  //~ {kind: "ToggleButton", name: "testingToggle", state: false,
+                    //~ onChange: "toggleTesting", onLabel: $L("yes"), offLabel: $L("no"),
+                    //~ components:[{className: "toggle-button-knob"}]}
+              //~ ]}
+            //~ ]},
           ]}
         ]},
         {name: "footerToolbar", kind: "Toolbar", pack : "center", components: [
@@ -96,63 +117,52 @@ enyo.kind({
   
   create: function() {
     this.inherited(arguments);
+    this.getPrefs();
+    //~ this.owner.$.songViewPane.setTesting(this.testing);
+    this.owner.$.songViewPane.setShowPrefs(this.showPrefs);
   },
-    
+  
+  getPrefs: function() {
+    if (Helper.getItem("showPrefs")) {
+      this.showPrefs = Helper.getItem("showPrefs");
+      //~ enyo.log("got", "showPrefs", Helper.getItem("showPrefs"));
+    }
+    //~ if (Helper.getItem("testing")) {
+      //~ this.testing = Helper.getItem("testing");
+      //~ enyo.log("got", "testing", Helper.getItem("testing"));
+    //~ }
+  },
+  
   rendered: function() {
-    this.$.sortLyrics.setState(this.sortLyric);
-    this.$.toolbarSwitch.setValue(this.showinToolbar);
-    this.$.toggleChords.setState(this.showChords);
-    this.$.toggleComments.setState(this.showComments);
-    this.$.toggleHeadline.setState(this.showHeadline);
+    this.getPrefs();
+    for (i in this.showPrefs) {
+      //~ enyo.log("set: ", i, this.showPrefs[i]);
+      if (i === "showinToolbar") {
+        this.$[i].setValue(this.showPrefs[i]);
+      } else {
+        this.$[i].setState(this.showPrefs[i]);
+      }
+    }
     this.$.testingToggle.setState(this.testing);
   },
   
-  savePrefs: function(inSender, inEvent) {
-    this.owner.$.setPreferencesCall.call({
-      "sortLyric": this.sortLyric,
-      "showinToolbar": this.showinToolbar,
-      "showChords": this.showChords,
-      "showComments": this.showComments,
-      "showHeadline": this.showHeadline,
-      "testing": this.testing
-    });
-    this.doSave(this.sortLyric, this.showinToolbar, this.showChords, 
-      this.showComments, this.showHeadline, this.testing);
+  savePrefs: function() {
+    //~ Helper.setItem("testing", this.testing);
+    Helper.setItem("showPrefs", this.showPrefs);
+    //~ this.owner.$.songViewPane.setTesting(this.testing);
+    this.owner.$.songViewPane.setShowPrefs(this.showPrefs);
+    this.close();
   },
   
   cancelClick: function() {
     this.close();
   },
-  
-  // toggle and change Events
-  toggleSortLyrics: function() {
-    //~ enyo.log("SortLyric toggled", this.$.sortLyrics.getState());
-    this.sortLyric = this.$.sortLyrics.getState();
-  },
-  
-  onchange_toolbarSwitch: function () {
-    //~ enyo.log("ToolbarSwitch toggled", this.$.toolbarSwitch.getValue());
-    this.showinToolbar = this.$.toolbarSwitch.getValue();
-  },
-  
-  toggleShowChords: function () {
-    //~ enyo.log("ShowChords toggled", this.$.toggleChords.getState());
-    this.showChords = this.$.toggleChords.getState();
-  },
-  
-  toggleShowComments: function () {
-    //~ enyo.log("Show Comments toggled", this.$.toggleComments.getState());
-    this.showComments = this.$.toggleComments.getState();
-  },
-  
+
   toggleTesting: function () {
-    //~ enyo.log("Testing toggled", this.$.testingToggle.getState());
     this.testing = this.$.testingToggle.getState();
   },
-  
-  toggleShowHeadline: function () {
-    //~ enyo.log("Headline toggled", this.$.toggleHeadline.getState());
-    this.showHeadline = this.$.toggleHeadline.getState();
+
+  toggle: function (inSender, inEvent) {
+    this.showPrefs[inSender.name] = inEvent;
   }
-  
 });

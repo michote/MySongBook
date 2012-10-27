@@ -37,7 +37,7 @@ enyo.kind({
       show: "copyright",
       showChords: true,
       showComments: true,
-      //~ showHeadline: false,
+      showHeadline: true,
       testing: false
   },
   components: [
@@ -438,35 +438,30 @@ enyo.kind({
         } else { //~ display lyrics without verseOrder
           formL = d.lyrics
         };
-        //~ for (var i in formL) {
-          //~ if (this.showHeadline) {
-            //~ var t = "<h1>" + $L(formL[i][0].charAt(0)) + " " 
-              //~ + formL[i][0].substring(1, formL[i][0].length) + "</h1>";
-          //~ } else {
-            //~ var t = "<div class='element'>" + $L(formL[i][0].charAt(0)).charAt(0)
-              //~ + formL[i][0].substring(1, formL[i][0].length) + ":</div>";
-          //~ };
-          //~ this.$.lyric.createComponent({
-            //~ name: i,
-            //~ kind: "HFlexBox",
-            //~ flex: 1,
-            //~ className: "lyric",
-            //~ content: t + formL[i][1]
-          //~ });
-        //~ };
+        // Create lyric divs
         for (var i in formL) {
-          //~ enyo.log("i", i);
-          var t = $L(formL[i][0].charAt(0)).charAt(0)
-            + formL[i][0].substring(1, formL[i][0].length) + ":";
-          this.$.lyric.createComponent({
-            name: i,
-            kind: "HFlexBox",
-            flex: 1,
-            className: "lyric",
-            components: [
-              {content: t, className: "element"},
-              {content: formL[i][1], kind: "VFlexBox", flex: 1}
-          ]});
+          if (this.showHeadline) {
+            var t = $L(formL[i][0].charAt(0)).charAt(0)
+              + formL[i][0].substring(1, formL[i][0].length) + ":";
+            this.$.lyric.createComponent({
+              name: i,
+              kind: "HFlexBox",
+              flex: 1,
+              className: "lyric",
+              components: [
+                {content: t, className: "element"},
+                {content: formL[i][1], kind: "VFlexBox", flex: 1}
+            ]});
+          } else {
+            this.$.lyric.createComponent({
+              name: i,
+              kind: "HFlexBox",
+              flex: 1,
+              className: "lyric",
+              components: [
+                {content: formL[i][1], kind: "VFlexBox", flex: 1}
+            ]});
+          }
         };
           
       };

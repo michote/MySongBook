@@ -16,7 +16,7 @@ enyo.kind({
     showinToolbar: "copyright",
     showChords: true,
     showComments: false,
-    showHeadline: false,
+    showHeadline: true,
     testing: false
   },
   components: [ 
@@ -66,13 +66,13 @@ enyo.kind({
                   {kind: "ToggleButton", name: "toggleComments", state: false,
                     onChange: "toggleShowComments", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
+              ]},
+              {kind: "LabeledContainer", caption: $L("Show elementname (e.g. V1:)"),
+                components: [
+                  {kind: "ToggleButton", name: "toggleHeadline", state: true,
+                    onChange: "toggleShowHeadline", onLabel: $L("yes"), offLabel: $L("no"),
+                    components:[{className: "toggle-button-knob"}]}
               ]}
-              //~ {kind: "LabeledContainer", caption: $L("Show elementname (e.g. Verse 1) as Headline"),
-                //~ components: [
-                  //~ {kind: "ToggleButton", name: "toggleHeadline", state: false,
-                    //~ onChange: "toggleShowHeadline", onLabel: $L("yes"), offLabel: $L("no"),
-                    //~ components:[{className: "toggle-button-knob"}]}
-              //~ ]}
             ]},
             {kind: "RowGroup", caption: $L("Developement Settings"), components:[
               {kind: "HFlexBox", components: [
@@ -103,7 +103,7 @@ enyo.kind({
     this.$.toolbarSwitch.setValue(this.showinToolbar);
     this.$.toggleChords.setState(this.showChords);
     this.$.toggleComments.setState(this.showComments);
-    //~ this.$.toggleHeadline.setState(this.showHeadline);
+    this.$.toggleHeadline.setState(this.showHeadline);
     this.$.testingToggle.setState(this.testing);
   },
   
@@ -113,7 +113,7 @@ enyo.kind({
       "showinToolbar": this.showinToolbar,
       "showChords": this.showChords,
       "showComments": this.showComments,
-      //~ "showHeadline": this.showHeadline,
+      "showHeadline": this.showHeadline,
       "testing": this.testing
     });
     this.doSave(this.sortLyric, this.showinToolbar, this.showChords, 

@@ -143,7 +143,7 @@ enyo.kind({
         this.$[i].setState(this.showPrefs[i]);
       }
     }
-    this.$.testingToggle.setState(this.testing);
+    //~ this.$.testingToggle.setState(this.testing);
   },
   
   savePrefs: function() {

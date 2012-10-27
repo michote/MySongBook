@@ -85,7 +85,7 @@ enyo.kind({
         {name: "forthButton", kind: "IconButton", disabled: true, 
           icon: "images/forth.png", onclick : "textForth", width: "75px"},
         {kind: "HFlexBox", pack: "start", flex: 1, components : [
-          {name: "playButton", kind: "IconButton", toggling: true, showing: false, // still in Developement
+          {name: "playButton", kind: "IconButton", toggling: true,
             icon: "images/play.png", onclick: "togglePlay"},
           {kind: "Spacer"},
           {name: "editButton", kind: "IconButton", showing: false, // still in Developement
@@ -117,10 +117,8 @@ enyo.kind({
   pathChanged: function() {
     if (this.testing) {
       this.$.editButton.show();
-      this.$.playButton.show();
     } else {
       this.$.editButton.hide();
-      this.$.playButton.hide();
     }
     this.initCursor();
     this.$.getXml.setUrl(this.path);
@@ -457,7 +455,7 @@ enyo.kind({
           //~ });
         //~ };
         for (var i in formL) {
-          enyo.log("i", i);
+          //~ enyo.log("i", i);
           var t = $L(formL[i][0].charAt(0)).charAt(0)
             + formL[i][0].substring(1, formL[i][0].length) + ":";
           this.$.lyric.createComponent({

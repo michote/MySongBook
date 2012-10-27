@@ -101,29 +101,5 @@
     "Swipe to the leftt to open previous song in list": "Desliza a la izquierda para abrir la canción previa de la lista",
     "Swipe an librarylist item to add it to the current custom list": "Desliza un item en lista de librería para añadirla a la actual lista personalizada",
     "Swipe an custom list item to remove it from this list": "Desliza un item en lista personalizada para removerla de esta lista",
-    "Swipe a list to remove it": "Desliza la lista para removerla",
-    "Doubletab maximizes mainview": "",
-    
-    "Create new song": "",
-    "Refresh Library": "",
-    "start autoscroll": "",
-    "pause autoscroll": "",
-    "edit current song": "",
-    "New song": "",
-    "Songname": "",
-    "Enter songname": "",
-    "Song saved": "",
-    
-    "Edit": "",
-    "Discard": "",
-    "add new": "",
-    "songbook": "",
-    "no": "",
-    "release date": "",
-    "copyright holder": "",
-    "pulisher": "",
-    "key": "",
-    "transposition": "",
-    "duration": "",
-    "verseorder": ""
+    "Swipe a list to remove it": "Desliza la lista para removerla"
 }

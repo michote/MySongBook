@@ -61,9 +61,9 @@ enyo.kind({
             {name: "copyright", flex: 1, kind: "Input", hint: $L("copyright holder")}
           ]},
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {content: $L("pulisher") + ":", style: "padding: 10px 5px;", width: "15%", 
+            {content: $L("publisher") + ":", style: "padding: 10px 5px;", width: "15%", 
               className: "editlabel"},
-            {name: "publisher", kind: "Input", hint: $L("pulisher"), flex: 1}
+            {name: "publisher", kind: "Input", hint: $L("publisher"), flex: 1}
           ]},
         ]},
         {name: "songbookbox", kind: "RowGroup", caption: $L("infos"), components:[

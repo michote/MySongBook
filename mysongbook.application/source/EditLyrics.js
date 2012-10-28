@@ -21,8 +21,6 @@ enyo.kind({
         onclick: "addNew"},
     ]},
     {kind: "Scroller", flex: 1, components: [
-      {kind: "HtmlContent", className: "box-center", style: "color:red;",
-        content: $L("HINT: Use [shift]+[enter] for linebreaks")},
       {name: "lyric", kind:"VFlexBox", className: "box-center"}
     ]},
   ],
@@ -42,7 +40,7 @@ enyo.kind({
           value: this.lyrics[i], onkeypress: "handleKeyPress"}]}
       );
       button.push(i);
-    };
+    }
     this.owner.$.metaPane.setButton(button);
     this.$.lyric.render();
   },
@@ -57,8 +55,8 @@ enyo.kind({
     for (i in this.lyrics) {
       if (this.add === i.charAt(0)) {
         e.push(i)
-      };
-    };
+      }
+    }
     if (!e.length) {
       var z = "";
     } else if (e.slice(-1)[0].length === 1) {
@@ -76,14 +74,14 @@ enyo.kind({
     if (inEvent.keyCode===13 && !inEvent.shiftKey) {
       inEvent.preventDefault();
       inSender.insertAtCursor("<br/>");
-    };
+    }
   },
   
   saveModifications: function() {
     for (i in this.lyrics) {
       this.lyrics[i] = this.$[i+"text"].getValue();
       //~ enyo.log(this.$[i+"text"].getValue());
-    };
+    }
     this.owner.setLyrics(this.lyrics);
   }
 });

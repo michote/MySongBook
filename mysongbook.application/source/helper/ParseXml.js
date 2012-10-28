@@ -24,8 +24,8 @@ function ParseXml () {}
     if (n[0]) {
       for (i = 0; i < n.length; i++) {
         names = n[i].firstChild.nodeValue;
-      };
-    };
+      }
+    }
     return names;
   };
   
@@ -37,7 +37,7 @@ function ParseXml () {}
       for (i = 0; i < n.length; i++) {
         names.push({"title": n[i].firstChild.nodeValue, 
             "lang": n[i].getAttribute("lang")});
-      };
+      }
     }
     return names;
   };
@@ -48,8 +48,8 @@ function ParseXml () {}
       titles += a[i].title;
       if (i < (a.length-1)) {
         titles += " &ndash; ";
-      };
-    };
+      }
+    }
     //~ enyo.log(titles);
     return titles
   };
@@ -67,7 +67,7 @@ function ParseXml () {}
         } else {
           names.push({"type":t, "author": n[i].firstChild.nodeValue});
         }
-      };
+      }
     }
     return names;
   };
@@ -83,7 +83,7 @@ function ParseXml () {}
       } else {
         names.push(a[i].author);
       }
-    };
+    }
     //~ enyo.log(names);
     return names;
   };
@@ -96,8 +96,8 @@ function ParseXml () {}
       for (i = 0; i < n.length; i++) {
         names.push({"book": n[i].getAttribute("name"),
           "no": n[i].getAttribute("entry")});
-      };
-    };
+      }
+    }
     return names;
   };
   
@@ -124,16 +124,16 @@ function ParseXml () {}
               } else {
                 lines += Transposer.transpose(chord, transp) + 
                   "&nbsp;&nbsp;" + "</div>";
-              };
+              }
             } else {
               lines += line[j].getAttribute("name") + "&nbsp;&nbsp;" + "</div>";
-            };
+            }
             if (line[j+1] && (line[j+1].nodeValue === null || // catch chord at line end
               line[j+1].nodeValue.replace(/^[\s\xA0]+/, "") === "")) { 
               lines += "<div class='txt'> </div></div>";
             } else if (!line[j+1] && !trigger) { // also catch chord at line end
               lines += "<div class='txt'> </div></div>";
-            };
+            }
           } else if(line[j].tagName === "br") {
             trigger = true;
             lines += "<div style='clear:both;'></div>"; 
@@ -142,8 +142,8 @@ function ParseXml () {}
               lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
             } else {
               lines += "<span style='line-height: 0;'></span>"
-            };
-          };
+            }
+          }
         } else {
           //~ enyo.log(j, line[j].nodeValue);
           var x = line[j].nodeValue.replace(/^[\s\xA0]+/, " ");
@@ -154,10 +154,10 @@ function ParseXml () {}
               x = x.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); // keep only ending whitespace on beginning of line
             } else {
               x = x.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;"); // keep leeding and ending whitespaces
-            };
+            }
             lines += "<div class='txt'>" + x + "</div></div>";
-          };
-        };
+          }
+        }
       // handle lyrics with chords but don't show chords 
       } else if (haschords && !showChords) { 
         if (line[j].nodeValue === null) { // node is htmltag
@@ -167,20 +167,20 @@ function ParseXml () {}
               commenttrigger = false;
             } else {
               lines += "<br>";
-            };
+            }
           } else if (line[j].tagName === "comment") {
             if (showComments) {
               lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
             } else {
               commenttrigger = true;
-            };
-          };
+            }
+          }
         } else {
           var x = line[j].nodeValue.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); //strip nodevalue
           if (x !== '') { // don't add empty divs
             lines += x;
-          };
-        };
+          }
+        }
       // handle lyrics without chords
       } else { 
         if (line[j].nodeValue === null) { 
@@ -189,19 +189,19 @@ function ParseXml () {}
               commenttrigger = false;
             } else {
               lines += "<br>";
-            };
+            }
           } else if (line[j].tagName === "comment") {
             if (showComments) {
               lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
             } else {
               commenttrigger = true;
-            };
-          };
+            }
+          }
         } else {
           lines += line[j].nodeValue; 
-        };
-      };
-    };
+        }
+      }
+    }
     lines += "</div><div style='clear:both;'></div>"; 
     
     return lines
@@ -250,11 +250,11 @@ function ParseXml () {}
         // create verseOrder
         if (crOrder) {
           data.verseOrder.push(l[i].getAttribute("name"));
-        };
-      };
+        }
+      }
     } else {
       data.lyrics = "nolyrics";
-    };
+    }
     
     return data;  
   };
@@ -268,7 +268,7 @@ function ParseXml () {}
       data.lyrics = "wrongversion";  
       enyo.log($L("wrongversion"));
       return data;  
-    };
+    }
     
     // Data: titles[], authors[music, words], copyright, publisher, verseOrder 
     data.titles = this.get_titles(xml);
@@ -279,7 +279,7 @@ function ParseXml () {}
     data.duration = this.get_metadata(xml, "duration");
     if (this.get_metadata(xml, "verseOrder")) {
       data.verseOrder = this.get_metadata(xml, "verseOrder").split(" ");
-    };
+    }
     data.key = this.get_metadata(xml, "key");
     data.tempo = this.get_metadata(xml, "tempo");
     data.ccli = this.get_metadata(xml, "ccliNo");
@@ -292,7 +292,7 @@ function ParseXml () {}
     //~ enyo.log(l);
     if (l.verseOrder) {
       data.verseOrder = l.verseOrder;
-    };
+    }
     data.haschords = l.haschords;
     data.lyrics = l.lyrics
     
@@ -332,7 +332,7 @@ function ParseXml () {}
       t = t.replace(/<chord name="/g, '[').replace(/"\/>/g, ']');
       t = t.replace(/<comment>/g, '*').replace(/<\/comment>/g, '*');
       data[id] = t
-    };
+    }
     
     return data;  
   };

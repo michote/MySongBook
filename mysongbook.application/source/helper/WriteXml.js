@@ -17,7 +17,8 @@ function WriteXml () {}
       date: "yyyy-MM-dd",
       time: "HH:mm:ss"
     });
-    return dateFmt.format(date).replace(' ', 'T')
+    
+    return dateFmt.format(date).replace(' ', 'T');
   };
   
   WriteXml.seralize = function (xml) {
@@ -42,15 +43,15 @@ function WriteXml () {}
     while (fc) {
         n.removeChild(fc);
         fc = n.firstChild;
-    };
+    }
     for (i in metadata.titles) {
       var newt=xml.createElement("title");
       newt.appendChild(xml.createTextNode(metadata.titles[i].title));
       if (metadata.titles[i].lang) {
         newt.setAttribute("lang", metadata.titles[i].lang);
-      };
+      }
       n.appendChild(newt);
-    };
+    }
     
     // Authors
     n = xml.getElementsByTagName("authors")[0];
@@ -59,7 +60,7 @@ function WriteXml () {}
       while (fc) {
         n.removeChild(fc);
         fc = n.firstChild;
-      };
+      }
     } else {
       var newas=xml.createElement("authors");
       m.appendChild(newas);
@@ -70,12 +71,12 @@ function WriteXml () {}
       newa.appendChild(xml.createTextNode(metadata.authors[i].author));
       if (metadata.authors[i].type) {
         newa.setAttribute("type", metadata.authors[i].type);
-      };
+      }
       if (metadata.authors[i].lang) {
         newa.setAttribute("lang", metadata.authors[i].lang);
-      };
+      }
       n.appendChild(newa);
-    };
+    }
     
     // All single string properties
     var single = ["released", "copyright", "publisher", "key", "tempo", 
@@ -91,8 +92,8 @@ function WriteXml () {}
           newm.appendChild(xml.createTextNode(metadata[single[i]]));
           m.appendChild(newm);
         }
-      };
-    };
+      }
+    }
     
     // Songbooks
     n = xml.getElementsByTagName("songbooks")[0];
@@ -101,7 +102,7 @@ function WriteXml () {}
       while (fc) {
         n.removeChild(fc);
         fc = n.firstChild;
-      };
+      }
     } else {
       var newss=xml.createElement("songbooks");
       m.appendChild(newss);
@@ -113,9 +114,9 @@ function WriteXml () {}
       news.setAttribute("name", metadata.songbooks[i].book);
       if (metadata.songbooks[i].no) {
         news.setAttribute("entry", metadata.songbooks[i].no);
-      };
+      }
       n.appendChild(news);
-    };
+    }
     
     // Lyric
     //~ enyo.log(lyrics);
@@ -126,9 +127,9 @@ function WriteXml () {}
         if (i === n[j].getAttribute("name")) {
           repl[i]=n[j];
           break;
-        };
-      };
-    };
+        }
+      }
+    }
     m = xml.getElementsByTagName("lyrics")[0];
     for (i in lyrics) {
       // Create xml from inputstring
@@ -154,8 +155,8 @@ function WriteXml () {}
         } else if (text[j]) { // text
           newe = xml.createTextNode(text[j]);
           newl.appendChild(newe);
-        };
-      };
+        }
+      }
       //~ enyo.log(newl);
       
       // Add lyrics to element or create new one
@@ -169,7 +170,7 @@ function WriteXml () {}
         var newll=xml.createElement("lines");
         newv.appendChild(newl);
         m.appendChild(newv);
-      };
+      }
     };
     
     return WriteXml.seralize(xml);

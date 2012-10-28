@@ -28,7 +28,7 @@ enyo.kind({
     } else {
       window.open(inUrl, '_blank');
       window.focus();
-    };
+    }
   },
   
   closeClicked: function(sender) {

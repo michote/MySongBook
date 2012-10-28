@@ -35,11 +35,12 @@ enyo.kind({
         caption: $L("Save"), onclick: "saveClicked"}
     ]}
   ],
+  
   rendered: function() {
     if (this.owner.css) {
       this.$.fontSizeSelector.setValue(this.owner.css.size);
       this.$.lineSpacingSelector.setValue(this.owner.css.space);
-    };
+    }
   },
   
   changed: function() {
@@ -53,6 +54,7 @@ enyo.kind({
     this.rendered();
     this.close();
   },
+  
   saveClicked: function(s) {
     this.owner.setCss(this.css);
     this.owner.setFont(this.css);

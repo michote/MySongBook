@@ -77,14 +77,14 @@ enyo.kind({
           components: [
             {name: "lyric", components: [{name: "help", kind: "Help"}], 
               ondragfinish: "songDragFinish", ondblclick: "onDoubleClick"}
-          ]},
+          ]}
         ]
       },
       {name: "footerToolbar", kind: "Toolbar", pack : "center" , components: [
         {kind: "HFlexBox", pack: "start", flex: 1, components : [
           {kind:"GrabButton"},
           {name: "copy", kind: "HtmlContent", className: "copy title", 
-            content: "&copy; michote", flex: 1},
+            content: "&copy; michote", flex: 1}
         ]},
         {name: "backButton", kind: "IconButton", disabled: true,
           icon: "images/back.png", onclick : "textBack", width: "75px"},
@@ -99,7 +99,7 @@ enyo.kind({
           {name: "infoButton", kind: "IconButton", disabled: true,
             icon: "images/info.png", onclick: "showInfo"}
         ]}
-      ]},
+      ]}
     ]},
     {name: "infoDialog", kind: "InfoDialog"}
   ],
@@ -108,7 +108,7 @@ enyo.kind({
     this.inherited(arguments);
     if (!window.PalmSystem) {
       this.$.lockButton.hide();
-    };
+    }
   },
   
   showPrefsChanged: function() {
@@ -173,7 +173,7 @@ enyo.kind({
           this.$.forthButton.setDisabled(false);
         }
       }
-    } ;
+    }
   },
   
   gotXmlFailure: function(inSender, inResponse, inRequest) {
@@ -183,7 +183,7 @@ enyo.kind({
 
   // ### Autoscroll ###
   togglePlay: function() { 
-    if (this.$.playButton.getIcon() == "images/play.png") { 
+    if (this.$.playButton.getIcon() === "images/play.png") { 
       // play
       if (this.lyricsCurrRow !== 0) {
         // paused
@@ -196,9 +196,9 @@ enyo.kind({
         this.intervalSong = window.setInterval(enyo.bind(this, "showLyrics"), perRowMSecs);
         if (window.PalmSystem) {
           enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': true});
-        };
+        }
         //        this.$.cursorScrollBar.setBpmTimer(120);
-      };
+      }
       this.$.playButton.setIcon("images/pause.png");
       this.$.playButton.setDepressed(false);
       this.$.forthButton.setDisabled(true);
@@ -210,8 +210,8 @@ enyo.kind({
       this.running = false;
       if (this.finished) {
         this.initCursor();
-      };
-    };
+      }
+    }
   },
   
   movingLyrics: function() {
@@ -219,7 +219,7 @@ enyo.kind({
       return true;
     } else {
       return false;
-    };
+    }
   },
 
   resetCursorTiming: function() {
@@ -234,7 +234,7 @@ enyo.kind({
       this.$.viewScroller.setScrollTop(this.lyricsCurrRow - this.cursorRow);
     } else {
       this.cursorRow = this.halfHt;
-    };
+    }
     this.$.cursorScrollBar.setY(this.cursorRow);
     // now adjust the speed of the cursor.
     this.songSecs = this.songSecs * lyricsPrevRow / this.lyricsCurrRow;
@@ -252,15 +252,15 @@ enyo.kind({
       } else {
         this.cursorRow = this.cursorRow + 1;
         this.$.cursorScrollBar.setY(this.cursorRow);
-      };
+      }
       this.lyricsCurrRow = this.lyricsCurrRow + 1;
       if (this.lyricsCurrRow > this.rowsTraversed) {
         window.clearInterval(this.intervalSong);
         this.$.cursorScrollBar.cursorOff();
         this.finished = true;
         this.running = false;
-      };
-    };
+      }
+    }
   },
 
   initCursor: function() {
@@ -273,13 +273,13 @@ enyo.kind({
     this.$.playButton.setIcon("images/play.png");
     this.finished = false;
     this.$.cursorScrollBar.hide();
-    if (window.PalmSystem && (this.$.lockButton.getIcon() == "images/lock-open.png")) {
+    if (window.PalmSystem && (this.$.lockButton.getIcon() === "images/lock-open.png")) {
       enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': false});
-    };
+    }
     if (this.data.titles) { 
       var theTitles = ParseXml.titlesToString(this.data.titles); 
       this.$.title.setContent(theTitles);
-    };
+    }
     this.$.editButton.setDisabled(false);
     this.$.fontButton.setDisabled(false);
     this.$.forthButton.setDisabled(false);
@@ -290,18 +290,18 @@ enyo.kind({
     var ctrls = this.$.lyric.getControls();
     this.rowsTraversed = this.$.lyric.node.clientHeight;
     for (i = 0; i < ctrls.length; i++) {
-      if (ctrls[i].name == "scrollspacer") {
+      if (ctrls[i].name === "scrollspacer") {
         this.rowsTraversed = this.rowsTraversed - this.$.lyric.node.lastChild.clientHeight + 20;
-      };
-    };
+      }
+    }
     this.halfHt = this.$.viewScroller.node.clientHeight / 2;
     this.$.viewScroller.setScrollTop(this.lyricsCurrRow);
     if (this.data.duration) {
       this.songSecs = this.data.duration;
     } else {
       this.songSecs = this.defaultSongSecs;
-    };
-    this.$.cursorScrollBar.color = this.$.cursorScrollBar.onColor
+    }
+    this.$.cursorScrollBar.color = this.$.cursorScrollBar.onColor;
     this.$.cursorScrollBar.node.height = this.$.viewScroller.node.clientHeight;
     this.$.cursorScrollBar.show();
     this.$.editButton.setDisabled(true);
@@ -312,7 +312,7 @@ enyo.kind({
   // ### Scrolling Button/Keypress ###
   scrollHelper: function() {
     enyo.log(this.textIndex);
-    var x = this.$.lyric.$[this.order[this.textIndex]].hasNode()
+    var x = this.$.lyric.$[this.order[this.textIndex]].hasNode();
     var ePos = enyo.dom.calcNodeOffset(x).top - 74; // element offset - Toolbar and margin
     this.scroll = this.$.viewScroller.$.scroll.y;   // scroll position
     this.$.viewScroller.scrollTo((ePos - this.scroll),0);
@@ -324,13 +324,13 @@ enyo.kind({
       this.$.backButton.setDisabled(false);
     } else if (this.textIndex === (this.data.verseOrder.length-1)) {
       this.$.forthButton.setDisabled(true);
-    };
+    }
     if (this.textIndex === (this.data.verseOrder.length+1)) {
       this.nextSong();
-    };
+    }
     if (this.textIndex <= (this.data.verseOrder.length-1)) {
       this.scrollHelper();
-    };
+    }
   },
   
   textBack: function() {
@@ -339,51 +339,50 @@ enyo.kind({
       this.$.backButton.setDisabled(true);
     } else if (this.textIndex === (this.data.verseOrder.length-2)) {
       this.$.forthButton.setDisabled(false);
-    };
+    }
     if (this.textIndex === -2) {
       this.prevSong();
-    };
+    }
     if (this.textIndex >= 0) {
       this.scrollHelper();
-    };
+    }
   },
   
   handleKeyPress: function(inSender, inEvent) {
-    k = inEvent.keyCode
+    k = inEvent.keyCode;
     //~ enyo.log(k);
     if ((k===33 || k===38 || k===37 || k===32) && this.textIndex > -2) { // PageUp
       this.textBack();
-    } else if ((k===34 || k===40 || k===39 || k===13)
-      && this.textIndex < this.data.verseOrder.length+1) { // PageDown
+    } else if ((k===34 || k===40 || k===39 || k===13) && this.textIndex < this.data.verseOrder.length+1) { // PageDown
       this.textForth();
-    };
+    }
   },
   
   // Go to next/prev song
   nextSong: function() {
-    var o = this.owner
+    var o = this.owner;
     if (o.currentIndex >= 0 && 
       o.currentIndex < o[o.currentList].content.length-1) {
       enyo.log("next Song");
       o.setCurrentIndex(o.currentIndex+1);
-    };
+    }
   },
   
   prevSong: function() {
     if (this.owner.currentIndex > 0) {
       enyo.log("prev Song");
       this.owner.setCurrentIndex(this.owner.currentIndex-1);
-    };
+    }
   },
   
   // Swipe left and right
   songDragFinish: function(inSender, event) {
     if (+event.dx > 120) {
       this.nextSong();
-    };
+    }
     if (+event.dx < -120) {
       this.prevSong();
-    };
+    }
   },
   
   // Maximize view on doubleclick
@@ -397,7 +396,7 @@ enyo.kind({
       this.$.headerToolbar.show(); 
       this.$.footerToolbar.show();
       this.owner.$.songSlidingPane.selectViewByName('songListPane'); 
-    };
+    }
     if (window.PalmSystem) {
       enyo.setFullScreen(this.fullscreen);
     }
@@ -406,32 +405,33 @@ enyo.kind({
   
   // ### set Data ###
   metaDataSet: function() {
-    var d = this.data
+    var d = this.data;
     //~ format and set title
     if (d.titles) {
       var t = ParseXml.titlesToString(d.titles);
       this.$.title.setContent(t);
-    };
+    }
     
     //~ format and set copyright
+    var y;
     if (d.released) { // add release year
-      var y = d.released + ": ";
+      y = d.released + ": ";
     } else {
-      var y = ""
+      y = "";
     }
     if (d[this.showPrefs.showinToolbar]) {
       if (this.showPrefs.showinToolbar === "authors") {
         this.$.copy.setContent(y + ParseXml.authorsToString(d.authors).join(", "));
       } else {
         this.$.copy.setContent("&copy; " + y + d[this.showPrefs.showinToolbar]);
-      };
+      }
     } else {
       this.$.copy.setContent("&copy; " + y + $L("no" + this.showPrefs.showinToolbar));
-    };
+    }
   },
   
   lyricDataSet: function() {
-    var d = this.data
+    var d = this.data;
     //~ format and set lyrics
     if (d.lyrics) {
       var lyrics = "";
@@ -445,8 +445,8 @@ enyo.kind({
           formL = Helper.orderLyrics(d.lyrics, this.order);
           this.order = Helper.handleDoubles(this.order);
         } else { //~ display lyrics without verseOrder
-          formL = d.lyrics
-        };
+          formL = d.lyrics;
+        }
         // Create lyric divs
         for (var i in formL) {
           if (this.showPrefs.showName) {
@@ -471,19 +471,18 @@ enyo.kind({
                 {content: formL[i][1], kind: "VFlexBox", flex: 1}
             ]});
           }
-        };
-          
-      };
+        }
+      }
       this.$.lyric.render();
       var x = this.$.lyric.node.lastChild.clientHeight;
       var h = window.innerHeight-138-x;
       if (h > 0) {
         this.$.lyric.createComponent({
           name: "scrollspacer",
-          style: "height:" + h + "px;width:100%;",
+          style: "height:" + h + "px;width:100%;"
         });
-      };
-    };
+      }
+    }
     this.$.lyric.render();
   },
   
@@ -509,7 +508,7 @@ enyo.kind({
   },
   
   toggleLock: function() {
-    if (this.$.lockButton.getIcon() == "images/lock-open.png") {
+    if (this.$.lockButton.getIcon() === "images/lock-open.png") {
       this.$.lockButton.setIcon("images/lock.png");
       if (window.PalmSystem) {
         enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {"blockScreenTimeout" : true});
@@ -519,7 +518,7 @@ enyo.kind({
       if (window.PalmSystem) {
         enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {"blockScreenTimeout" : false});
       }
-    };
+    }
   },
   
   showFontDialog: function() {
@@ -540,12 +539,12 @@ enyo.kind({
         this.$.transposer.setItems(moll);
       } else {
         this.$.transposer.setItems(dur);
-      };
+      }
       if (transp) {
         this.$.transposer.setValue(Transposer.transpose(key, transp));
       } else {
         this.$.transposer.setValue(key);
-      };
+      }
       this.$.transposer.setDisabled(false);
     } else if (!key && chords) {
       this.$.transminus.setDisabled(false);
@@ -557,7 +556,7 @@ enyo.kind({
       this.$.transposer.setDisabled(true);
       this.$.transplus.setDisabled(true);
       this.$.transposer.hide();
-    };
+    }
   },
   
   setTrans: function(value) {
@@ -565,7 +564,7 @@ enyo.kind({
       value -= 12;
     } else if (value < -11) {
       value += 12;
-    };
+    }
     this.transpose = value;
     this.renderLyrics(this.xml);    
   },

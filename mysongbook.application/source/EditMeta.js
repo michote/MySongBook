@@ -161,7 +161,7 @@ enyo.kind({
       this.$["authorlang"+num].show();
     } else {
       this.$["authorlang"+num].hide();
-    };
+    }
     this.$["authorlang"+num].render();
   },
   

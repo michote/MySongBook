@@ -192,6 +192,7 @@ enyo.kind({
       {kind: "HtmlContent", content: "<br>"},
     ]}
   ],
+  
   // Handle links
   linkClicked: function (inSender, inUrl) {
     this.owner.owner.linkClicked(inSender, inUrl);

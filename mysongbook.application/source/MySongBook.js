@@ -27,12 +27,6 @@ enyo.kind({
   components: [
     // Services
     {kind: "ApplicationEvents", onBack: "goBack"},
-    {name: "getPreferencesCall", kind: "PalmService", 
-      service: "palm://com.palm.systemservice/", method: "getPreferences",
-      onSuccess: "getPreferencesSuccess", onFailure: "getPreferencesFailure"},
-    {name: "setPreferencesCall", kind: "PalmService",
-      service: "palm://com.palm.systemservice/", method: "setPreferences",
-      onSuccess: "setPreferencesSuccess", onFailure: "setPreferencesFailure"},
     {name: "AppManService", kind: "PalmService", service: "palm://com.palm.applicationManager/", 
       method: "open"},
     {name: "readDir", kind: "PalmService", service: "palm://com.michote.mysongbook.service/",
@@ -142,8 +136,8 @@ enyo.kind({
         this.pathCount.a.push(i); 
         this.$.fileProgress.setPosition(i+2);
         this.fetchTitles(inResponse.path + inResponse.files[i]);
-      };
-    };
+      }
+    }
   },
   
   readDirFail: function(inSender, inResponse) {
@@ -158,7 +152,7 @@ enyo.kind({
   },
   
   gotTitle: function(inSender, inResponse, inRequest) {
-    var xml = ParseXml.parse_dom(inResponse)
+    var xml = ParseXml.parse_dom(inResponse);
     var a = {"path": inRequest.url, "title": ParseXml.get_titles(xml)[0].title};
     this.libraryList.content.push(a);
     
@@ -172,13 +166,13 @@ enyo.kind({
         for (i in this.libraryList.content) {
           if (this.libraryList.content[i].path === this.newSong.path) {
             this.setCurrentIndex(i);
-          };
-        };
+          }
+        }
         this.newSong = false;
         this.$.songListPane.$.libraryList.updateRow();
         this.editSong();
-      };
-    };
+      }
+    }
   },
   
   gotTitleFailure: function(inSender, inResponse, inRequest) {
@@ -188,17 +182,17 @@ enyo.kind({
     if (this.pathCount.b.length === this.pathCount.a.length) {
       this.sortAndRefresh();
       this.showError($L("reading:") + "<br>" + this.errorList.join(" <br>"));
-    };
+    }
   },
    
   // Sort Library alphabetically
   sortByTitle: function (a,b) {
     if (a.title < b.title) {
       return -1;
-    };
+    }
     if (a.title > b.title) {
       return 1;
-    };
+    }
     return 0;
   },
   
@@ -210,7 +204,7 @@ enyo.kind({
     this.$.readFilesDialog.close();
     if (this.currentIndex >= 0) {
       this.openSong(this.currentIndex);
-    };
+    }
   },
   
   // List Tab  
@@ -232,7 +226,7 @@ enyo.kind({
       this.openSong(this.currentIndex);
     } else {
       this.$.songListPane.$[this.currentList].refresh();
-    };
+    }
   },
   
   // Adjust Font
@@ -240,7 +234,7 @@ enyo.kind({
     if (css) {
       this.$.songViewPane.$.lyric.applyStyle("font-size", css.size);
       this.$.songViewPane.$.lyric.applyStyle("line-height", css.space);
-    };
+    }
   },
   
   // ### Custom Lists ###
@@ -252,7 +246,7 @@ enyo.kind({
         this.addLists();
       } else {
         this.$.songListPane.noList();
-      };
+      }
     } else {
       for (t in this.customList.content) {
         if (this.customList.content[t].path === this.searchList.content[inEvent].path) {
@@ -260,9 +254,9 @@ enyo.kind({
           this.searchList.content.splice(inEvent, 1);
           this.addLists();
           this.$.songListPane.$.searchList.refresh();
-        };
-      };
-    };
+        }
+      }
+    }
   },
   
   addLists: function() {
@@ -270,9 +264,9 @@ enyo.kind({
       for (i in this.savedLists) {
         if (this.savedLists[i].title === this.customList.title) {
           this.savedLists[i] = this.customList
-        };
-      };
-    };
+        }
+      }
+    }
     this.saveLists();
   },
   
@@ -282,7 +276,7 @@ enyo.kind({
       this.addLists();
     } else {
       this.$.songListPane.noList();
-    };
+    }
   },
   
   removeFromList: function(inSender, inEvent) {
@@ -304,7 +298,7 @@ enyo.kind({
       this.customList = undefined; // no List selected
       this.$.songListPane.$.listToggle.setValue(0);
       this.$.songListPane.toggleLibrary();
-    };
+    }
     this.savedLists.splice(inEvent, 1);
     this.$.listDialog.$.customListList.refresh();
     this.addLists();
@@ -392,7 +386,7 @@ enyo.kind({
       this.createSong();
     } else if (inEvent.keyCode===47) {
       inEvent.preventDefault();
-    };
+    }
   },
   
   createSong: function() {
@@ -405,13 +399,13 @@ enyo.kind({
         this.$.songErrorContent.setContent($L("Name already exist"));
         e = true;
       }
-    };
+    }
     if (!e) {
       path = this.dirPath + path;
       this.writeXml(path, WriteXml.create(songt));
       this.$.newSongDialog.close();
       this.newSong = {"path": path};
-    };
+    }
   },
   
   // Error Dialog
@@ -439,6 +433,6 @@ enyo.kind({
     } else {
       window.open(inUrl, '_blank');
       window.focus();
-    };
+    }
   }
 });

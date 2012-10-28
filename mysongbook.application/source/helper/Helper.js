@@ -11,7 +11,7 @@ function Helper() {}
       return "230px";
     } else {
       return "350px";
-    };
+    }
   };
   
   Helper.toasterWidth = function() {
@@ -19,7 +19,7 @@ function Helper() {}
       return "100%";
     } else {
       return "90%";
-    };
+    }
     
   };
 
@@ -37,12 +37,12 @@ function Helper() {}
         trigger += 1;
       } else {
         obj[arr[i]]=i;
-      };
-    };
+      }
+    }
 
     for (i in obj) {
       out.push(i);
-    };
+    }
     return out;
   };
 
@@ -56,8 +56,8 @@ function Helper() {}
     for (i = 0; i < order.length; i++) {
       if (lyrics[order[i]] !== undefined) {
         newLyrics[order2[i]] = [order[i],lyrics[order[i]][1]];
-      };
-    };
+      }
+    }
     return newLyrics;
   };
   
@@ -79,10 +79,10 @@ function Helper() {}
     var tit = [];
     for (j in t) {
       tit.push(t[j].title.toLowerCase());
-    };
+    }
     if (this.isIn(term, tit.join())) {
       return true;
-    };
+    }
     return false;
   };
   
@@ -91,10 +91,10 @@ function Helper() {}
     var aut = [];
     for (j in a) {
       aut.push(a[j].toLowerCase());
-    };
+    }
     if (this.isIn(term, aut.join())) {
       return true;
-    };
+    }
     return false;
   };
   
@@ -103,10 +103,10 @@ function Helper() {}
     var lyr = [];
     for (j in l) {
       lyr.push(enyo.string.removeHtml(l[j][1].replace(/&nbsp;/g, " ")));
-    };
+    }
     if (this.isIn(term, lyr.join().toLowerCase())) {
       return true;
-    };
+    }
     return false;
   };
   

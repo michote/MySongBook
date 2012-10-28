@@ -51,7 +51,7 @@ enyo.kind({
   getCustomLists: function(inSender, inIndex) {
     if (this.owner.savedLists) {
       var r = this.owner.savedLists[inIndex];
-    };
+    }
     if (r) {
       this.$.listListTitle.setContent(r.title);
       return true;
@@ -77,7 +77,7 @@ enyo.kind({
   handleKeyPress: function(inSender, inEvent) {
     if (inEvent.keyCode===13) {
       this.saveClicked();
-    };
+    }
   },
   
   saveClicked: function(s) {
@@ -86,15 +86,15 @@ enyo.kind({
         if (this.owner.savedLists[i].title === this.$.listName.getValue()) {
           //~ enyo.log(this.$.listName.getValue());
           this.$.errorContent.setContent($L("Name already exist"));
-          return
-        };
-      };
+          return;
+        }
+      }
       this.owner.savedLists.push({"title": this.$.listName.getValue(),
         "content": []});
       if (!this.owner.customList) {
         this.owner.customList = {"title": this.$.listName.getValue(),
           "content": []};
-      };
+      }
       this.$.customListList.refresh();
       this.owner.addLists();
       this.$.listName.setValue("");
@@ -102,7 +102,7 @@ enyo.kind({
     } else {
       this.$.errorContent.setContent($L("Name is empty"));
       return
-    };
+    }
   }
   
 });

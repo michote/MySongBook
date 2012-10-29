@@ -1,4 +1,3 @@
-
 enyo.kind({
   kind: "ModalDialog",
   name: "InfoDialog",
@@ -43,20 +42,20 @@ enyo.kind({
         className: "about",
         content: extra + $L(cap)
       });
-    };
+    }
   },
 
   infoset: function(data) {
     if (data.released) {
       this.addDiv("copybox", data.released + ":", "&copy; ");
-    };
+    }
     this.addDiv("copybox", data.copyright, "");
     if (data.publisher !== data.copyright) {
       this.addDiv("copybox", data.publisher, "");
-    };
-    data.authors = ParseXml.authorsToString(data.authors);
-    for(i = 0; i < data.authors.length; i++) {
-      this.addDiv("authorbox", data.authors[i], "");
+    }
+    var authors = ParseXml.authorsToString(data.authors);
+    for(i = 0; i < authors.length; i++) {
+      this.addDiv("authorbox", authors[i], "");
     };
     for(j = 0; j < data.songbooks.length; j++) {
       if (data.songbooks[j].no) {
@@ -64,14 +63,15 @@ enyo.kind({
           data.songbooks[j].no, "");
       } else {
         this.addDiv("songbox", data.songbooks[j].book, "");
-      };
-    };
+      }
+    }
     this.addDiv("songbox", data.key, $L("key: "));
     if (!isNaN(data.tempo)) {
       this.addDiv("songbox", data.tempo, $L("tempo") + " (bpm): ");
     } else {
       this.addDiv("songbox", data.tempo, $L("tempo") + ": ");
-    };
+    }
+    this.addDiv("songbox", data.duration, $L("duration") + ": ");
     this.addDiv("songbox", data.ccli, "CCLI: ");
   },
   

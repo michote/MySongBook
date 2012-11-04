@@ -32,14 +32,30 @@ enyo.kind({
   lyricsChanged: function() {
     this.$.lyric.destroyComponents();
     var button = []
-    for (i in this.lyrics) {
+    var vs = 0;
+    for (i in this.lyrics) {  // verses
       this.$.lyric.createComponent(
         {name: i, kind: "RowGroup",
-        caption: $L(i.charAt(0)) + " " + i.substring(1, i.length),
-        components: [{name: i+"text", kind: "RichText", owner: this,
-          value: this.lyrics[i], onkeypress: "handleKeyPress"}]}
+        caption: $L(i.charAt(0)) + " " + i.substring(1, i.length), components: []}
       );
-      button.push(i);
+      for (j in this.lyrics[i]) {  // language & then lines
+        if (j == "language") {
+          // process this.lyrics[i][j].language
+        } else {
+          if (this.lyrics[i][j].part !== "" ) {
+            this.$.lyric.children[vs].createComponent(
+              {name: vs+j+"part", kind: "RichText", style: "color: #9E0508", owner: this,
+                value: this.lyrics[i][j].part, onkeypress: "handleKeyPress"}
+            );
+          }
+        this.$.lyric.children[vs].createComponent(
+          {name: vs+j+"text", kind: "RichText", owner: this,
+              value: this.lyrics[i][j].line, onkeypress: "handleKeyPress"}
+          );
+        }
+      }
+    button.push(i);
+    vs++;  
     }
     this.owner.$.metaPane.setButton(button);
     this.$.lyric.render();

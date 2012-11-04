@@ -16,7 +16,8 @@ enyo.kind({
       showName: true,
       showTransposer: true,
       showScroll: true,
-      showAuto: true
+      showAuto: true,
+      scrollToNext: true
     },
     testing: false
   },
@@ -91,6 +92,12 @@ enyo.kind({
               {kind: "LabeledContainer", caption: $L("Show Autoscrollbutton"),
                 components: [
                   {kind: "ToggleButton", name: "showAuto", state: true,
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
+                    components:[{className: "toggle-button-knob"}]}
+              ]},
+              {kind: "LabeledContainer", caption: $L("Autoscroll end to next page"),
+                components: [
+                  {kind: "ToggleButton", name: "scrollToNext", state: true,
                     onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
               ]}

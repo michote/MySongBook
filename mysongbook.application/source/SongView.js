@@ -43,7 +43,8 @@ enyo.kind({
         showName: true,
         showTransposer: true,
         showScroll: true,
-        showAuto: true
+        showAuto: true,
+        scrollToNext: true
       }
   },
   components: [
@@ -210,6 +211,9 @@ enyo.kind({
       this.running = false;
       if (this.finished) {
         this.initCursor();
+        if (this.showPrefs.scrollToNext) {
+          this.nextSong();
+        }
       }
     }
   },

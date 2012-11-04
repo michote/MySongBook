@@ -46,19 +46,53 @@ function Helper() {}
     return out;
   };
 
+  // Remove dublicates from Array
+  Helper.removeDoubles = function(arr) {
+    var i,
+      trigger=1,
+      len=arr.length,
+      out=[],
+      obj={};
+
+    for (i=0;i<len;i++) {
+      if (obj[arr[i]]) {
+        obj[(arr[i])]=i;
+        trigger += 1;
+      } else {
+        obj[arr[i]]=i;
+      }
+    }
+
+    for (i in obj) {
+      out.push(i);
+    }
+    return out;
+  };
+
   // create Lyrics fron verseOrder
-  Helper.orderLyrics = function(lyrics, order) {
+  Helper.orderLyrics = function(lyrics, order, lang) {
     var newLyrics = {};
     var order2 = this.handleDoubles(order);
     //~ enyo.log("lyrics: " + lyrics);
     //~ enyo.log("order: " + order);
     //~ enyo.log("order2: " + order2);
     for (i = 0; i < order.length; i++) {
-      if (lyrics[order[i]] !== undefined) {
+      if (!lang && lyrics[order[i]]) {
         newLyrics[order2[i]] = [order[i],lyrics[order[i]][1]];
+      } else if (lang && lyrics[order[i]]) {
+        newLyrics[order2[i]] = [order[i].split("_")[0],lyrics[order[i]][1]];
       }
     }
     return newLyrics;
+  };
+  
+  Helper.orderLanguage = function(order, lang) {
+    var newOrder = [];
+    for (i in order) {
+      newOrder.push(order[i] + "_" + lang);
+    }
+    
+    return newOrder;
   };
   
   // Search

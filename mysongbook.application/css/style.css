@@ -66,6 +66,10 @@
     -webkit-border-image: none !important;
     padding: 8px 16px;
     color: white;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
     background: #333333 url(../images/gradient.png) repeat-x bottom;
     border-top: 1px solid rgba(15, 15, 15, 0.2);
     border-right: 1px solid rgba(15, 15, 15, 0.2);
@@ -360,15 +364,15 @@ a {
 }
 
 .enyo-sliding-view-shadow-right {
-position: absolute;
-z-index: 122;
-height: 100%;
-width: 20px;
-top: 0;
-right: -20px;
-background: url(../images/sliding-shadow-right.png) repeat-y;
-background-size: 20px 2px;
-pointer-events: none;
+    position: absolute;
+    z-index: 122;
+    height: 100%;
+    width: 20px;
+    top: 0;
+    right: -20px;
+    background: url(../images/sliding-shadow-right.png) repeat-y;
+    background-size: 20px 2px;
+    pointer-events: none;
 }
 
 .prefsimage {

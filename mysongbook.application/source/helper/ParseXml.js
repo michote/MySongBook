@@ -42,16 +42,23 @@ function ParseXml () {}
     return names;
   };
   
-  ParseXml.titlesToString = function (a) {
-    var titles = "";
-    for(i = 0; i < a.length; i++) {
-      titles += a[i].title;
-      if (i < (a.length-1)) {
-        titles += " &ndash; ";
+  ParseXml.titlesToString = function (a, lang) {
+    var titles = [];
+    if (lang) {
+      for(i = 0; i < a.length; i++) {
+        if (a[i].lang === lang[0]) {
+          titles.push(a[i].title);
+        } else if (!a[i].lang) {
+          titles.push(a[i].title);
+        }
+      }
+    } else {
+      for(i = 0; i < a.length; i++) {
+        titles.push(a[i].title);
       }
     }
     //~ enyo.log(titles);
-    return titles
+    return titles.join(" &ndash; ");
   };
   
   // Authors
@@ -243,9 +250,14 @@ function ParseXml () {}
             showChords, showComments, transp);
         }  
         
-        // add lyrics[id] = [name, lyrics]
-        var id = l[i].getAttribute("name");
-        data.lyrics[id] = [id, lines];
+        // add lyrics[id] = [name, lyrics
+        var id;
+        if (l[i].getAttribute("lang")) { // Languages
+          id = l[i].getAttribute("name") + "_" + l[i].getAttribute("lang");
+        } else {
+          id = l[i].getAttribute("name");
+        }
+        data.lyrics[id] = [l[i].getAttribute("name"), lines];
         
         // create verseOrder
         if (crOrder) {
@@ -294,7 +306,16 @@ function ParseXml () {}
       data.verseOrder = l.verseOrder;
     }
     data.haschords = l.haschords;
-    data.lyrics = l.lyrics
+    data.lyrics = l.lyrics;
+    
+    // Languages
+    data.haslang = [];
+    for (i in data.lyrics) {
+      if (i.split("_")[1]) {
+        data.haslang.push(i.split("_")[1]);
+      }
+    }
+    data.haslang = Helper.removeDoubles(data.haslang);
     
     return data;  
   };

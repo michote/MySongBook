@@ -25,6 +25,8 @@ enyo.kind({
   transpose: 0,
   order: [],  
   fullscreen: false,
+  xml: undefined,
+  lang: undefined,
   events: {
     "onEdit": ""
   },
@@ -56,6 +58,7 @@ enyo.kind({
       {name: "headerToolbar", kind: "Toolbar", components: [
         {name: "title", kind: "HtmlContent", className: "song title", 
           content: $L("Help"), flex: 1},
+        {name: "languagegr", kind: "RadioToolButtonGroup", className: "enyo-menu-toolbar", components: []},
         {name: "transposergr", kind: "ToolButtonGroup", components: [
             {name: "transminus", icon: "images/minus.png", onclick: 
               "transMinus", disabled: true},
@@ -114,7 +117,7 @@ enyo.kind({
   
   showPrefsChanged: function() {
     if (this.xml) {
-      this.renderLyrics(this.xml);
+      this.renderLyrics();
     } else {
       this.buttons();
     }
@@ -130,18 +133,24 @@ enyo.kind({
   // get xml lyricdata
   pathChanged: function() {
     this.initCursor();
+    this.lang = undefined;
     this.$.getXml.setUrl(this.path);
     this.$.getXml.call();
   },
   
   gotXml: function(inSender, inResponse) {
     this.xml = ParseXml.parse_dom(inResponse);
-    this.renderLyrics(this.xml);
+    this.renderLyrics();
+  },
+  
+  gotXmlFailure: function(inSender, inResponse, inRequest) {
+    enyo.log("Parse XML Failure");
+    this.owner.showError("reading:" + "</br>" + inRequest.url);
   },
     
-  renderLyrics: function(xml) {
+  renderLyrics: function() {
     this.buttons();
-    var transposition = ParseXml.get_metadata(xml, "transposition");
+    var transposition = ParseXml.get_metadata(this.xml, "transposition");
     if (transposition && this.first) {
       this.transpose = parseInt(transposition);
       this.first = false;
@@ -151,15 +160,33 @@ enyo.kind({
     } else {
       this.first = false;
     }
-    this.data = ParseXml.parse(xml, this.showPrefs.showChords, 
+    this.data = ParseXml.parse(this.xml, this.showPrefs.showChords, 
       this.showPrefs.showComments, this.transpose);
     if (this.data.titles !== undefined) {
-      this.metaDataSet();
-      this.order = (this.data.verseOrder);
       this.textIndex = 0; // reset index
       this.scroll = 0;    // reset scroller
       this.$.help.hide();
       this.$.lyric.destroyComponents();
+      // Languages
+      this.$.languagegr.destroyControls();
+      if (this.data.haslang[0]) {
+        for (i in this.data.haslang) {
+          this.addLangToggle(this.data.haslang[i]);
+        }
+        if (this.lang) {
+          this.$.languagegr.setValue(this.lang[1]);
+        } else {  
+          this.$.languagegr.setValue(0);
+          this.lang = [this.data.haslang[0], 0];
+        }
+      }
+      if (this.lang) {
+        this.order = Helper.orderLanguage(this.data.verseOrder, this.lang[0]);
+      } else {
+        this.order = this.data.verseOrder;
+      }
+      // render data
+      this.metaDataSet();
       this.lyricDataSet();
       // Buttons
       this.enableTransposer(this.data.key, this.data.haschords, this.transpose);
@@ -177,9 +204,101 @@ enyo.kind({
     }
   },
   
-  gotXmlFailure: function(inSender, inResponse, inRequest) {
-    enyo.log("Parse XML Failure");
-    this.owner.showError("reading:" + "</br>" + inRequest.url);
+  // Language Toggle
+  addLangToggle: function(l) {
+    //~ enyo.log("add", l, "toggle");
+    this.$.languagegr.createComponent(
+      {name: l, caption: l, owner: this, onclick: "toggleLang"}
+    );
+    this.$.languagegr.render();
+  },
+  
+  toggleLang: function(inSender) {
+    this.lang = [inSender.caption, this.$.languagegr.getValue()];
+    this.renderLyrics();
+  },
+  
+  // ### set Data ###
+  metaDataSet: function() {
+    var d = this.data;
+    //~ format and set title
+    if (d.titles) {
+      var t = ParseXml.titlesToString(d.titles, this.lang);
+      this.$.title.setContent(t);
+    }
+    
+    //~ format and set copyright
+    var y;
+    if (d.released) { // add release year
+      y = d.released + ": ";
+    } else {
+      y = "";
+    }
+    if (d[this.showPrefs.showinToolbar]) {
+      if (this.showPrefs.showinToolbar === "authors") {
+        this.$.copy.setContent(y + ParseXml.authorsToString(d.authors).join(", "));
+      } else {
+        this.$.copy.setContent("&copy; " + y + d[this.showPrefs.showinToolbar]);
+      }
+    } else {
+      this.$.copy.setContent("&copy; " + y + $L("no" + this.showPrefs.showinToolbar));
+    }
+  },
+  
+  lyricDataSet: function() {
+    var d = this.data;
+    //~ format and set lyrics
+    if (d.lyrics) {
+      var lyrics = "";
+      if (d.lyrics === "nolyrics") {
+        lyrics = $L(d.lyrics); 
+      } else if (d.lyrics === "wrongversion") {
+        lyrics = $L(d.lyrics);
+      } else { 
+        var formL = {};
+        if (this.showPrefs.sortLyrics) { //~ display lyrics like verseOrder
+          formL = Helper.orderLyrics(d.lyrics, this.order, this.lang);
+          this.order = Helper.handleDoubles(this.order);
+        } else { //~ display lyrics without verseOrder
+          formL = d.lyrics;
+        }
+        // Create lyric divs
+        for (var i in formL) {
+          if (this.showPrefs.showName) {
+            var t = $L(formL[i][0].charAt(0)).charAt(0)
+              + formL[i][0].substring(1, formL[i][0].length) + ":";
+            this.$.lyric.createComponent({
+              name: i,
+              kind: "HFlexBox",
+              flex: 1,
+              className: "lyric",
+              components: [
+                {content: t, className: "element"},
+                {content: formL[i][1], kind: "VFlexBox", flex: 1}
+            ]});
+          } else {
+            this.$.lyric.createComponent({
+              name: i,
+              kind: "HFlexBox",
+              flex: 1,
+              className: "lyric",
+              components: [
+                {content: formL[i][1], kind: "VFlexBox", flex: 1}
+            ]});
+          }
+        }
+      }
+      this.$.lyric.render();
+      var x = this.$.lyric.node.lastChild.clientHeight;
+      var h = window.innerHeight-138-x;
+      if (h > 0) {
+        this.$.lyric.createComponent({
+          name: "scrollspacer",
+          style: "height:" + h + "px;width:100%;"
+        });
+      }
+    }
+    this.$.lyric.render();
   },
 
   // ### Autoscroll ###
@@ -315,7 +434,7 @@ enyo.kind({
  
   // ### Scrolling Button/Keypress ###
   scrollHelper: function() {
-    enyo.log(this.textIndex);
+    //~ enyo.log(this.textIndex);
     var x = this.$.lyric.$[this.order[this.textIndex]].hasNode();
     var ePos = enyo.dom.calcNodeOffset(x).top - 74; // element offset - Toolbar and margin
     this.scroll = this.$.viewScroller.$.scroll.y;   // scroll position
@@ -404,90 +523,6 @@ enyo.kind({
     if (window.PalmSystem) {
       enyo.setFullScreen(this.fullscreen);
     }
-  }, 
-  
-  
-  // ### set Data ###
-  metaDataSet: function() {
-    var d = this.data;
-    //~ format and set title
-    if (d.titles) {
-      var t = ParseXml.titlesToString(d.titles);
-      this.$.title.setContent(t);
-    }
-    
-    //~ format and set copyright
-    var y;
-    if (d.released) { // add release year
-      y = d.released + ": ";
-    } else {
-      y = "";
-    }
-    if (d[this.showPrefs.showinToolbar]) {
-      if (this.showPrefs.showinToolbar === "authors") {
-        this.$.copy.setContent(y + ParseXml.authorsToString(d.authors).join(", "));
-      } else {
-        this.$.copy.setContent("&copy; " + y + d[this.showPrefs.showinToolbar]);
-      }
-    } else {
-      this.$.copy.setContent("&copy; " + y + $L("no" + this.showPrefs.showinToolbar));
-    }
-  },
-  
-  lyricDataSet: function() {
-    var d = this.data;
-    //~ format and set lyrics
-    if (d.lyrics) {
-      var lyrics = "";
-      if (d.lyrics === "nolyrics") {
-        lyrics = $L(d.lyrics); 
-      } else if (d.lyrics === "wrongversion") {
-        lyrics = $L(d.lyrics);
-      } else { 
-        var formL = {};
-        if (this.showPrefs.sortLyrics) { //~ display lyrics like verseOrder
-          formL = Helper.orderLyrics(d.lyrics, this.order);
-          this.order = Helper.handleDoubles(this.order);
-        } else { //~ display lyrics without verseOrder
-          formL = d.lyrics;
-        }
-        // Create lyric divs
-        for (var i in formL) {
-          if (this.showPrefs.showName) {
-            var t = $L(formL[i][0].charAt(0)).charAt(0)
-              + formL[i][0].substring(1, formL[i][0].length) + ":";
-            this.$.lyric.createComponent({
-              name: i,
-              kind: "HFlexBox",
-              flex: 1,
-              className: "lyric",
-              components: [
-                {content: t, className: "element"},
-                {content: formL[i][1], kind: "VFlexBox", flex: 1}
-            ]});
-          } else {
-            this.$.lyric.createComponent({
-              name: i,
-              kind: "HFlexBox",
-              flex: 1,
-              className: "lyric",
-              components: [
-                {content: formL[i][1], kind: "VFlexBox", flex: 1}
-            ]});
-          }
-        }
-      }
-      this.$.lyric.render();
-      var x = this.$.lyric.node.lastChild.clientHeight;
-      var h = window.innerHeight-138-x;
-      if (h > 0) {
-        this.$.lyric.createComponent({
-          name: "scrollspacer",
-          style: "height:" + h + "px;width:100%;"
-        });
-      }
-    }
-    this.$.lyric.render();
   },
   
   // ### Button ###
@@ -570,7 +605,7 @@ enyo.kind({
       value += 12;
     }
     this.transpose = value;
-    this.renderLyrics(this.xml);    
+    this.renderLyrics();    
   },
   
   transPlus: function() {

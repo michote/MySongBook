@@ -345,15 +345,34 @@ function ParseXml () {}
     var l = xml.getElementsByTagName("verse");
     for (i = 0; i < l.length; i++) {
       var id = l[i].getAttribute("name");
-      
-      var s = new XMLSerializer();
-      var t = s.serializeToString(l[i].getElementsByTagName("lines")[0]);
-      t = t.replace('<lines xmlns="http://openlyrics.info/namespace/2009/song">', '');
-      t = t.replace('</lines>', '');
-      t = t.replace(/<chord name="/g, '[').replace(/"\/>/g, ']');
-      t = t.replace(/<comment>/g, '*').replace(/<\/comment>/g, '*');
-      data[id] = t
+      var lang = l[i].getAttribute("lang");
+      data[id] = {};
+      tdata = data[id];
+      tdata["language"] = lang;
+      var line = [];
+      for (k=0; k<l[i].childElementCount; k++) {
+        line = line.concat(l[i].getElementsByTagName("lines")[k]);
+      }
+      for (m=0; m < line.length; m++) {   // separate lines in verse
+        var s = new XMLSerializer();
+        var t = s.serializeToString(line[m]);
+        t = t.replace('<lines xmlns="http://openlyrics.info/namespace/2009/song"', '');
+        // part
+        var gtIdx = t.indexOf('>');
+        var pIdx = t.indexOf('part');
+         var pt = "";
+        if (pIdx !== -1 && pIdx < gtIdx) {
+          pt = t.slice(pIdx, gtIdx).split('"')[1];
+          t = t.replace(t.slice(0, gtIdx+1), '');
+        } else {
+          t = t.replace('>', '');
+        }
+        t = t.replace('</lines>', '');
+        t = t.replace(/<chord name="/g, '[').replace(/"\/>/g, ']');
+        t = t.replace(/<comment>/g, '*').replace(/<\/comment>/g, '*');
+        tdata["line" + m] = {part: pt, line: t};
+      }  
+    data[id] = tdata;
     }
-    
     return data;  
   };

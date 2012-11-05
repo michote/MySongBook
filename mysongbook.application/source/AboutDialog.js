@@ -1,6 +1,6 @@
 enyo.kind({
   name: "AboutDialog",
-  kind: enyo.ModalDialog,
+  kind: "ModalDialog",
   layoutKind:"VFlexLayout",
   caption : $L("About"),
   scrim: true,
@@ -14,11 +14,12 @@ enyo.kind({
         + 'License: <a href="http://opensource.org/licenses/mit-license.php">MIT</a>',
         onLinkClick: "linkClicked"},
     ]},
-    {kind: "HFlexBox", pack: "center", components : [
+    {kind: "HFlexBox", pack: "center", components: [
       {kind: "Image", src: "images/icon128.png"},
     ]},
-    {kind: "HFlexBox", pack: "center", components : [
-      {kind: "Button", flex: 0, caption : $L("Close"), width: "150px", onclick : "closeClicked"}
+    {kind: "HFlexBox", pack: "center", components: [
+      {kind: "Button", flex: 0, caption : $L("Close"), width: "150px", 
+        onclick: "closeClicked"}
     ]}
   ],
   

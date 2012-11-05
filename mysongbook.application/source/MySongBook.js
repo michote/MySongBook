@@ -48,17 +48,17 @@ enyo.kind({
     
     // Dialogs
     {kind: "AboutDialog", onCancel: "closeClicked"},
-    {name: "readFilesDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
+    {name: "readFilesDialog", kind: "ModalDialog", layoutKind: "VFlexLayout",
       caption: $L("Reading Files"), components :[
         {name: "fileProgress", kind: "ProgressBar"}
     ]},
-    {name: "errorDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
+    {name: "errorDialog", kind: "ModalDialog", layoutKind: "VFlexLayout",
       caption: $L("Error!"), scrim: true, components :[
         {name: "errorContent", kind: "HtmlContent", style:"margin: 10px 0;",
           content:""},
         {kind: "Button", caption: $L("Close"), onclick: "closeClicked"}
     ]},
-    {name: "firstUseDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
+    {name: "firstUseDialog", kind: "ModalDialog", layoutKind: "VFlexLayout",
       caption: $L("First Use"), scrim: true, components :[
         {name: "content", kind: "HtmlContent", style:"margin: 10px 0;",
           content: $L("No songfiles found!") + $L(" Please add ") +
@@ -76,7 +76,7 @@ enyo.kind({
       onListRm: "rmCustomList"},
     {kind: "FontDialog"},
     {name: "preferences", kind: "Preferences", onBack: "goBack"},
-    {name: "newSongDialog", kind: enyo.ModalDialog, layoutKind: "VFlexLayout",
+    {name: "newSongDialog", kind: "ModalDialog", layoutKind: "VFlexLayout",
       caption: $L("New song"), scrim: true, components: [
         {name: "songErrorContent", kind: "HtmlContent", 
           style: "color: #9E0508; margin: 0 10px", content: ""},

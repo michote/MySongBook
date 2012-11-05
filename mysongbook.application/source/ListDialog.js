@@ -1,6 +1,6 @@
 enyo.kind({
   name: "ListDialog",
-  kind: enyo.ModalDialog,
+  kind: "ModalDialog",
   layoutKind:"VFlexLayout",
   caption : $L("Manage Lists"),
   scrim: true,

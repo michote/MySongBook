@@ -439,6 +439,17 @@ a {
 }
 
 .editlabel {
+    padding: 12px 5px 10px;
     text-overflow: ellipsis;
     overflow: hidden;
+    font-size: .9rem;
+}
+
+.preview {
+    color: #999999;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 10px;
+    font-size: .8rem;
+    white-space: nowrap;
 }

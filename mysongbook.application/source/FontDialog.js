@@ -1,6 +1,6 @@
 enyo.kind({
   name: "FontDialog",
-  kind: enyo.ModalDialog,
+  kind: "ModalDialog",
   layoutKind:"VFlexLayout",
   caption: $L("Font Settings"),
   scrim: true,

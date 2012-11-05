@@ -5,19 +5,19 @@ enyo.kind({
   scrim: true,
   onBack: "cancelClicked",
   components: [ 
-    {name: "viewScroller", kind: enyo.Scroller, flex: 1, height: 
+    {name: "viewScroller", kind: "Scroller", flex: 1, height: 
       Helper.dialogHeight(), components: [ 
       {name: "copyboxdiv", kind: "Divider", caption: $L("Copyright"),
         showing: false},
-      {name: "copybox", kind: "enyo.VFlexBox"},
+      {name: "copybox", kind: "VFlexBox"},
       {name: "authorboxdiv", kind: "Divider", caption: $L("Author(s)"),
         showing: false},
-      {name: "authorbox", kind: "enyo.VFlexBox"},
+      {name: "authorbox", kind: "VFlexBox"},
       {name: "songboxdiv", kind: "Divider", caption: $L("Song"),
         showing: false},
-      {name: "songbox", kind: "enyo.VFlexBox"},
+      {name: "songbox", kind: "VFlexBox"},
     ]},
-    {kind: "HFlexBox", pack: "center", components : [
+    {kind: "HFlexBox", pack: "center", components: [
       {kind : "Button", flex: 0, caption : $L("Close"), width: "150px", onclick : "cancelClicked"}
     ]}
   ],

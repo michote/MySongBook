@@ -61,41 +61,44 @@ enyo.kind({
             {name: "copyright", flex: 1, kind: "Input", hint: $L("copyright holder")}
           ]},
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {content: $L("publisher") + ":", style: "padding: 10px 5px;", width: "15%", 
+            {content: $L("publisher") + ":", width: "15%", 
               className: "editlabel"},
             {name: "publisher", kind: "Input", hint: $L("publisher"), flex: 1}
           ]},
         ]},
         {name: "songbookbox", kind: "RowGroup", caption: $L("infos"), components:[
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {content: $L("key") + ":", style: "padding:10px 5px;", width: "10%", 
+            {content: $L("key") + ":", width: "10%", 
               className: "editlabel"},
             {name: "key", kind: "Input", flex: 1, hint: $L("key")},
-            {content: $L("transposition") + ":", style: "padding:10px 5px;", width: "20%", 
+            {content: $L("transposition") + ":", width: "20%", 
               className: "editlabel"},
-            {name: "transposition", kind: "Input", flex: 1, hint: $L("transposition")},
+            {name: "transposition", kind: "Input", flex: 1, hint: $L("transposition")}
           ]},
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", components:[
-            {content: $L("tempo") + ":", style: "padding:10px 5px;", width: "10%", 
+            {content: $L("tempo") + ":", width: "10%", 
               className: "editlabel"},
             {name: "tempo", kind: "Input", flex: 1, hint: $L("tempo")},
-            {content: $L("duration") + ":", style: "padding:10px 5px;", width: "20%", 
+            {content: $L("duration") + ":", width: "20%", 
               className: "editlabel"},
-            {name: "duration", kind: "Input", flex: 1, hint: $L("duration")},
+            {name: "duration", kind: "Input", flex: 1, hint: $L("duration")}
           ]},
           {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", 
             components:[
-            {content: $L("verseorder") + ":", style: "padding: 10px 5px;", width: "15%", 
+            {content: $L("verseorder") + ":", width: "15%", 
               className: "editlabel"},
             {name: "verseOrder", flex: 1, kind: "Input", hint: $L("verseorder")},
-            {name: "versehflex", kind:"HFlexBox", style: "padding:0; margin:0px;"},
+            {name: "versehflex", kind:"HFlexBox", style: "padding:0; margin:0px;"}
           ]},
           {name: "songbookhflex1", kind:"HFlexBox", flex: 1, style: 
             "padding:0; margin:-10px;", components:[
-            {content: $L("songbook") + ":", style: "padding:10px 5px;", width: "15%", 
+            {content: $L("songbook") + ":",  width: "15%", 
               className: "editlabel"},
             {name: "songbook1", flex: 1, kind: "Input", hint: $L("songbook")}, 
-            {content: $L("no.") + ":", style: "padding:10px 5px;", width: "5%", 
+            {content: $L("no.") + ":",  
+            
+            
+            width: "5%", 
               className: "editlabel"},
             {name: "no1", kind: "Input", width: "15%", hint: $L("number")}
           ]},
@@ -170,11 +173,11 @@ enyo.kind({
     this.$.songbookbox.createComponent(
       {name: "songbookhflex" + this.songbookCount, kind: "HFlexBox", flex: 1,
         style: "padding:0; margin:-10px;", owner: this, components: [
-        {content: $L("songbook") + ":", style: "padding:10px 5px;",
+        {content: $L("songbook") + ":", style: "padding:11px 5px;",
           width: "15%", className: "editlabel"},
         {name: "songbook" + this.songbookCount, flex: 1, kind: "Input",
           hint: "songbook", owner: this},
-        {content: $L("no.") + ":", style: "padding:10px 5px;", width: "5%",
+        {content: $L("no.") + ":", style: "padding:11px 5px;", width: "5%",
           className: "editlabel"},
         {name: "no" + this.songbookCount, kind: "Input", width: "15%", 
           hint: $L("number"), owner: this}

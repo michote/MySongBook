@@ -1,6 +1,6 @@
 enyo.kind({
   name: "Preferences",
-  kind: enyo.Toaster,
+  kind: "Toaster",
   flyInFrom: "top",
   width: Helper.toasterWidth(),
   autoClose: false,
@@ -95,16 +95,16 @@ enyo.kind({
                     components:[{className: "toggle-button-knob"}]}
               ]}
             ]},
-            //~ {kind: "RowGroup", caption: $L("Developement Settings"), components:[
-              //~ {kind: "HFlexBox", components: [
-                  //~ {kind: "HtmlContent", flex: 1, content: "Enable features in \
-                    //~ development.<br><span style='color:red;'>This comes without \
-                    //~ any warranty and may destroy yout data!</span>"},
-                  //~ {kind: "ToggleButton", name: "testingToggle", state: false,
-                    //~ onChange: "toggleTesting", onLabel: $L("yes"), offLabel: $L("no"),
-                    //~ components:[{className: "toggle-button-knob"}]}
-              //~ ]}
-            //~ ]},
+            {kind: "RowGroup", caption: $L("Developement Settings"), components:[
+              {kind: "HFlexBox", components: [
+                  {kind: "HtmlContent", flex: 1, content: "Enable \"features in \
+                    development\".<br><span style='color:red;'>This comes without \
+                    any warranty and may destroy yout data!</span>"},
+                  {kind: "ToggleButton", name: "testingToggle", state: false,
+                    onChange: "toggleTesting", onLabel: $L("yes"), offLabel: $L("no"),
+                    components:[{className: "toggle-button-knob"}]}
+              ]}
+            ]},
           ]}
         ]},
         {name: "footerToolbar", kind: "Toolbar", pack : "center", components: [
@@ -118,7 +118,7 @@ enyo.kind({
   create: function() {
     this.inherited(arguments);
     this.getPrefs();
-    //~ this.owner.$.songViewPane.setTesting(this.testing);
+    this.owner.$.songViewPane.setTesting(this.testing);
     this.owner.$.songViewPane.setShowPrefs(this.showPrefs);
   },
   
@@ -127,10 +127,10 @@ enyo.kind({
       this.showPrefs = Helper.getItem("showPrefs");
       //~ enyo.log("got", "showPrefs", Helper.getItem("showPrefs"));
     }
-    //~ if (Helper.getItem("testing")) {
-      //~ this.testing = Helper.getItem("testing");
+    if (Helper.getItem("testing")) {
+      this.testing = Helper.getItem("testing");
       //~ enyo.log("got", "testing", Helper.getItem("testing"));
-    //~ }
+    }
   },
   
   rendered: function() {
@@ -143,13 +143,13 @@ enyo.kind({
         this.$[i].setState(this.showPrefs[i]);
       }
     }
-    //~ this.$.testingToggle.setState(this.testing);
+    this.$.testingToggle.setState(this.testing);
   },
   
   savePrefs: function() {
-    //~ Helper.setItem("testing", this.testing);
+    Helper.setItem("testing", this.testing);
     Helper.setItem("showPrefs", this.showPrefs);
-    //~ this.owner.$.songViewPane.setTesting(this.testing);
+    this.owner.$.songViewPane.setTesting(this.testing);
     this.owner.$.songViewPane.setShowPrefs(this.showPrefs);
     this.close();
   },

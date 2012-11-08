@@ -8,9 +8,9 @@
 // #################
 
 
-function WriteXml () {}
+function WriteXml() {}
 
-  WriteXml.date = function () {
+  WriteXml.date = function() {
     var date = new Date();
     var dateFmt = new enyo.g11n.DateFmt({
       locale: enyo.g11n.currentLocale(),
@@ -21,14 +21,14 @@ function WriteXml () {}
     return dateFmt.format(date).replace(' ', 'T');
   };
   
-  WriteXml.seralize = function (xml) {
+  WriteXml.seralize = function(doc) {
     serializer = new XMLSerializer();
-    return serializer.serializeToString(xml);
+    return serializer.serializeToString(doc);
   };
 
   // DOM Parser
-  WriteXml.edit = function (xml, metadata, lyrics) {
-    
+  WriteXml.edit2 = function(xml, metadata, lyrics) {
+    enyo.log(lyrics);
     // write edit information
     var edited = xml.getElementsByTagName("song")[0]
     edited.setAttribute("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
@@ -147,6 +147,7 @@ function WriteXml () {}
         } else if (text[j].search(/<br>/) > -1) { // linebreaks
           newe = xml.createElement("br");
           newl.appendChild(newe);
+          newl.appendChild(xml.createTextNode("\n"));
         } else if (text[j].search(/^\*.+\*$/) > -1) { // comments
           newe = xml.createElement("comment");
           var c = text[j].replace(/\*/g,"");
@@ -175,9 +176,47 @@ function WriteXml () {}
     
     return WriteXml.seralize(xml);
   };
+  
+  WriteXml.edit = function(xml, metadata, lyrics) {
+    var xw = new XMLWriter( 'UTF-8', '1.0' );
+    xw.indentChar = ' ';  //indent with spaces
+    xw.indentation = 4;   //add 4 spaces per level
 
-  WriteXml.create = function (title) {
-    var xml = document;
+    xw.writeStartDocument( );
+    xw.writeStartElement('song');
+    xw.writeAttributeString("xmlns", "http://openlyrics.info/namespace/2009/song");
+    xw.writeAttributeString("version","0.8");
+    xw.writeAttributeString("createdIn", '');
+    xw.writeAttributeString("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
+    xw.writeAttributeString("modifiedDate", WriteXml.date());
+      
+      xw.writeStartElement('properties');
+        xw.writeStartElement('titles');
+          for (i in metadata.titles) {
+            xw.writeStartElement('title');
+            if (metadata.titles[i].lang) {
+              xw.writeAttributeString('lang', metadata.titles[i].lang);
+            }
+            xw.writeString(metadata.titles[i].title);
+            xw.writeEndElement('title');
+          }
+        xw.writeEndElement();
+      xw.writeEndElement();
+      
+      xw.writeStartElement('lyrics');
+        xw.writeStartElement('verse');
+        xw.writeAttributeString('name','v1');
+          xw.writeElementString('lines', '');
+        xw.writeEndElement();
+      xw.writeEndElement();
+        
+    xw.writeEndElement();
+    xw.writeEndDocument();
+    return xw.flush();
+  }
+
+  WriteXml.create2 = function(title) {
+    var xml = document.implementation.createDocument("", "", null);
     
     var s = xml.createElement("song");
     // Metatags
@@ -186,16 +225,21 @@ function WriteXml () {}
     s.setAttribute("createdIn","MySongBook "+enyo.fetchAppInfo().version);
     s.setAttribute("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
     s.setAttribute("modifiedDate", WriteXml.date());
-    //~ xml.appendChild(s);
+    xml.appendChild(s);
     
     // Metadata/Properties
     var p = xml.createElement("properties");
     var tt = xml.createElement("titles");
     var t = xml.createElement("title");
     t.appendChild(xml.createTextNode(title));
+    t.appendChild(xml.createTextNode("\n"));
+    tt.appendChild(xml.createTextNode("\n"));
     tt.appendChild(t);
+    tt.appendChild(xml.createTextNode("\n"));
     p.appendChild(tt);
+    p.appendChild(xml.createTextNode("\n"));
     s.appendChild(p);
+    s.appendChild(xml.createTextNode("\n"));
     
     // Lyrics
     var l = xml.createElement("lyrics");
@@ -207,8 +251,37 @@ function WriteXml () {}
     s.appendChild(l);
     
     //~ enyo.log(WriteXml.seralize(s));
-    return WriteXml.seralize(s);
+    return WriteXml.seralize(xml);
   };
+  
+  WriteXml.create = function(title) {
+    var xw = new XMLWriter( 'UTF-8', '1.0' );
+    xw.indentChar = ' ';  //indent with spaces
+    xw.indentation = 4;   //add 4 spaces per level
 
-
-
+    xw.writeStartDocument( );
+    xw.writeStartElement('song');
+    xw.writeAttributeString("xmlns", "http://openlyrics.info/namespace/2009/song");
+    xw.writeAttributeString("version","0.8");
+    xw.writeAttributeString("createdIn","MySongBook "+enyo.fetchAppInfo().version);
+    xw.writeAttributeString("modifiedIn","MySongBook "+enyo.fetchAppInfo().version);
+    xw.writeAttributeString("modifiedDate", WriteXml.date());
+      
+      xw.writeStartElement('properties');
+        xw.writeStartElement('titles');
+          xw.writeElementString('title', title);
+        xw.writeEndElement();
+      xw.writeEndElement();
+      
+      xw.writeStartElement('lyrics');
+        xw.writeStartElement('verse');
+        xw.writeAttributeString('name','v1');
+          xw.writeStartElement('lines');
+          xw.writeEndElement();
+        xw.writeEndElement();
+      xw.writeEndElement();
+        
+    xw.writeEndElement();
+    xw.writeEndDocument();
+    return xw.flush();
+  };

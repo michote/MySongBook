@@ -4,5 +4,6 @@ enyo.depends(
     "Transposer.js",
     "WriteXml.js",
     "ScrollBarsScroller.js",
-    "cursorScrollBar.js"
+    "cursorScrollBar.js",
+    "XMLWriter-1.0.0-min.js"
 );

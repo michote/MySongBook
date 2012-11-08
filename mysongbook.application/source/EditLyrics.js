@@ -5,11 +5,7 @@ enyo.kind({
   parts: [1],
   published: {
     lyrics: {},
-    element: {
-        elname: "v1",
-        language: "en",
-        lines: [{part: "men", text: "some text here"}, {part: "women", text: "we will only display the first line here"}]
-      }
+    element: undefined
   },
   components: [
     {name: "addBar", kind: "Toolbar", className: "searchbar",
@@ -46,11 +42,11 @@ enyo.kind({
         ]},
         {kind: "Divider", caption: $L("parts")},
         {kind: "HFlexBox", components: [
-          {name: "part1", kind: "Input", flex: 1, hint: $L("part")},
+          {name: "editpart1", kind: "Input", flex: 1, hint: $L("part")},
           {name: "addPartsButton", kind: "IconButton", icon: "images/add.png", 
             onclick: "addPart"},
         ]},
-        {name: "text1", className: "preview"},
+        {name: "edittext1", className: "preview"},
         {name: "parts", kind: "VFlexBox"},
         {kind: "Divider", caption: ""},
         {kind: "HFlexBox", pack: "end", components: [
@@ -71,39 +67,35 @@ enyo.kind({
   },
   
   lyricsChanged: function() {
-    this.$.lyric.destroyComponents();
+    this.$.lyric.destroyControls();
     var button = [];
-    var vs = 0;
     for (i in this.lyrics) { // verses
+      var cap = $L(this.lyrics[i].elname.charAt(0)) + " " 
+        + this.lyrics[i].elname.substring(1, this.lyrics[i].elname.length);
+      if (this.lyrics[i].language) {
+        cap = cap + ' (' + this.lyrics[i].language + ')'
+      }
       this.$.lyric.createComponent(
-        {name: i, kind: "RowGroup",
-        caption: $L(i.charAt(0)) + " " + i.substring(1, i.length),
-        components: [{name: i+"text", kind: "RichText", owner: this, 
-          value: this.lyrics[i], onkeypress: "handleKeyPress", components: [
+        {name: i, kind: "RowGroup", style: "position: relative;",
+        caption: cap, owner: this, components: [
           {name: "eB"+i, kind: "IconButton", icon: "images/edit.png",
-            onclick: "openEdit", owner: this}
-          ]}
+            onclick: "openEdit", owner: this, className: "editbutton"},
         ]}
       );
-      for (j in this.lyrics[i]) {  // language & then lines
-        if (j == "language") {
-          // process this.lyrics[i][j].language
-        } else {
-          if (this.lyrics[i][j].part !== "" ) {
-            this.$.lyric.children[vs].createComponent(
-              {name: vs+j+"part", kind: "RichText", style: "color: #9E0508", owner: this,
-                value: this.lyrics[i][j].part, onkeypress: "handleKeyPress"}
-            );
-          }
-        this.$.lyric.children[vs].createComponent(
-          {name: vs+j+"text", kind: "RichText", owner: this,
-              value: this.lyrics[i][j].line, onkeypress: "handleKeyPress"}
+      for (j in this.lyrics[i].lines) {  // lines
+        if (this.lyrics[i].lines[j].part) {
+          this.$[i].createComponent(
+            {style: "color: #9E0508", owner: this, content: this.lyrics[i].lines[j].part}
           );
         }
+        this.$[i].createComponent(
+          {name: i+"text"+j, kind: "RichText", owner: this, 
+          value: this.lyrics[i].lines[j].text, onkeypress: "handleKeyPress"}
+        );
       }
-    button.push(i);
-    vs++;  
+      button.push(this.lyrics[i].elname); 
     }
+    button = Helper.removeDoubles(button);
     this.owner.$.metaPane.setButton(button);
     this.$.lyric.render();
   },
@@ -127,37 +119,32 @@ enyo.kind({
     } else {
       var z = parseInt(e.slice(-1)[0].substring(1, e.slice(-1)[0].length))+1;
     }
-    //~ enyo.log(this.add + z);
-    this.lyrics[this.add + z] = "";
+    this.lyrics[this.add+z] = {
+      elname: this.add+z, 
+      language: null, 
+      lines:[{"part":"","text":""}]
+      };
     this.setLyrics(this.lyrics);
   },
   
+  saveModifications: function() {
+    for (i in this.lyrics) {
+      for (j in this.lyrics[i].lines) {
+        var l = JSON.stringify(this.$[i+"text"+j].getText().replace(/\n/g,'<br>'));
+        this.lyrics[i].lines[j].text = l.substring(1,l.length-1);
+      }
+    }
+    this.owner.setLyrics(this.lyrics);
+  },
+  
+  // ### Edit Dialog ###
   openEdit: function(inSender) {
-    enyo.log(inSender.name.replace("eB", ""));
+    this.saveModifications();
     this.$.editDialog.openAtCenter();
     var i = inSender.name.replace("eB", "");
+    this.setElement(this.lyrics[i]);
+    this.el = i;
     this.$.editDialog.setCaption($L("Edit") + " " + $L(i.charAt(0)) + " " + i.substring(1, i.length));
-    this.setElement(this.element);
-  },
-  
-  // Edit Dialog
-  addPart: function() {
-    enyo.log(this.parts);
-    var num = this.parts.slice(-1)[0]+1;
-    enyo.log("add part " + num);
-    this.$.parts.createComponents(
-      [{name: "box" + num, kind: "HFlexBox", components: [
-        {name: "part" + num, kind: "Input", flex: 1, hint: $L("part")},
-        {name: "delPB" + num, kind: "IconButton", icon: "images/remove.png",
-          className: "enyo-button-negative", onclick: "delPart"},
-      ]},
-      {name: "text" + num, className: "preview"}], {owner: this}
-    );
-    this.$.parts.render();
-  },
-  
-  delPart: function(inSender) {
-    enyo.log(inSender.name.replace("delPB", ""));
   },
   
   elementChanged: function() {
@@ -166,9 +153,9 @@ enyo.kind({
       if (i === "lines") {
         this.$.parts.destroyControls();
         for (j=0; j < this.element[i].length; j++) {
-          if (j>0) { this.addPart();}
-          this.$["part"+(j+1)].setValue(this.element[i][j].part);
-          this.$["text"+(j+1)].setContent(this.element[i][j].text);
+          if (j>0) { this.addPart("init");}
+          this.$["editpart"+(j+1)].setValue(this.element[i][j].part);
+          this.$["edittext"+(j+1)].setContent(this.element[i][j].text);
         }
       } else {
         this.$[i].setValue(this.element[i]);
@@ -176,8 +163,38 @@ enyo.kind({
     }
   },
   
+  addPart: function(i) {
+    var num = this.parts.slice(-1)[0]+1;
+    this.$.parts.createComponents(
+      [{name: "box" + num, kind: "HFlexBox", components: [
+        {name: "editpart" + num, kind: "Input", flex: 1, hint: $L("part")},
+        {name: "delPB" + num, kind: "IconButton", icon: "images/remove.png",
+          className: "enyo-button-negative", onclick: "delPart"},
+      ]},
+      {name: "edittext" + num, className: "preview"}], {owner: this}
+    );
+    if (i !== "init") { // if add button used 
+      this.element.lines.push({"part": "", "text": ""});
+    }
+    this.parts.push(num);
+    this.$.parts.render();
+  },
+  
+  delPart: function(inSender) {
+    var y = parseInt(inSender.name.replace("delPB", ""));
+    for (x in this.parts) {
+      if (this.parts[x] === y) {
+        this.parts.splice(x,1);
+        this.$["box"+y].destroy();
+        this.$["edittext"+y].destroy();
+        this.$.parts.render();
+      }
+    }
+  },
+  
   deleteElement: function() {
-    enyo.log("delete " + this.element.elname);
+    delete this.lyrics[this.el];
+    this.setLyrics(this.lyrics);
     this.$.editDialog.close();
   },
   
@@ -187,30 +204,22 @@ enyo.kind({
       language: this.$.language.getValue(),
       lines: []
     };
-    for (i = 1; i < this.parts+1; i++) {
-      data.lines.push({part: this.$["part"+i].getValue(), text: this.$["text"+i].getContent()});
+    for (i in this.parts) {
+      enyo.log("i: ",this.parts[i]-1);
+      data.lines.push({part: this.$["editpart"+this.parts[i]].getValue(),
+        text: this.element.lines[this.parts[i]-1].text});
     }
-    enyo.log(data);
+    return data;
   },
   
   closeEdit: function() {
-    this.getData();
+    var el = this.getData();
+    enyo.log(el);
+    var id = el.elname;
+    if (el.language) {
+      id = id + "_" + el.language;
+    }
+    this.setLyrics(Helper.insertSame(this.lyrics, id, el, this.el));
     this.$.editDialog.close();
   },
-
-  // Add '<br>' instead of creating a new div  
-  handleKeyPress: function(inSender, inEvent) {
-    if (inEvent.keyCode===13 && !inEvent.shiftKey) {
-      inEvent.preventDefault();
-      inSender.insertAtCursor("<br/>");
-    }
-  },
-  
-  saveModifications: function() {
-    for (i in this.lyrics) {
-      this.lyrics[i] = this.$[i+"text"].getValue();
-      //~ enyo.log(this.$[i+"text"].getValue());
-    }
-    this.owner.setLyrics(this.lyrics);
-  }
 });

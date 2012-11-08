@@ -346,15 +346,16 @@ function ParseXml () {}
     for (i = 0; i < l.length; i++) {
       var id = l[i].getAttribute("name");
       var lang = l[i].getAttribute("lang");
-      data[id] = {};
-      tdata = data[id];
+      var tdata = {};
+      tdata["elname"] = id;
       tdata["language"] = lang;
       var line = [];
+      tdata["lines"] = [];
       for (k=0; k<l[i].childElementCount; k++) {
         line = line.concat(l[i].getElementsByTagName("lines")[k]);
       }
+      var s = new XMLSerializer();
       for (m=0; m < line.length; m++) {   // separate lines in verse
-        var s = new XMLSerializer();
         var t = s.serializeToString(line[m]);
         t = t.replace('<lines xmlns="http://openlyrics.info/namespace/2009/song"', '');
         // part
@@ -370,9 +371,13 @@ function ParseXml () {}
         t = t.replace('</lines>', '');
         t = t.replace(/<chord name="/g, '[').replace(/"\/>/g, ']');
         t = t.replace(/<comment>/g, '*').replace(/<\/comment>/g, '*');
-        tdata["line" + m] = {part: pt, line: t};
-      }  
-    data[id] = tdata;
+        tdata.lines.push({part: pt, text: t});
+      }
+      if (lang) {  
+        data[id + "_" + lang] = tdata;
+      } else {
+        data[id] = tdata;
+      }
     }
     return data;  
   };

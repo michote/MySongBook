@@ -445,6 +445,12 @@ a {
     font-size: .9rem;
 }
 
+.editbutton {
+    position: absolute;
+    right: -11px;
+    top: -33px;
+}
+
 .preview {
     color: #999999;
     text-overflow: ellipsis;

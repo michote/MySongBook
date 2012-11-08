@@ -92,11 +92,11 @@ enyo.kind({
   saveClicked: function(s) {
     this.$.metaPane.saveModifications();
     this.$.lyricsPane.saveModifications();
-    //~ this.$.displayDialog.openAtCenter();
-    //~ this.$.newText.setValue(WriteXml.edit(this.xml, this.metadata, this.lyrics));
-    this.owner.writeXml(this.element.path, 
-      WriteXml.edit(this.xml, this.metadata, this.lyrics));
-    this.close();
+    this.$.displayDialog.openAtCenter();
+    this.$.newText.setValue(WriteXml.edit(this.xml, this.metadata, this.lyrics));
+    //~ this.owner.writeXml(this.element.path, 
+      //~ WriteXml.edit(this.xml, this.metadata, this.lyrics));
+    //~ this.close();
   },
   
   cancelClicked: function() {

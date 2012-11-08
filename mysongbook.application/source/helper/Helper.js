@@ -69,7 +69,7 @@ function Helper() {}
     return out;
   };
 
-  // create Lyrics fron verseOrder
+  // create Lyrics from verseOrder
   Helper.orderLyrics = function(lyrics, order, lang) {
     var newLyrics = {};
     var order2 = this.handleDoubles(order);
@@ -86,13 +86,28 @@ function Helper() {}
     return newLyrics;
   };
   
+  // language tag to verse id
   Helper.orderLanguage = function(order, lang) {
     var newOrder = [];
     for (i in order) {
       newOrder.push(order[i] + "_" + lang);
     }
-    
     return newOrder;
+  };
+  
+  // Insert a modified element add same place
+  Helper.insertSame = function(lyrics, id, elCon, oldId) {
+    var newLyrics = {};
+    for (i in lyrics) {
+      if (i === oldId && id === oldId) {
+        newLyrics[i] = elCon;
+      } else if (i === oldId && id !== oldId) {
+        newLyrics[id] = elCon;
+      } else {
+        newLyrics[i] = lyrics[i];
+      }
+    }
+    return newLyrics;
   };
   
   // Search

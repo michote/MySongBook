@@ -131,7 +131,8 @@ enyo.kind({
     for (i in this.lyrics) {
       for (j in this.lyrics[i].lines) {
         var l = JSON.stringify(this.$[i+"text"+j].getText().replace(/\n/g,'<br>'));
-        this.lyrics[i].lines[j].text = l.substring(1,l.length-1);
+        l = l.substring(1,l.length-1).replace(/\\/g, '');
+        this.lyrics[i].lines[j].text = l;
       }
     }
     this.owner.setLyrics(this.lyrics);
@@ -205,7 +206,6 @@ enyo.kind({
       lines: []
     };
     for (i in this.parts) {
-      enyo.log("i: ",this.parts[i]-1);
       data.lines.push({part: this.$["editpart"+this.parts[i]].getValue(),
         text: this.element.lines[this.parts[i]-1].text});
     }
@@ -214,7 +214,6 @@ enyo.kind({
   
   closeEdit: function() {
     var el = this.getData();
-    enyo.log(el);
     var id = el.elname;
     if (el.language) {
       id = id + "_" + el.language;

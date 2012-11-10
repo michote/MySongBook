@@ -11,7 +11,7 @@
 function ParseXml () {}
 
   // DOM Parser
-  ParseXml.parse_dom = function (xml) {
+  ParseXml.parse_dom = function(xml) {
       var parser = new DOMParser();
       return parser.parseFromString(xml, "text/xml");
   };
@@ -30,7 +30,7 @@ function ParseXml () {}
   };
   
   // Titles
-  ParseXml.get_titles = function (xml) {
+  ParseXml.get_titles = function(xml) {
     var names = [];
     var n = xml.getElementsByTagName("title");
     if (n[0]) {
@@ -42,7 +42,7 @@ function ParseXml () {}
     return names;
   };
   
-  ParseXml.titlesToString = function (a, lang) {
+  ParseXml.titlesToString = function(a, lang) {
     var titles = [];
     if (lang) {
       for(i = 0; i < a.length; i++) {
@@ -79,7 +79,7 @@ function ParseXml () {}
     return names;
   };
   
-  ParseXml.authorsToString = function (a) {
+  ParseXml.authorsToString = function(a) {
     var names = [];
     for (i = 0; i < a.length; i++) {
       var t = a[i].type
@@ -96,10 +96,10 @@ function ParseXml () {}
   };
   
   // Songbooks
-  ParseXml.get_songbooks = function (xml) {
+  ParseXml.get_songbooks = function(xml) {
     var names = [];
     var n = xml.getElementsByTagName("songbook");
-    if (n[0] != undefined) {
+    if (n[0] !== undefined) {
       for (i = 0; i < n.length; i++) {
         names.push({"book": n[i].getAttribute("name"),
           "no": n[i].getAttribute("entry")});
@@ -108,8 +108,35 @@ function ParseXml () {}
     return names;
   };
   
+  // Themes
+  ParseXml.get_themes = function(xml) {
+    var names = [];
+    var n = xml.getElementsByTagName("theme");
+    if (n[0] !== undefined) {
+      for (i = 0; i < n.length; i++) {
+        names.push({"theme": n[i].firstChild.nodeValue,
+          "lang": n[i].getAttribute("lang")});
+      }
+    }
+    return names;
+  }
+  
+  // Comments
+  ParseXml.get_comments = function(xml) {
+    var names = [];
+    var m = xml.getElementsByTagName("comments")[0];
+    if (m !== undefined) { var n = m.getElementsByTagName("comment");}
+    if (n !== undefined) {
+      for (i = 0; i < n.length; i++) {
+        names.push(n[i].firstChild.nodeValue);
+      }
+    }
+    return names;
+    
+  }
+  
   // Parse a single <lines> tag
-  ParseXml.parselines = function (line, haschords, showChords, showComments, transp) {
+  ParseXml.parselines = function(line, haschords, showChords, showComments, transp) {
     var lines = "<div class='text'>";
     var trigger = true; // for line starting without chord
     var commenttrigger = false; //remove br after comment
@@ -215,7 +242,7 @@ function ParseXml () {}
   };
   
   // ###Lyrics, Chords, Verseorder ###
-  ParseXml.get_lyrics = function (xml, vo, showChords, showComments, transp) {
+  ParseXml.get_lyrics = function(xml, vo, showChords, showComments, transp) {
     var data = {}
     var l = xml.getElementsByTagName("verse");
     data.lyrics = {};
@@ -272,7 +299,7 @@ function ParseXml () {}
   };
 
   // Parse OpenLyric 0.8
-  ParseXml.parse = function (xml, showChords, showComments, transp) {
+  ParseXml.parse = function(xml, showChords, showComments, transp) {
     var data = {};
     
     // Version Check
@@ -322,25 +349,25 @@ function ParseXml () {}
 
 
 // Parse for editing
-  ParseXml.allMetadata = function (xml) {
+  ParseXml.allMetadata = function(xml) {
     var data = {};
+    data.created = xml.getElementsByTagName("song")[0].getAttribute("createdIn");
     data.titles = this.get_titles(xml);
     data.authors = this.get_authors(xml);
-    data.copyright = this.get_metadata(xml, "copyright");
-    data.released = this.get_metadata(xml, "released");
-    data.publisher = this.get_metadata(xml, "publisher");
-    data.duration = this.get_metadata(xml, "duration");
-    data.verseOrder = this.get_metadata(xml, "verseOrder");
-    data.key = this.get_metadata(xml, "key");
-    data.tempo = this.get_metadata(xml, "tempo");
-    data.ccli = this.get_metadata(xml, "ccliNo");
-    data.transposition = this.get_metadata(xml, "transposition"); 
+    var single = ['copyright', 'ccliNo', 'released', 'transposition', 'tempo',
+      'key', 'variant', 'publisher', 'version', 'keywords', 'verseOrder', 
+      'duration'];
+    for (i in single) {
+      data[single[i]] = this.get_metadata(xml, single[i]);
+    }
     data.songbooks = this.get_songbooks(xml);
+    data.themes = this.get_themes(xml);
+    data.comments = this.get_comments(xml);
     
     return data;  
   };
   
-  ParseXml.editLyrics = function (xml) {
+  ParseXml.editLyrics = function(xml) {
     var data = {};
     var l = xml.getElementsByTagName("verse");
     for (i = 0; i < l.length; i++) {

@@ -36,7 +36,7 @@ enyo.kind({
       xml: undefined,
       first: true,
       // Prefs
-      testing: false,
+      //~ testing: false,
       showPrefs: {
         sortLyrics: true,
         showinToolbar: "copyright",
@@ -44,6 +44,7 @@ enyo.kind({
         showComments: false,
         showName: true,
         showTransposer: true,
+        showPrint: false,
         showScroll: true,
         showAuto: true,
         scrollToNext: true
@@ -98,7 +99,7 @@ enyo.kind({
           {name: "playButton", kind: "IconButton", toggling: true,
             icon: "images/play.png", onclick: "togglePlay"},
           {kind: "Spacer"},
-          {name: "editButton", kind: "IconButton", icon: "images/edit.png", showing: false, // Development
+          {name: "editButton", kind: "IconButton", icon: "images/edit.png",
             onclick: "doEdit", disabled: true},
           {name: "infoButton", kind: "IconButton", disabled: true,
             icon: "images/info.png", onclick: "showInfo"}
@@ -128,7 +129,6 @@ enyo.kind({
     this.$.forthButton.setShowing(this.showPrefs.showScroll);
     this.$.transposergr.setShowing(this.showPrefs.showTransposer);
     this.$.playButton.setShowing(this.showPrefs.showAuto);
-    this.$.editButton.setShowing(this.testing); // testing
   },
   
   // get xml lyricdata

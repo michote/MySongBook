@@ -236,7 +236,7 @@ function ParseXml () {}
         }
       }
     }
-    lines += "</div><div style='clear:both;'></div>"; 
+    lines += "</div><div style='clear:both;'></div>";
     
     return lines
   };
@@ -382,10 +382,9 @@ function ParseXml () {}
         line = line.concat(l[i].getElementsByTagName("lines")[k]);
       }
       var s = new XMLSerializer();
-      for (m=0; m < line.length; m++) {   // separate lines in verse
+      for (m=0; m < line.length; m++) { // separate lines in verse
         var t = s.serializeToString(line[m]);
         t = t.replace('<lines xmlns="http://openlyrics.info/namespace/2009/song"', '');
-        // part
         var gtIdx = t.indexOf('>');
         var pIdx = t.indexOf('part');
          var pt = "";
@@ -396,12 +395,19 @@ function ParseXml () {}
           t = t.replace('>', '');
         }
         t = t.replace('</lines>', '');
+        // remove line braeks and leading spaces
+        var tt = [] 
+        for (f in t.split('\n')) {
+          tt.push(t.split('\n')[f].replace(/^[\s\xA0]+/, ''));
+        }
+        t = tt.join('');
+        // chords and comments
         t = t.replace(/<chord name="/g, '[').replace(/"\/>/g, ']');
         t = t.replace(/<comment>/g, '*').replace(/<\/comment>/g, '*');
         tdata.lines.push({part: pt, text: t});
       }
       if (lang) {  
-        data[id + "_" + lang] = tdata;
+        data[id + '_' + lang] = tdata;
       } else {
         data[id] = tdata;
       }

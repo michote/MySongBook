@@ -127,7 +127,7 @@ enyo.kind({
       {name: "titlehflex" + this.titleCount, kind:"HFlexBox", flex: 1, 
         style: "padding:0; margin:-10px;", owner: this, components:[
         {name: "title" + this.titleCount, flex: 1, kind: "Input", 
-          hint: "title", owner: this},
+          hint: $L("title"), owner: this},
         {name: "titlelang" + this.titleCount, kind: "Input", width: "12%",
           hint: "", owner: this}
       ]}
@@ -141,7 +141,7 @@ enyo.kind({
       {name: "authorhflex" + this.authorCount, kind:"HFlexBox", flex: 1,
         style: "padding:0; margin:-10px;", owner: this,  components:[
         {name: "author" + this.authorCount, owner: this, flex: 1, 
-          kind: "Input", hint: "author", components: [
+          kind: "Input", hint: $L("author"), components: [
           {name:"authorSwitch" + this.authorCount, owner: this, 
             kind: "ListSelector", style: "padding:0; margin:-10px 0;", 
             value: null, onChange: "onchange_author", items: [
@@ -176,7 +176,7 @@ enyo.kind({
         {content: $L("songbook") + ":", style: "padding:11px 5px;",
           width: "15%", className: "editlabel"},
         {name: "songbook" + this.songbookCount, flex: 1, kind: "Input",
-          hint: "songbook", owner: this},
+          hint: $L("songbook"), owner: this},
         {content: $L("no.") + ":", style: "padding:11px 5px;", width: "5%",
           className: "editlabel"},
         {name: "no" + this.songbookCount, kind: "Input", width: "15%", 

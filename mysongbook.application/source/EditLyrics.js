@@ -33,12 +33,14 @@ enyo.kind({
         {kind: "HFlexBox", components: [
           {content: $L("name") + ": ", style: "padding:10px 5px;", width: "100px", 
             className: "editlabel"},
-            {name: "elname", kind: "Input", flex: 1, hint: $L("name")}
+            {name: "elname", kind: "Input", flex: 1, autoCapitalize: "lowercase",
+              hint: $L("name")}
         ]},
         {kind: "HFlexBox", components: [
           {content: $L("language") + ": ", style: "padding:10px 5px;", width: "100px", 
             className: "editlabel"},
-            {name: "language", kind: "Input", flex: 1, hint: $L("language")}          
+            {name: "language", kind: "Input", flex: 1, autoCapitalize: "lowercase",
+              hint: $L("language")}          
         ]},
         {kind: "Divider", caption: $L("parts")},
         {kind: "HFlexBox", components: [
@@ -51,7 +53,7 @@ enyo.kind({
         {kind: "Divider", caption: ""},
         {kind: "HFlexBox", pack: "end", components: [
         {kind: "Button", className: "enyo-button-negative", 
-          caption: $L("Delete Element"), onclick: "deleteElement"},
+          caption: $L("delete element"), onclick: "deleteElement"},
           
         ]}
       ]},
@@ -90,7 +92,7 @@ enyo.kind({
         }
         this.$[i].createComponent(
           {name: i+"text"+j, kind: "RichText", owner: this, 
-          value: this.lyrics[i].lines[j].text, onkeypress: "handleKeyPress"}
+          value: this.lyrics[i].lines[j].text, hint: $L("type lyrics here")}
         );
       }
       button.push(this.lyrics[i].elname); 

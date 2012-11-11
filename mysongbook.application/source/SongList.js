@@ -39,7 +39,7 @@ enyo.kind({
     // Search
     {name: "searchBar", kind: "Toolbar", className: "searchbar", showing: false,
       components: [
-      {name: "searchBox", kind: enyo.SearchInput, hint: $L("Search"), 
+      {name: "searchBox", kind: enyo.SearchInput, hint: $L("search for ..."), 
         autoCapitalize: "lowercase", value: "", oninput: "startSearch", 
         onCancel: "clearSearch", keypressInputDelay: 500, flex:1}
     ]},

@@ -127,11 +127,11 @@ function WriteXml() {}
         var newText = "";
         for (k in text) {
           if (text[k].search(/^\[.+\]$/) > -1) { // chords '[X]'
-            newText += '<chord="'+text[k].replace(/\[/g,"").replace(/\]/g,"")+'"/>'
+            newText += '<chord name="'+text[k].replace(/\[/g,"").replace(/\]/g,"")+'"/>'
           } else if (text[k].search(/<br>/) > -1) { // linebreaks
             newText += '<br/>$'
           } else if (text[k].search(/^\*.+\*$/) > -1) { // comments
-            newText += '<comment>' + text[k].replace(/\*/g,"") + '<comment>';
+            newText += '<comment>' + text[k].replace(/\*/g,"") + '</comment>';
           } else if (text[k]) { // text
             newText += text[k]
           }

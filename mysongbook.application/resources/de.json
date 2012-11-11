@@ -127,9 +127,17 @@
     "transposition": "Transponierung",
     "duration": "Dauer",
     "verseorder": "Reihenfolge",
+    "type lyrics here": "hier Lyrictexte eingeben",
+    "name": "Name",
+    "language": "Sprache",
+    "parts": "Abschnitte",
+    "part": "Abschnitt",
+    "delete element": "Element löschen",
     
     "Button Settings": "Button Einstellungen",
     "Show Transposer": "Zeige Transponierer",
     "Show Scrollbuttons": "Zeige Scrollbutton",
-    "Show Autoscrollbutton": "Zeige Autoscrollbutton"
+    "Show Autoscrollbutton": "Zeige Autoscrollbutton",
+    "Autoscroll end to next page (on button press)": "Drücken des Pausebutton am Ende des Liedes springt zum nächsten",
+    "search for ...": "suche nach ..."
 }

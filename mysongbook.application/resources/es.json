@@ -34,7 +34,7 @@
     "very large": "bastante grande",
     "Line spacing:": "Espacio entre líneas",
     
-    "Song List": "Lista de Canciones",
+    "Song List": "Lista",
     
     "v": "Verso",
     "c": "Coro",
@@ -101,5 +101,43 @@
     "Swipe to the leftt to open previous song in list": "Desliza a la izquierda para abrir la canción previa de la lista",
     "Swipe an librarylist item to add it to the current custom list": "Desliza un item en lista de librería para añadirla a la actual lista personalizada",
     "Swipe an custom list item to remove it from this list": "Desliza un item en lista personalizada para removerla de esta lista",
-    "Swipe a list to remove it": "Desliza la lista para removerla"
+    "Swipe a list to remove it": "Desliza la lista para removerla",
+    "Doubletab maximizes mainview": "Doble click maximiza vista principal",
+    
+    "Create new song": "Crea nueva cancion",
+    "Refresh Library": "Recarga libreria",
+    "start autoscroll": "inicia desplazamiento automatico",
+    "pause autoscroll": "pausa desplazamiento automatico",
+    "edit current song": "edita cancion actual",
+    "New song": "Nueva cancion",
+    "Songname": "Nombre de cancion",
+    "Enter songname": "Introduzca nombre de cancion",
+    "Song saved": "Cancion guardada",
+    
+    "Edit": "Editar",
+    "Discard": "Desechar",
+    "add new": "agrugue nueva",
+    "songbook": "cancionero",
+    "no.": "no.",
+    "number": "numero",
+    "release date": "fecha de lanzamiento",
+    "copyright holder": "titular de derechos de autor",
+    "publisher": "casa editora",
+    "key": "nota",
+    "transposition": "transposicion",
+    "duration": "duracion",
+    "verseorder": "orden de versos",
+    "type lyrics here": "escribe letra aqui",
+    "name": "nombre",
+    "language": "idioma",
+    "parts": "partes",
+    "part": "parte",
+    "delete element": "borrar elemento",
+    
+    "Button Settings": "Boton de Configuraciones",
+    "Show Transposer": "Mostrar Trans-tonador",
+    "Show Scrollbuttons": "Mostrar botones de deslizamiento",
+    "Show Autoscrollbutton": "Mostrar Autodeslizamiento",
+    "Autoscroll end to next page (on button press)": "Autodeslizamiento termina en la proxima pagina (pausa boton)",
+    "search for ...": "buscar ..."
 }

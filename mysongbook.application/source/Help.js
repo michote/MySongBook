@@ -114,7 +114,7 @@ enyo.kind({
         '<ul> \
         <li><a href="mailto:reischuck.micha@googlemail.com">Micha Reischuck</a></li> \
         <li><a href="https://twitter.com/michote_">@michote_</a></li> \
-        <li><a href="http://forums.webosnation.com/webos-homebrhttp://dl.dropbox.com/u/1429945/MySongBook%20Documentation/index.htmlew-apps/318615-mysongbook.html">\
+        <li><a href="http://forums.webosnation.com/webos-homebrew-apps/318615-mysongbook.html">\
         webOS Nation forum thread</a></li> \
         </ul>', onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},
@@ -127,10 +127,11 @@ enyo.kind({
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
+          <li>Create and Edit Song out of beta</li> \
           <li>Added support fot multiple languages</li> \
-          <li>create Song out of beta</li> \
           <li>Rewrote preferences backend</li> \
           <li>Toggle show Buttons</li> \
+          <li>Translations updated</li> \
         </ul>'},
       {kind: "HtmlContent", content: "<b>Version 0.2.2</b>"},
       {kind: "HtmlContent", content: 
@@ -150,11 +151,11 @@ enyo.kind({
           <li>Bugfixing in editing</li> \
           <li>Some cleanup</li> \
         </ul>'},
-      {kind: "HtmlContent", content: "<b>Version 0.1.8</b>"},
-      {kind: "HtmlContent", content: 
-        '<ul> \
-          <li>Added XML-Editing for Betatesting</li> \
-        </ul>'},
+      //~ {kind: "HtmlContent", content: "<b>Version 0.1.8</b>"},
+      //~ {kind: "HtmlContent", content: 
+        //~ '<ul> \
+          //~ <li>Added XML-Editing for Betatesting</li> \
+        //~ </ul>'},
       //~ {kind: "HtmlContent", content: "<b>Version 0.1.6</b>"},
       //~ {kind: "HtmlContent", content: 
         //~ '<ul> \
@@ -182,15 +183,15 @@ enyo.kind({
         //~ '<ul> \
           //~ <li>Initial Release</li> \
         //~ </ul>'},
-      //~ {kind: "HtmlContent", content: "<br>"},
-      //~ {kind: "HtmlContent", content: "<h2>" + $L("Special Thanks") + "</h2>"},
-      //~ {kind: "HtmlContent", content: 
-        //~ '<ul> \
-          //~ <li>johncc @webosnation for the autoscroll feature</li> \
-          //~ <li>ajguns @webosnation for the spanish translation</li> \
-          //~ <li>@svzi for giving me an understanding of enyo ;)</li> \
-          //~ <li>phoque @developer.palm.com for sharing his "Simple FileIO Service"</li> \
-        //~ </ul>', onLinkClick: "linkClicked"},
+      {kind: "HtmlContent", content: "<br>"},
+      {kind: "HtmlContent", content: "<h2>" + $L("Special Thanks") + "</h2>"},
+      {kind: "HtmlContent", content: 
+        '<ul> \
+          <li>johncc @webosnation for the Autoscroll feature</li> \
+          <li>ajguns @webosnation for the spanish translation</li> \
+          <li>@svzi for giving me an understanding of enyo ;)</li> \
+          <li>phoque @developer.palm.com for sharing his "Simple FileIO Service"</li> \
+        </ul>', onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},
     ]}
   ],

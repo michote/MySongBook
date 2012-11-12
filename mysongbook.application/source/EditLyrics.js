@@ -58,8 +58,8 @@ enyo.kind({
         ]}
       ]},
       {kind: "HFlexBox", pack: "center", components: [
-        {kind: "Button", caption: $L("Close"), width: "150px",
-          onclick: "closeEdit"}
+        {kind: "Button", className: "enyo-button-affirmative", 
+          caption: $L("Done"), width: "150px", onclick: "closeEdit"}
       ]}
     ]}
   ],

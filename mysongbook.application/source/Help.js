@@ -128,7 +128,7 @@ enyo.kind({
       {kind: "HtmlContent", content: 
         '<ul> \
           <li>Create and Edit Song out of beta</li> \
-          <li>Added support fot multiple languages</li> \
+          <li>Added support for multiple languages</li> \
           <li>Rewrote preferences backend</li> \
           <li>Toggle show Buttons</li> \
           <li>Translations updated</li> \

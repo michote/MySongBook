@@ -38,8 +38,10 @@ function ParseXml () {}
         names.push({"title": n[i].firstChild.nodeValue, 
             "lang": n[i].getAttribute("lang")});
       }
+      return names;
+    } else {
+      return false;
     }
-    return names;
   };
   
   ParseXml.titlesToString = function(a, lang) {

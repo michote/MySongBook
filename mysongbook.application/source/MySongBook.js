@@ -133,9 +133,11 @@ enyo.kind({
       this.$.fileProgress.setMaximum(inResponse.files.length+1);
       this.$.fileProgress.setPosition(1);
       for (i = 0; i < inResponse.files.length; i++) {
-        this.pathCount.a.push(i); 
-        this.$.fileProgress.setPosition(i+2);
-        this.fetchTitles(inResponse.path + inResponse.files[i]);
+        if (inResponse.files[i].split('.').pop() === 'xml') { // only parse xml-files
+          this.pathCount.a.push(i); 
+          this.$.fileProgress.setPosition(i+2); 
+          this.fetchTitles(inResponse.path + inResponse.files[i]);
+        }
       }
     }
   },
@@ -153,9 +155,10 @@ enyo.kind({
   
   gotTitle: function(inSender, inResponse, inRequest) {
     var xml = ParseXml.parse_dom(inResponse);
-    var a = {"path": inRequest.url, "title": ParseXml.get_titles(xml)[0].title};
-    this.libraryList.content.push(a);
-    
+    if (ParseXml.get_titles(xml)) { // check for valid title before adding to library
+      var a = {"path": inRequest.url, "title": ParseXml.get_titles(xml)[0].title};
+      this.libraryList.content.push(a);
+    }
     // only refresh and sort once
     this.pathCount.b.push(1);
     if (this.pathCount.b.length === this.pathCount.a.length) {

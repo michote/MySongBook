@@ -95,11 +95,7 @@ enyo.kind({
             {content: $L("songbook") + ":",  width: "15%", 
               className: "editlabel"},
             {name: "songbook1", flex: 1, kind: "Input", hint: $L("songbook")}, 
-            {content: $L("no.") + ":",  
-            
-            
-            width: "5%", 
-              className: "editlabel"},
+            {content: $L("no.") + ":", width: "5%", className: "editlabel"},
             {name: "no1", kind: "Input", width: "15%", hint: $L("number")}
           ]},
         ]}

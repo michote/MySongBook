@@ -15,6 +15,7 @@ enyo.kind({
   errorList: [],
   dirPath: "/media/internal/MySongBook/",
   newSong: false,
+  textSrce: "",
   published: {
     libraryList: {"content": []},
     savedLists: [],
@@ -33,6 +34,8 @@ enyo.kind({
       method: "readdir", onSuccess: "readDirSuccess", onFailure: "readDirFail"},
     {name: "writeFile", kind: "PalmService", service: "palm://com.michote.mysongbook.service/",
       method: "writefile", onSuccess: "writeFileSuccess", onFailure: "writeFileFail"},
+    {name: "getTxt", kind: "WebService", onSuccess: "gotTxt", 
+      onFailure: "gotTxtFailure"},
     {name: "getTitle", kind: "WebService", onSuccess: "gotTitle", 
       onFailure: "gotTitleFailure"},
     // Layout
@@ -145,6 +148,15 @@ enyo.kind({
   readDirFail: function(inSender, inResponse) {
     enyo.error("read Dir Failure");
     this.showError($L("reading:") + "<br> " + "/media/internal/MySongBook"); 
+  },
+  
+  gotTxt: function (inSender, inResponse) {
+    this.textSrce = inResponse;
+    //enyo.job.stop("readTimeOut");
+  },
+  
+  gotTxtFailure: function(inSender, inResponse, inRequest) {
+    this.textSrce = "";
   },
   
   // get Title from XML
@@ -394,7 +406,7 @@ enyo.kind({
   
   createSong: function() {
     var songt = this.$.songName.getValue();
-    var path = songt.replace(/\s+/g, "_") + ".xml"; 
+    var path = songt.replace(/\s+/g, "_") + ".xml";   //' ' -> '_'
     var e = false;
     for (i in this.libraryList.content) {
       var p = this.libraryList.content[i].path.split('/')
@@ -403,12 +415,24 @@ enyo.kind({
         e = true;
       }
     }
-    if (!e) {
-      path = this.dirPath + path;
-      this.writeXml(path, WriteXml.create(songt));
-      this.$.newSongDialog.close();
-      this.newSong = {"path": path};
+    if (!e) {  // songt.xml does not exits.
+      path = this.dirPath + path;  // path and xml filename
+      // is there a .txt file to use
+      var txtPath = songt + ".txt";   // allow spaces in txt file names 
+      this.$.getTxt.setUrl(this.dirPath + txtPath);
+      this.$.getTxt.call();  // file content to this.textSrce
+      enyo.job("readTimeOut", enyo.bind(this, "createSongCont", path, songt), 1000); // wait up to 1 sec for text file.
     }
+  },
+  
+  createSongCont: function(path, songt) {
+    if (this.textSrce !== "") {
+      this.writeXml(path, convLyrics(this.textSrce));  // write txt file contents
+    } else {  
+      this.writeXml(path, WriteXml.create(songt));  // write file skeleton
+    }
+    this.$.newSongDialog.close();
+    this.newSong = {"path": path};
   },
   
   // Error Dialog

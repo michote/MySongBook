@@ -5,5 +5,6 @@ enyo.depends(
     "WriteXml.js",
     "ScrollBarsScroller.js",
     "cursorScrollBar.js",
-    "XMLWriter-1.0.0-min.js"
+    "XMLWriter-1.0.0-min.js",
+    "txtConverter.js"
 );

@@ -120,11 +120,18 @@ enyo.kind({
       {kind: "HtmlContent", content: "<br>"},
       {kind: "HtmlContent", content: "<h2>" + $L("Open Source") + "</h2>"},
       {kind: "HtmlContent", content: 'MySongBook is available under the terms \
-        of the <a href="http://opensource.org/licenses/mit-license.php">MIT license</a>.',
+        of the <a href="http://opensource.org/licenses/mit-license.php">MIT \
+        license</a>.<br> The source can be found on \
+        <a href="https://github.com/michote/MySongBook">github</a>.',
         onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},
       {kind: "HtmlContent", content: "<h2>" + $L("Changelog") + "</h2>"},
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
+      {kind: "HtmlContent", content: 
+        '<ul> \
+          <li>Added Textimport</li> \
+        </ul>'},
+      {kind: "HtmlContent", content: "<b>Version 0.3.0</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
           <li>Create and Edit Song out of beta</li> \

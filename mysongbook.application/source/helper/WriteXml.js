@@ -31,7 +31,7 @@ function WriteXml() {}
     xw.writeAttributeString('xmlns', 'http://openlyrics.info/namespace/2009/song');
     xw.writeAttributeString('version','0.8');
     xw.writeAttributeString('createdIn', metadata.created);
-    xw.writeAttributeString('modifiedIn','MySongBook '+enyo.fetchAppInfo().version);
+    xw.writeAttributeString('modifiedIn', enyo.fetchAppInfo().title+' '+enyo.fetchAppInfo().version);
     xw.writeAttributeString('modifiedDate', WriteXml.date());
     
     // Properties
@@ -158,8 +158,8 @@ function WriteXml() {}
     xw.writeStartElement('song');
     xw.writeAttributeString('xmlns', 'http://openlyrics.info/namespace/2009/song');
     xw.writeAttributeString('version','0.8');
-    xw.writeAttributeString('createdIn','MySongBook '+enyo.fetchAppInfo().version);
-    xw.writeAttributeString('modifiedIn','MySongBook '+enyo.fetchAppInfo().version);
+    xw.writeAttributeString('createdIn', enyo.fetchAppInfo().title+' '+enyo.fetchAppInfo().version);
+    xw.writeAttributeString('modifiedIn', enyo.fetchAppInfo().title+' '+enyo.fetchAppInfo().version);
     xw.writeAttributeString('modifiedDate', WriteXml.date());
       
       xw.writeStartElement('properties');

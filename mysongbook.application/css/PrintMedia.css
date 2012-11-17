@@ -1,12 +1,14 @@
 /* This css is included against media='print' and is used for styling the printed output. */
 
-#mySongBook_songListPane, #mySongBook_songViewPane_footerToolbar {
+#mySongBook_songListPane, #mySongBook_songViewPane_transposergr,
+#mySongBook_songViewPane_footerToolbar {
     display: none;
 }
 
 html, body {
     font-family: Prelude, Arial;
-    font-size: 160%;
+    font-size: 140%;
+    line-height: 100%;
 }
 
 .enyo-vflexbox {
@@ -25,7 +27,7 @@ html, body {
 .title {
     font-size: 2rem;
     font-weight: bold;
-    margin: .2rem 0 0.6rem 1rem; 
+    margin: .2rem 0 1.2rem 1rem; 
 }
 
 .lyric {
@@ -103,10 +105,11 @@ a {
 
 .pageBreak {
     display: block;
-    page-break-before: always;
+    page-break-after: always;
 }
 
 .printCopy {
+    page-break-inside: avoid;
     text-align: right;
     width: 30rem;
     margin: 2rem 0 0 28rem;

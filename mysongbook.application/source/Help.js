@@ -5,8 +5,8 @@ enyo.kind({
   components: [
     {kind: "VFlexBox", components: [
       {kind: "HtmlContent", content: "&nbsp;<br>"},
-      {kind: "HtmlContent", content: "<h1>" + $L("Welcome to MySongBook") + "</h1>"},
-      {kind: "HtmlContent", content: $L("MySongBook is an App to display Songs in ") +  
+      {kind: "HtmlContent", content: "<h1>" + $L("Welcome to ") + enyo.fetchAppInfo().title},
+      {kind: "HtmlContent", content: enyo.fetchAppInfo().title + $L(" is an App to display Songs in ") +  
         "<img src='images/openlyrics.png' style='display:inline;margin:-5px 0;'>" 
         + "<a href='http://openlyrics.info/'> OpenLyrics XML Standard</a>" +
         $L(" from the internal storage of your device.") + "<br>" + 
@@ -42,11 +42,15 @@ enyo.kind({
       ]},
       {kind: "HFlexBox", components: [
         {kind: "Image", src: "images/pause-help.png"},
-        {kind: "HtmlContent", content: $L("pause autoscroll")}
+        {kind: "HtmlContent", content: $L("pause autoscroll") + "<br><br>"}
       ]},
       {kind: "HFlexBox", components: [
         {kind: "Image", src: "images/edit-help.png"},
         {kind: "HtmlContent", content: $L("edit current song")}
+      ]},
+      {kind: "HFlexBox", components: [
+        {kind: "Image", src: "images/print-help.png"},
+        {kind: "HtmlContent", content: $L("print current song as displayed")}
       ]},
       {kind: "HFlexBox", components: [
         {kind: "Image", src: "images/info-help.png"},
@@ -119,8 +123,9 @@ enyo.kind({
         </ul>', onLinkClick: "linkClicked"},
       {kind: "HtmlContent", content: "<br>"},
       {kind: "HtmlContent", content: "<h2>" + $L("Open Source") + "</h2>"},
-      {kind: "HtmlContent", content: 'MySongBook is available under the terms \
-        of the <a href="http://opensource.org/licenses/mit-license.php">MIT \
+      {kind: "HtmlContent", content: enyo.fetchAppInfo().title +
+        ' is available under the terms of the \
+        <a href="http://opensource.org/licenses/mit-license.php">MIT \
         license</a>.<br> The source can be found on \
         <a href="https://github.com/michote/MySongBook">github</a>.',
         onLinkClick: "linkClicked"},
@@ -129,7 +134,9 @@ enyo.kind({
       {kind: "HtmlContent", content: "<b>Version "+ enyo.fetchAppInfo().version + "</b>"},
       {kind: "HtmlContent", content: 
         '<ul> \
-          <li>Added Textimport</li> \
+          <li>Added Printing </li> \
+          <li>Added Textimporter (s. Documentation)</li> \
+          <li>Preferences fix</li> \
         </ul>'},
       {kind: "HtmlContent", content: "<b>Version 0.3.0</b>"},
       {kind: "HtmlContent", content: 

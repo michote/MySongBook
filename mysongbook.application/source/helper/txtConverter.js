@@ -290,7 +290,7 @@
     }
     destLyrics = destLyrics + "<song xmlns=\"http:\/\/openlyrics.info\/namespace\/2009\/song\"\n";
     destLyrics = destLyrics + "  version=\"0.8\"\n";
-    destLyrics = destLyrics + "  createdIn=\"MySongBook\"\n";
+    destLyrics = destLyrics + "  createdIn=\""+ enyo.fetchAppInfo().title+' '+enyo.fetchAppInfo().version +"\"\n";
     destLyrics = destLyrics + "  modifiedIn=\"\"\n"
     destLyrics = destLyrics + "  modifiedDate=\"";
     var currentdate = new Date();

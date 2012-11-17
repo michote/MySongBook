@@ -7,8 +7,8 @@ enyo.kind({
   onBack: "closeClicked",
   components :[ 
     {kind: "VFlexBox", pack: "start", components : [
-      {className: "about", content: "<b>MySongBook &ndash; v. "
-       + enyo.fetchAppInfo().version + "</b>", style: "color: #9E0508;"},
+      {className: "about", content: '<b>' +  enyo.fetchAppInfo().title + '&ndash; v. '
+       + enyo.fetchAppInfo().version + '</b>', style: "color: #9E0508;"},
       {className: "about", content: "&copy; 2012 " + 
         "<a href='mailto:reischuck.micha@googlemail.com'>Micha Reischuck</a><br>"
         + 'License: <a href="http://opensource.org/licenses/mit-license.php">MIT</a>',

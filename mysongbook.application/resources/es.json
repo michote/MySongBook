@@ -75,8 +75,8 @@
     "Please define a List": "Por favor defina una lista",
     "Name already exist": "Ya existe ese nombre",
     
-    "Welcome to MySongBook": "Bienvenido a MySongBook",
-    "MySongBook is an App to display Songs in ": "MySongBook es una aplicación para mostrar Canciones ",
+    "Welcome to ": "Bienvenido a ",
+    " is an App to display Songs in ": " es una aplicación para mostrar Canciones ",
     " from the internal storage of your device.": ", de la memoria interna de su dispositivo.",
     " You can create custom lists of songs to display.": " Puedes crear listas personalizadas de canciones a mostrar.",
     "Icon Guide": "Guía de Iconos",
@@ -139,5 +139,6 @@
     "Show Scrollbuttons": "Mostrar botones de deslizamiento",
     "Show Autoscrollbutton": "Mostrar Autodeslizamiento",
     "Autoscroll end to next page (on button press)": "Autodeslizamiento termina en la proxima pagina (pausa boton)",
+    "Show Printbutton": "Mostrar Imprimir",
     "search for ...": "buscar ..."
 }

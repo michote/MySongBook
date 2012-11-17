@@ -164,5 +164,6 @@ function Helper() {}
   };
   
   Helper.getItem = function(key) {
+    localStorage.getItem(key)
     return JSON.parse(localStorage.getItem(key));
   }

@@ -1,0 +1,115 @@
+/* This css is included against media='print' and is used for styling the printed output. */
+
+#mySongBook_songListPane, #mySongBook_songViewPane_footerToolbar {
+    display: none;
+}
+
+html, body {
+    font-family: Prelude, Arial;
+    font-size: 160%;
+}
+
+.enyo-vflexbox {
+    -webkit-box-orient: vertical;
+}
+
+.enyo-hflexbox {
+    -webkit-box-orient: horizontal;
+}
+
+.enyo-hflexbox, .enyo-vflexbox {
+    display: -webkit-box;
+    -webkit-box-sizing: border-box;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: .2rem 0 0.6rem 1rem; 
+}
+
+.lyric {
+    page-break-inside: avoid;
+    margin: 1rem 0;
+    padding: 5px 20px;
+}
+
+.cursor, .scrollspacer {
+    display: none;
+}
+
+.lyric h1 {
+    display: block;
+    font-size: 1.5rem;
+    margin: 0.25rem 0 0.25rem 0.25rem;
+    font-weight: bold;
+}
+
+.lyric h2 {
+    display: block;
+    font-size: 1.25rem;
+    margin: 0.25rem 0 0.25rem 0.25rem;
+    font-weight: bold;
+}
+
+.lyric h3 {
+    display: block;
+    font-size: 1rem;
+    margin: 0.25rem 0 0.25rem 0.25rem;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: underline;
+}
+
+.element {
+    width: 3.2rem;
+    color: #333;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.text {
+    font-size: 1rem;
+}
+
+.text i {
+    color: #333;
+}
+
+.chordbox {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-pack: start;
+    -webkit-box-align: stretch;
+    float: left;
+    margin: 0 0 0.25rem 0;
+}
+
+.chord {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 0 0 -0.2rem 0;
+}
+
+.txt {
+    max-width: 100%; 
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1rem;
+}
+
+.pageBreak {
+    display: block;
+    page-break-before: always;
+}
+
+.printCopy {
+    text-align: right;
+    width: 30rem;
+    margin: 2rem 0 0 28rem;
+    line-height: 1rem;
+    font-size: .8rem;
+}

@@ -97,16 +97,24 @@ enyo.kind({
           icon: "images/forth.png", onclick : "textForth", width: "75px"},
         {kind: "HFlexBox", pack: "start", flex: 1, components : [
           {name: "playButton", kind: "IconButton", toggling: true,
-            icon: "images/play.png", onclick: "togglePlay"},
+            icon: "images/play.png", onclick: "togglePlay", disabled: true},
           {kind: "Spacer"},
           {name: "editButton", kind: "IconButton", icon: "images/edit.png",
             onclick: "doEdit", disabled: true},
+          {name: "printButton", kind: "IconButton", icon: "images/print.png",
+            onclick: "print", disabled: true},
           {name: "infoButton", kind: "IconButton", disabled: true,
             icon: "images/info.png", onclick: "showInfo"}
         ]}
       ]}
     ]},
-    {name: "infoDialog", kind: "InfoDialog"}
+    {name: "infoDialog", kind: "InfoDialog"},
+    {name: "printDialog", kind: "PrintDialog", lazy: false, 
+      copiesRange: {min: 1, max: 10}, 
+      duplexOption: true,
+      colorOption: false,
+      appName: enyo.fetchAppInfo().title
+    }
   ],
   
   create: function() {
@@ -129,6 +137,7 @@ enyo.kind({
     this.$.forthButton.setShowing(this.showPrefs.showScroll);
     this.$.transposergr.setShowing(this.showPrefs.showTransposer);
     this.$.playButton.setShowing(this.showPrefs.showAuto);
+    this.$.printButton.setShowing(this.showPrefs.showPrint);
   },
   
   // get xml lyricdata
@@ -166,8 +175,7 @@ enyo.kind({
     if (this.data.titles !== undefined) {
       this.textIndex = 0; // reset index
       this.scroll = 0;    // reset scroller
-      this.$.help.hide();
-      this.$.lyric.destroyComponents();
+      this.$.lyric.destroyControls();
       // Languages
       this.$.languagegr.destroyControls();
       if (this.data.haslang[0]) {
@@ -192,8 +200,10 @@ enyo.kind({
       // Buttons
       this.enableTransposer(this.data.key, this.data.haschords, this.transpose);
       this.$.infoButton.setDisabled(false);
+      this.$.playButton.setDisabled(false);
       if (this.finished) {  // auto-scroll not active
         this.$.editButton.setDisabled(false);
+        this.$.printButton.setDisabled(false);
         this.$.backButton.setDisabled(true); 
         if (this.data.verseOrder && 
           (this.textIndex === (this.data.verseOrder.length-1))) {
@@ -285,7 +295,10 @@ enyo.kind({
               className: "lyric",
               components: [
                 {content: formL[i][1], kind: "VFlexBox", flex: 1}
-            ]});
+              ]});
+            this.$.lyric.createComponent({ // needed for printing
+              className: "pageBreak"
+              });
           }
         }
       }
@@ -295,7 +308,8 @@ enyo.kind({
       if (h > 0) {
         this.$.lyric.createComponent({
           name: "scrollspacer",
-          style: "height:" + h + "px;width:100%;"
+          style: "height:" + h + "px;width:100%;",
+          className: "scrollspacer"
         });
       }
     }
@@ -318,12 +332,13 @@ enyo.kind({
         if (window.PalmSystem) {
           enyo.windows.setWindowProperties(enyo.windows.getActiveWindow(), {'blockScreenTimeout': true});
         }
-        //        this.$.cursorScrollBar.setBpmTimer(120);
+        // this.$.cursorScrollBar.setBpmTimer(120);
       }
       this.$.playButton.setIcon("images/pause.png");
       this.$.playButton.setDepressed(false);
       this.$.forthButton.setDisabled(true);
       this.$.backButton.setDisabled(true);
+      this.$.printButton.setDisabled(true);
     } else { 
       //pause
       this.$.playButton.setIcon("images/play.png");
@@ -408,6 +423,7 @@ enyo.kind({
     this.$.fontButton.setDisabled(false);
     this.$.forthButton.setDisabled(false);
     this.$.backButton.setDisabled(false);
+    this.$.printButton.setDisabled(false);
   },
   
   initForTextPlay: function() {
@@ -528,7 +544,8 @@ enyo.kind({
   
   // ### Button ###
   showHelp: function() { 
-    this.$.lyric.destroyComponents();
+    this.$.lyric.destroyControls();
+    this.$.lyric.createComponent({name: "help", kind: "Help"});
     this.owner.setCurrentIndex(undefined);
     this.setXml(undefined);
     this.$.title.setContent($L("Help"));
@@ -537,7 +554,9 @@ enyo.kind({
     this.$.editButton.setDisabled(true);
     this.$.backButton.setDisabled(true);
     this.$.forthButton.setDisabled(true);
-    this.$.help.show();
+    this.$.printButton.setDisabled(true);
+    this.$.playButton.setDisabled(true);
+    this.$.lyric.render();
   },
   
   showInfo: function() {
@@ -619,5 +638,40 @@ enyo.kind({
   
   transPick: function() {
     this.setTrans(Transposer.getDelta(this.data.key, this.$.transposer.getValue()));
+  },
+  
+  // ### Print ###
+  print: function() {
+    this.printAdd();
+    this.$.viewScroller.scrollIntoView(0, 0);
+    setTimeout(this.openPrint(), 1000); // delay to be shure it scrolled to top
+    this.renderLyrics();
+  },
+  
+  openPrint: function() {
+    if (window.PalmSystem && !Helper.smScr()) {
+      this.$.printDialog.setFrameToPrint({name: "", landscape: false});
+      this.$.printDialog.openAtCenter();  // Standard enyo.Popup method
+    } else if (!window.PalmSystem) {
+      window.print();
+    }
+  },
+  
+  printAdd: function() { // add Copyright-box for printing
+    var printCopy = ParseXml.authorsToString(this.data.authors).join('<br>');
+    printCopy += '<br>&copy; '
+    if (this.data.released) { printCopy += this.data.released + ' ';}
+    if (this.data.copyright) { printCopy += this.data.copyright;}
+    if (this.data.publisher) { printCopy += '<br>' + this.data.publisher;}
+    printCopy += '<br>---<br>Printed with MySongBook'
+    //~ printCopy = 
+    this.$.lyric.createComponent({
+      name: "test",
+      kind: "HFlexBox",
+      flex: 1,
+      className: "printCopy",
+      content: printCopy
+      });
+    this.$.lyric.render();
   }
 });

@@ -322,9 +322,6 @@ a {
     font-weight: bold;
 }
 
-.text {
-}
-
 .text i {
     color: #777777;
 }
@@ -350,6 +347,10 @@ a {
     text-overflow: ellipsis;
     overflow: hidden;
     font-size: 1em;
+}
+
+.pageBreak { 
+    display: none; 
 }
 
 /* ### AboutDialog ### */

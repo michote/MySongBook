@@ -101,6 +101,12 @@ enyo.kind({
                   {kind: "ToggleButton", name: "scrollToNext", state: true,
                     onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
                     components:[{className: "toggle-button-knob"}]}
+              ]},
+              {kind: "LabeledContainer", caption: $L("Show Printbutton"),
+                components: [
+                  {kind: "ToggleButton", name: "showPrint", state: true,
+                    onChange: "toggle", onLabel: $L("yes"), offLabel: $L("no"),
+                    components:[{className: "toggle-button-knob"}]}
               ]}
             ]}//~ ,
             //~ {kind: "RowGroup", caption: $L("Developement Settings"), components:[
@@ -144,7 +150,7 @@ enyo.kind({
   rendered: function() {
     this.getPrefs();
     for (i in this.showPrefs) {
-      //~ enyo.log("set: ", i, this.showPrefs[i]);
+      enyo.log("set: ", i, this.showPrefs[i]);
       if (i === "showinToolbar") {
         this.$[i].setValue(this.showPrefs[i]);
       } else {

@@ -6,5 +6,6 @@ enyo.depends(
     "ScrollBarsScroller.js",
     "cursorScrollBar.js",
     "XMLWriter-1.0.0-min.js",
-    "txtConverter.js"
+    "txtConverter.js",
+    "$enyo-lib/printdialog/" 
 );

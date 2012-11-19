@@ -236,7 +236,7 @@ enyo.kind({
     !Helper.smScr() || this.$.songSlidingPane.selectViewByName('songViewPane');
   },
   
-  currentIndexChanged: function () {
+  currentIndexChanged: function() {
     if (this.currentIndex >= 0) {
       this.openSong(this.currentIndex);
     } else {
@@ -245,7 +245,7 @@ enyo.kind({
   },
   
   // Adjust Font
-  setFont: function (css) {
+  setFont: function(css) {
     if (css) {
       this.$.songViewPane.$.lyric.applyStyle("font-size", css.size);
       this.$.songViewPane.$.lyric.applyStyle("line-height", css.space);

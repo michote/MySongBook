@@ -83,12 +83,14 @@ enyo.kind({
               className: "editlabel"},
             {name: "duration", kind: "Input", flex: 1, hint: $L("duration")}
           ]},
-          {kind:"HFlexBox", flex: 1, style: "padding:0; margin:-10px;", 
+          {name: "verseO", kind: "HFlexBox", flex: 1, components:[
+            {kind:"HFlexBox", flex: 1, style: "padding:0; margin:0; width:inherit;",
             components:[
-            {content: $L("verseorder") + ":", width: "15%", 
-              className: "editlabel"},
-            {name: "verseOrder", flex: 1, kind: "Input", hint: $L("verseorder")},
-            {name: "versehflex", kind:"HFlexBox", style: "padding:0; margin:0px;"}
+              {content: $L("verseorder") + ":", width: "15%", 
+                className: "editlabel"},
+              {name: "verseOrder", flex: 1, kind: "Input", hint: $L("verseorder")},
+            ]},
+            {name: "versehflex", kind:"HFlexBox", style: "padding:0; margin:0;"}
           ]},
           {name: "songbookhflex1", kind:"HFlexBox", flex: 1, style: 
             "padding:0; margin:-10px;", components:[
@@ -243,6 +245,14 @@ enyo.kind({
       );
     };
     this.$.versehflex.render();
+    enyo.log();
+    if (Helper.smScr() && this.button.length > 4) {
+      this.$.verseO.setStyle("-webkit-box-orient:vertical;padding:0;margin:-10px;");
+    } else if (this.button.length > 8) {
+      this.$.verseO.setStyle("-webkit-box-orient:vertical;padding:0;margin:-10px;");
+    } else {
+      this.$.verseO.setStyle("-webkit-box-orient:horizontal;padding:0;margin:-10px;");
+    }
   },
   
   verseButton: function(inSender) {

@@ -54,12 +54,14 @@
     "music": "Musik",
     "words": "Text",
     "title": "Titel",
+    "comment": "Kommentar",
     
     "Song Info": "Informationen zum Lied",
     "Author(s)": "Autor(en)",
     "key: ": "Tonart: ",
     "tempo": "Tempo",
     "Song": "Lied",
+    "Comments": "Kommentare",
     
     "Manage Lists": "Listen verwalten", 
     "New List": "Neue Liste", 
@@ -76,8 +78,8 @@
     "Name already exist": "Name existiert bereits",
     
     "Welcome to ": "Willkommen zu ",
-    " is an App to display Songs in ": " ist ein App, dass Lieder im ",
-    " from the internal storage of your device.": ", die auf dem Gerät gespeichert sind anzeigt.",
+    " is an App to display Songs in ": " ist ein App, das Lieder im ",
+    " from the internal storage of your device.": ", die auf dem Gerät gespeichert sind, anzeigt.",
     " You can create custom lists of songs to display.": " Es können eigenen Liedlisten angelegt werden.",
     "Icon Guide": "Symbol Leitfaden",
     "Main View": "Hauptfenster",
@@ -92,6 +94,7 @@
     "searches in titles": "Sucht in Titeln",
     "searches in authors": "Sucht in Autoren",
     "searches in lyrics": "Sucht in Liedtexten",
+    "searches in comments and themes": "Sucht in Kommentaren und Schlüsselworten",
     "opens listpicker": "Öffnet des Listen-Auswahl-Dialog",
     "toogles library": "Zeigt die Bibliothek an",
     "toogles custom list": "Zeigt die aktuelle eigene Liste an",
@@ -114,6 +117,7 @@
     "Songname": "Name des Liedes",
     "Enter songname": "Name des Liedes",
     "Song saved": "Lied gespeichert",
+    "Lists saved": "Listen gespeichert",
     
     "Edit": "Bearbeite",
     "Discard": "Verwerfen",

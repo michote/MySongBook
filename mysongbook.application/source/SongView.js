@@ -1,6 +1,6 @@
 // #################
 //
-// Copyright (c) 2012 Micha Reischuck
+// Copyright (c) 2012-13 Micha Reischuck
 //
 // MySongBook is available under the terms of the MIT license. 
 // The full text of the MIT license can be found in the LICENSE file included in this package.

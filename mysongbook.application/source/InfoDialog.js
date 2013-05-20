@@ -16,22 +16,26 @@ enyo.kind({
       {name: "songboxdiv", kind: "Divider", caption: $L("Song"),
         showing: false},
       {name: "songbox", kind: "VFlexBox"},
+      {name: "commentboxdiv", kind: "Divider", caption: $L("Comments"),
+        showing: false},
+      {name: "commentbox", kind: "VFlexBox"}
     ]},
     {kind: "HFlexBox", pack: "center", components: [
       {kind : "Button", flex: 0, caption : $L("Close"), width: "150px", onclick : "cancelClicked"}
     ]}
   ],
   
-  // ADD: Comments, Variant
   // ADD: Themes?
   
   destroy: function() {
     this.$.copybox.destroyComponents();
     this.$.authorbox.destroyComponents();
     this.$.songbox.destroyComponents();
+    this.$.commentbox.destroyComponents();
     this.$.copyboxdiv.hide();
     this.$.authorboxdiv.hide();
     this.$.songboxdiv.hide();
+    this.$.commentboxdiv.hide();
   },
 
   addDiv: function(box, cap, extra) {
@@ -73,6 +77,9 @@ enyo.kind({
     }
     this.addDiv("songbox", data.duration, $L("duration") + ": ");
     this.addDiv("songbox", data.ccli, "CCLI: ");
+    for (k = 0, l = data.comments.length; k < l; k++) {
+      this.addDiv("commentbox", data.comments[k], "");
+    }
   },
   
   cancelClicked: function(sender) {

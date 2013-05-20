@@ -1,6 +1,6 @@
 // #################
 //
-// Copyright (c) 2012 Micha Reischuck
+// Copyright (c) 2012-2013 Micha Reischuck
 //
 // MySongBook is available under the terms of the MIT license. 
 // The full text of the MIT license can be found in the LICENSE file included in this package.
@@ -22,7 +22,7 @@ function ParseXml () {}
     var names = undefined;
     var n = xml.getElementsByTagName(name);
     if (n[0]) {
-      for (i = 0; i < n.length; i++) {
+      for (i = 0, len = n.length; i < len; i++) {
         names = n[i].firstChild.nodeValue;
       }
     }
@@ -34,7 +34,7 @@ function ParseXml () {}
     var names = [];
     var n = xml.getElementsByTagName("title");
     if (n[0]) {
-      for (i = 0; i < n.length; i++) {
+      for (i = 0, len1 = n.length; i < len1; i++) {
         names.push({"title": n[i].firstChild.nodeValue, 
             "lang": n[i].getAttribute("lang")});
       }
@@ -47,15 +47,15 @@ function ParseXml () {}
   ParseXml.titlesToString = function(a, lang) {
     var titles = [];
     if (lang) {
-      for(i = 0; i < a.length; i++) {
-        if (a[i].lang === lang[0]) {
+      for(i = 0, len2 = a.length; i < len2; i++) {
+        if (a[i].lang === lang) {
           titles.push(a[i].title);
         } else if (!a[i].lang) {
           titles.push(a[i].title);
         }
       }
     } else {
-      for(i = 0; i < a.length; i++) {
+      for(i = 0, len3 = a.length; i < len3; i++) {
         titles.push(a[i].title);
       }
     }
@@ -68,7 +68,7 @@ function ParseXml () {}
     var names = [];
     var n = xml.getElementsByTagName("author");
     if (n[0]) {
-      for (i = 0; i < n.length; i++) {
+      for (i = 0, len3 = n.length; i < len3; i++) {
         var t = n[i].getAttribute("type")
         if (t === "translation") {
           names.push({"type":t, "author": n[i].firstChild.nodeValue, 
@@ -83,7 +83,7 @@ function ParseXml () {}
   
   ParseXml.authorsToString = function(a) {
     var names = [];
-    for (i = 0; i < a.length; i++) {
+    for (i = 0, len4 = a.length; i < len4; i++) {
       var t = a[i].type
       if (t === "music" || t === "words") {
         names.push($L(t+":") + a[i].author);
@@ -102,7 +102,7 @@ function ParseXml () {}
     var names = [];
     var n = xml.getElementsByTagName("songbook");
     if (n[0] !== undefined) {
-      for (i = 0; i < n.length; i++) {
+      for (i = 0, len5 = n.length; i < len5; i++) {
         names.push({"book": n[i].getAttribute("name"),
           "no": n[i].getAttribute("entry")});
       }
@@ -115,13 +115,13 @@ function ParseXml () {}
     var names = [];
     var n = xml.getElementsByTagName("theme");
     if (n[0] !== undefined) {
-      for (i = 0; i < n.length; i++) {
+      for (i = 0, len6 = n.length; i < len6; i++) {
         names.push({"theme": n[i].firstChild.nodeValue,
           "lang": n[i].getAttribute("lang")});
       }
     }
     return names;
-  }
+  };
   
   // Comments
   ParseXml.get_comments = function(xml) {
@@ -129,114 +129,148 @@ function ParseXml () {}
     var m = xml.getElementsByTagName("comments")[0];
     if (m !== undefined) { var n = m.getElementsByTagName("comment");}
     if (n !== undefined) {
-      for (i = 0; i < n.length; i++) {
+      for (i = 0, len7 = n.length; i < len7; i++) {
         names.push(n[i].firstChild.nodeValue);
       }
     }
     return names;
     
-  }
+  };
+  
+  // format Chord  
+  ParseXml.formatChordDiv = function(chord) {
+    chord.substring(1) ? chord = chord.charAt(0) + '<small>' + chord.substring(1).replace(/([0-9]+)/g, '<sup>$1</sup>') + '</small>' : chord = chord.charAt(0);
+    return chord;
+  };
+  
+  ParseXml.formatChord = function(chord, transp) {
+    if (transp) { // Transposer
+      if (chord.indexOf("/") >= 0) { // Handle Chords with "/" e.g. "E/D"
+        chord = chord.split("/");
+        return ParseXml.formatChordDiv(Transposer.transpose(chord[0], transp)) + "/" + ParseXml.formatChordDiv(Transposer.transpose(chord[1], transp));
+      } else {
+        return ParseXml.formatChordDiv(Transposer.transpose(chord, transp));
+      }
+    } else {
+      if (chord.indexOf("/") >= 0) { // Handle Chords with "/" e.g. "E/D"
+        chord = chord.split("/");
+        return ParseXml.formatChordDiv(chord[0]) + "/" + ParseXml.formatChordDiv(chord[1]);
+      } else {
+        return ParseXml.formatChordDiv(chord);
+      }
+    }
+  };
+  
+  function toArray(nl) {
+    for(var a=[], l=nl.length; l--; a[l]=nl[l]);
+    return a;
+} 
   
   // Parse a single <lines> tag
   ParseXml.parselines = function(line, haschords, showChords, showComments, transp) {
     var lines = "<div class='text'>";
     var trigger = true; // for line starting without chord
-    var commenttrigger = false; //remove br after comment
-    for(j = 0; j < line.length; j++) {
-      // handle lyrics with chords 
+    var commenttrigger = false; // remove br after comment
+    var musicOnly = false;   // first character |
+    var moPrefix = '';
+    for (var lineArray=[], l=line.length; l--; lineArray[l]=line[l]);  // NodeList -> Array
+    var j = 0;
+    while (j < lineArray.length) {  // length is modified within the block
+      // handle lyrics with chords
       if (haschords && showChords) { 
-        if (line[j].nodeValue === null) { // node is htmltag
-          //~ enyo.log(j, line[j].tagName);
-          if (line[j].tagName === "chord") {
+        if (lineArray[j].nodeValue === null) { // node is htmltag
+          //~ enyo.log(j, lineArray[j].tagName);
+          if (lineArray[j].tagName === "chord") {
             trigger = false;
-            lines += "<div class='chordbox'><div class='chord'>"
-            if (transp) { // Transposer
-              var chord = line[j].getAttribute("name")
-              if (chord.indexOf("/") >= 0) { // Handle Chords with "/" e.g. "E/D"
-                chord = chord.split("/")
-                lines += Transposer.transpose(chord[0], transp) + "/" + 
-                  Transposer.transpose(chord[1], transp) + "&nbsp;&nbsp;"
-                    + "</div>";
-              } else {
-                lines += Transposer.transpose(chord, transp) + 
-                  "&nbsp;&nbsp;" + "</div>";
-              }
-            } else {
-              lines += line[j].getAttribute("name") + "&nbsp;&nbsp;" + "</div>";
-            }
-            if (line[j+1] && (line[j+1].nodeValue === null || // catch chord at line end
-              line[j+1].nodeValue.replace(/^[\s\xA0]+/, "") === "")) { 
+            var chord = lineArray[j].getAttribute("name")
+            lines = lines + "<div class='" + moPrefix + "chordbox'><div class='" + moPrefix + "chord'>"+ ParseXml.formatChord(chord, transp) + "&nbsp;" + "</div>";
+            if (lineArray[j+1] && (lineArray[j+1].nodeValue === null || // catch chord at line end
+              lineArray[j+1].nodeValue.replace(/^[\s\xA0]+/, "") === "")) { 
               lines += "<div class='txt'> </div></div>";
-            } else if (!line[j+1] && !trigger) { // also catch chord at line end
+            } else if (!lineArray[j+1] && !trigger) { // also catch chord at line end
               lines += "<div class='txt'> </div></div>";
             }
-          } else if(line[j].tagName === "br") {
+          } else if (lineArray[j].tagName === "br") {
             trigger = true;
             lines += "<div style='clear:both;'></div>"; 
-          } else if (line[j].tagName === "comment") {
+          } else if (lineArray[j].tagName === "comment") {
             if (showComments) {
-              lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
+              lines += "<i>" + lineArray[j].firstChild.nodeValue + "</i>"
             } else {
               lines += "<span style='line-height: 0;'></span>"
             }
           }
         } else {
-          //~ enyo.log(j, line[j].nodeValue);
-          var x = line[j].nodeValue.replace(/^[\s\xA0]+/, " ");
+          //~ enyo.log(j, lineArray[j].nodeValue);
+          var x = lineArray[j].nodeValue.replace(/^[\s\xA0]+/, " ");
           if (x !== " ") { // don't add empty divs
-            if (trigger) { // for line starting without chord
-              trigger = false;
-              lines += "<div class='chordbox'><div class='chord'>&nbsp;</div>";
+            if (trigger || lineArray[j].nodeType === "mo") { // for line starting without chord or music only
               x = x.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); // keep only ending whitespace on beginning of line
-            } else {
-              x = x.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;"); // keep leeding and ending whitespaces
+              barPrefix = x[0] === '|' ? '' : moPrefix;
+              lines = lines + "<div class='" + barPrefix + "chordbox'><div class='chord'>&nbsp;</div>";
             }
-            lines += "<div class='txt'>" + x + "</div></div>";
+            if (musicOnly  && x !== ".") {  
+              // add elements to lineArray to add chordboxes for non-chord dot positions. 
+              var remStr = x;
+              x = remStr[0];
+              var i = 1;
+              while (i < remStr.length) {
+                lineArray.splice(j+i,0, {"nodeValue": remStr[i], "nodeType": "mo"});
+                i++;
+              }
+            }
+            x = x.replace(/^[\s\xA0]+/, "&nbsp;").replace(/[\s\xA0]+$/, "&nbsp;"); // keep leeding and ending whitespaces
+            lines += "<div class='txt'>" + x + "</div></div>";  // add txt div and close chordbox div
+            if (x[0] === "|" && j == 0) {
+              musicOnly = true;
+              moPrefix = "mo";
+            }
           }
         }
       // handle lyrics with chords but don't show chords 
       } else if (haschords && !showChords) { 
-        if (line[j].nodeValue === null) { // node is htmltag
-          if (line[j].tagName === "chord") {
-          } else if(line[j].tagName === "br") {
+        if (lineArray[j].nodeValue === null) { // node is htmltag
+          if (lineArray[j].tagName === "chord") {
+          } else if(lineArray[j].tagName === "br") {
             if (commenttrigger) {
               commenttrigger = false;
             } else {
               lines += "<br>";
             }
-          } else if (line[j].tagName === "comment") {
+          } else if (lineArray[j].tagName === "comment") {
             if (showComments) {
-              lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
+              lines += "<i>" + lineArray[j].firstChild.nodeValue + "</i>"
             } else {
               commenttrigger = true;
             }
           }
         } else {
-          var x = line[j].nodeValue.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); //strip nodevalue
+          var x = lineArray[j].nodeValue.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "&nbsp;"); //strip nodevalue
           if (x !== '') { // don't add empty divs
             lines += x;
           }
         }
       // handle lyrics without chords
       } else { 
-        if (line[j].nodeValue === null) { 
-          if (line[j].tagName === "br") {
+        if (lineArray[j].nodeValue === null) { 
+          if (lineArray[j].tagName === "br") {
             if (commenttrigger) {
               commenttrigger = false;
             } else {
               lines += "<br>";
             }
-          } else if (line[j].tagName === "comment") {
+          } else if (lineArray[j].tagName === "comment") {
             if (showComments) {
-              lines += "<i>" + line[j].firstChild.nodeValue + "</i>"
+              lines += "<i>" + lineArray[j].firstChild.nodeValue + "</i>"
             } else {
               commenttrigger = true;
             }
           }
         } else {
-          lines += line[j].nodeValue; 
+          lines += lineArray[j].nodeValue; 
         }
       }
+      j++;
     }
     lines += "</div><div style='clear:both;'></div>";
     
@@ -257,7 +291,7 @@ function ParseXml () {}
       } else { 
         data.verseOrder = false;
       } 
-      for (i = 0; i < l.length; i++) { // [verses]
+      for (i = 0, len9 = l.length; i < len9; i++) { // [verses]
       
         // check for chords
         if (l[i].getElementsByTagName("chord").length > 0) {
@@ -266,11 +300,11 @@ function ParseXml () {}
         
         // get versename and lyrics as html-string
         var line = [];
-        for (k=0; k<l[i].childElementCount; k++) {
+        for (k=0, len10 = l[i].childElementCount; k < len10; k++) {
           line = line.concat(l[i].getElementsByTagName("lines")[k]);
         }
         var lines = "";
-        for (m=0; m < line.length; m++) {
+        for (m=0, len11 = line.length; m < len11; m++) {
           if (line[m].getAttribute("part") !== null) {
             lines += "<font color='#9E0508'><i>" + line[m].getAttribute("part")
               + "</i></font><br>";
@@ -326,6 +360,8 @@ function ParseXml () {}
     data.ccli = this.get_metadata(xml, "ccliNo");
     //~ data.transposition = this.get_metadata(xml, "transposition"); 
     data.songbooks = this.get_songbooks(xml);
+    //~ data.themes = this.get_themes(xml);
+    data.comments = this.get_comments(xml);
     
     //~ enyo.log(this.get_lyrics(xml, data.verseOrder, showChords, showComments));
     var l = this.get_lyrics(xml, data.verseOrder, showChords, showComments,
@@ -372,7 +408,7 @@ function ParseXml () {}
   ParseXml.editLyrics = function(xml) {
     var data = {};
     var l = xml.getElementsByTagName("verse");
-    for (i = 0; i < l.length; i++) {
+    for (i = 0, len12 = l.length; i < len12; i++) {
       var id = l[i].getAttribute("name");
       var lang = l[i].getAttribute("lang");
       var tdata = {};
@@ -384,7 +420,7 @@ function ParseXml () {}
         line = line.concat(l[i].getElementsByTagName("lines")[k]);
       }
       var s = new XMLSerializer();
-      for (m=0; m < line.length; m++) { // separate lines in verse
+      for (m=0, len13 = line.length;  m < len13; m++) { // separate lines in verse
         var t = s.serializeToString(line[m]);
         t = t.replace('<lines xmlns="http://openlyrics.info/namespace/2009/song"', '');
         var gtIdx = t.indexOf('>');
@@ -394,7 +430,7 @@ function ParseXml () {}
           pt = t.slice(pIdx, gtIdx).split('"')[1];
           t = t.replace(t.slice(0, gtIdx+1), '');
         } else {
-          t = t.replace('>', '');
+          t = t.slice(gtIdx+1);
         }
         t = t.replace('</lines>', '');
         // remove line braeks and leading spaces

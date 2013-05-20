@@ -49,8 +49,8 @@ enyo.kind({
   
   // populate list
   getCustomLists: function(inSender, inIndex) {
-    if (this.owner.savedLists) {
-      var r = this.owner.savedLists[inIndex];
+    if (this.owner.savedLists.data) {
+      var r = this.owner.savedLists.data[inIndex];
     }
     if (r) {
       this.$.listListTitle.setContent(r.title);
@@ -82,21 +82,20 @@ enyo.kind({
   
   saveClicked: function(s) {
     if (this.$.listName.getValue() !== "") { 
-      for (i in this.owner.savedLists) {
-        if (this.owner.savedLists[i].title === this.$.listName.getValue()) {
+      for (i in this.owner.savedLists.data) {
+        if (this.owner.savedLists.data[i].title === this.$.listName.getValue()) {
           //~ enyo.log(this.$.listName.getValue());
           this.$.errorContent.setContent($L("Name already exist"));
           return;
         }
       }
-      this.owner.savedLists.push({"title": this.$.listName.getValue(),
+      this.owner.savedLists.data.push({"title": this.$.listName.getValue(),
         "content": []});
-      if (!this.owner.customList) {
-        this.owner.customList = {"title": this.$.listName.getValue(),
-          "content": []};
+      if (!this.owner.savedLists.data[this.owner.customList]) {
+        this.owner.customList = 0;
       }
       this.$.customListList.refresh();
-      this.owner.addLists();
+      this.owner.saveLists();
       this.$.listName.setValue("");
       this.clearDialog();
     } else {

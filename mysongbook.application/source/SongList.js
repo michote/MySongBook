@@ -1,6 +1,6 @@
 // #################
 //
-// Copyright (c) 2012 Micha Reischuck
+// Copyright (c) 2012-13 Micha Reischuck
 //
 // MySongBook is available under the terms of the MIT license. 
 // The full text of the MIT license can be found in the LICENSE file included in this package.
@@ -40,7 +40,7 @@ enyo.kind({
     {name: "searchBar", kind: "Toolbar", className: "searchbar", showing: false,
       components: [
       {name: "searchBox", kind: enyo.SearchInput, hint: $L("search for ..."), 
-        autoCapitalize: "lowercase", value: "", oninput: "startSearch", 
+        autoCapitalize: "lowercase", value: "", oninput: "startSearch", onfocus: "searchFocus", 
         onCancel: "clearSearch", keypressInputDelay: 500, flex:1}
     ]},
     {name: "searchBar2", kind: "Toolbar", className: "searchbar", showing: false, 
@@ -48,7 +48,8 @@ enyo.kind({
       {kind: "RadioToolButtonGroup", components: [
         {name: "titles", icon: "images/title.png", onclick: "searchFilter"},
         {name: "authors", icon: "images/author.png", onclick: "searchFilter"},
-        {name: "lyrics", icon: "images/lyrics.png", onclick: "searchFilter"}
+        {name: "lyrics", icon: "images/lyrics.png", onclick: "searchFilter"},
+        {name: "keys", icon: "images/key.png", onclick: "searchFilter"}
       ]}
     ]},
     
@@ -129,8 +130,8 @@ enyo.kind({
     
   // populate custom list
   getCustomList: function(inSender, inIndex) {
-    if (this.owner.customList) {
-      var r = this.owner.customList.content[inIndex];
+    if (this.owner.savedLists.data[this.owner.customList]) {
+      var r = this.owner.savedLists.data[this.owner.customList].content[inIndex];
     };
     if (r) {
       // Set select color
@@ -192,15 +193,27 @@ enyo.kind({
   
   onSearch: function() {
     this.xmlList = [];
-    var list = this.owner[this.owner.currentList];
     this.$.searchSpinner.show();
-    for (i in list.content) {
-      this.$.getXml.setUrl(list.content[i].path);
-      this.searchCount.a.push(i); 
-      this.$.getXml.call();
-    } 
-    if (list.content.length === 0) {
-      this.$.searchSpinner.hide();
+    if (this.owner.currentList === "libraryList") {
+      if (this.owner.libraryList.content.length === 0) {
+        this.$.searchSpinner.hide();
+        return;
+      };
+      for (i in this.owner.libraryList.content) {
+        this.$.getXml.setUrl(this.owner.libraryList.content[i].path);
+        this.searchCount.a.push(i); 
+        this.$.getXml.call();
+      } 
+    } else {
+      for (j in this.owner.savedLists.data[this.owner.customList].content) {
+        this.$.getXml.setUrl(this.owner.dirPath + this.owner.savedLists.data[this.owner.customList].content[j].file);
+        this.searchCount.a.push(j); 
+        this.$.getXml.call();
+      }
+      if (this.owner.savedLists.data[this.owner.customList].content.length === 0) {
+        this.$.searchSpinner.hide();
+        return;
+      };
     }
   },
   
@@ -270,15 +283,15 @@ enyo.kind({
   },
   
   toggleList: function() {
-    if (this.owner.customList) {
+    if (this.owner.savedLists.data[this.owner.customList]) {
       this.owner.currentList = "customList";
       if (this.$.searchBar.getShowing() && this.oldList) { // toggle while search open
         this.oldList = "customList";
         this.$.searchBox.setValue("");
         this.onSearch();
       };
-      this.$.title.setContent(this.owner.customList.title+ " (" + 
-      this.owner.customList.content.length + ")");
+      this.$.title.setContent(this.owner.savedLists.data[this.owner.customList].title+ " (" + 
+      this.owner.savedLists.data[this.owner.customList].content.length + ")");
       this.owner.setCurrentIndex(undefined);
       this.$.listPane.selectViewByName("customList");
       

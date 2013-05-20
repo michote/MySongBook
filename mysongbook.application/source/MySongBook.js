@@ -1,6 +1,6 @@
 // #################
 //
-// Copyright (c) 2012 Micha Reischuck
+// Copyright (c) 2012-13 Micha Reischuck
 //
 // MySongBook is available under the terms of the MIT license. 
 // The full text of the MIT license can be found in the LICENSE file included in this package.
@@ -18,7 +18,7 @@ enyo.kind({
   textSrce: "",
   published: {
     libraryList: {"content": []},
-    savedLists: [],
+    savedLists: {"data": [], "modified": null},
     customList: undefined,
     searchList: {"content": []},
     css: undefined,
@@ -34,10 +34,11 @@ enyo.kind({
       method: "readdir", onSuccess: "readDirSuccess", onFailure: "readDirFail"},
     {name: "writeFile", kind: "PalmService", service: "palm://com.michote.mysongbook.service/",
       method: "writefile", onSuccess: "writeFileSuccess", onFailure: "writeFileFail"},
-    {name: "getTxt", kind: "WebService", onSuccess: "gotTxt", 
-      onFailure: "gotTxtFailure"},
-    {name: "getTitle", kind: "WebService", onSuccess: "gotTitle", 
-      onFailure: "gotTitleFailure"},
+    {name: "writeList", kind: "PalmService", service: "palm://com.michote.mysongbook.service/",
+      method: "writefile", onSuccess: "writeListSuccess", onFailure: "writeFileFail"},
+    {name: "getTxt", kind: "WebService", onSuccess: "gotTxt", onFailure: "gotTxtFailure"},
+    {name: "getTitle", kind: "WebService", onSuccess: "gotTitle", onFailure: "gotTitleFailure"},
+    {name: "getLists", kind: "WebService", onSuccess: "gotLists", onFailure: "gotListsFailure"},
     // Layout
     {name: "songSlidingPane", kind: "SlidingPane", flex: 1, multiViewMinWidth: 500, 
       onSelect: "paneSelected", components: [
@@ -129,6 +130,7 @@ enyo.kind({
   
   // Read Directory
   readDirSuccess: function(inSender, inResponse) {
+    this.dirPath = inResponse.path; // needed for mock-service-testing;
     if (inResponse.files.length === 0) {
       this.$.firstUseDialog.openAtCenter();
       this.$.readFilesDialog.close();
@@ -139,7 +141,11 @@ enyo.kind({
         if (inResponse.files[i].split('.').pop() === 'xml') { // only parse xml-files
           this.pathCount.a.push(i); 
           this.$.fileProgress.setPosition(i+2); 
-          this.fetchTitles(inResponse.path + inResponse.files[i]);
+          this.$.getTitle.setUrl(inResponse.path + inResponse.files[i]);
+          this.$.getTitle.call();
+        } else if (inResponse.files[i] === 'lists.json') {
+          this.$.getLists.setUrl(inResponse.path + 'lists.json');
+          this.$.getLists.call();
         }
       }
     }
@@ -152,19 +158,13 @@ enyo.kind({
   
   gotTxt: function (inSender, inResponse) {
     this.textSrce = inResponse;
-    //enyo.job.stop("readTimeOut");
   },
   
   gotTxtFailure: function(inSender, inResponse, inRequest) {
     this.textSrce = "";
   },
   
-  // get Title from XML
-  fetchTitles: function(path) {
-    this.$.getTitle.setUrl(path);
-    this.$.getTitle.call();
-  },
-  
+  // get Title from XML  
   gotTitle: function(inSender, inResponse, inRequest) {
     var xml = ParseXml.parse_dom(inResponse);
     if (ParseXml.get_titles(xml)) { // check for valid title before adding to library
@@ -199,6 +199,18 @@ enyo.kind({
       this.showError($L("reading:") + "<br>" + this.errorList.join(" <br>"));
     }
   },
+  
+  // get savedLists from file
+  gotLists: function(inSender, inResponse, inRequest) {
+    enyo.log(inResponse.data);
+    this.savedLists = inResponse;
+    this.customList = (this.savedLists.data[this.customList] ? this.customList : undefined); // if lists was deleted, don't try to open it
+    enyo.log(this.customList);
+  },
+  
+  gotListsFailure: function(inSender, inResponse, inRequest) {
+    enyo.error("Parse Lists Failure");
+  },
    
   // Sort Library alphabetically
   sortByTitle: function (a,b) {
@@ -229,7 +241,12 @@ enyo.kind({
   },
   
   openSong: function(index) {
-    this.$.songViewPane.setPath(this[this.currentList].content[index].path);
+    enyo.log(this.currentList);
+    if (this.currentList === "customList") {
+      this.$.songViewPane.setPath(this.dirPath + this.savedLists.data[this.customList].content[index].file);
+    } else {
+      this.$.songViewPane.setPath(this[this.currentList].content[index].path);
+    }
     this.$.songViewPane.setFirst(true);
     this.$.songListPane.$[this.currentList].refresh(); // mark selcted row
     this.$.songViewPane.$.viewScroller.scrollIntoView(0, 0);
@@ -256,67 +273,53 @@ enyo.kind({
   searchSwipe: function(inSender, inEvent) {
     var base = this.$.songListPane.oldList;
     if (base === "libraryList") {
-      if (this.customList) {
-        this.customList.content.push(this.searchList.content[inEvent]);
-        this.addLists();
-      } else {
-        this.$.songListPane.noList();
-      }
+      this.addToList(null, inEvent);
     } else {
-      for (t in this.customList.content) {
-        if (this.customList.content[t].path === this.searchList.content[inEvent].path) {
-          this.customList.content.splice(t, 1);
+      for (t in this.savedLists.data[this.customList].content) {
+        if (this.savedLists.data[this.customList].content[t].path === this.searchList.content[inEvent].path) {
+          this.savedLists.data[this.customList].content.splice(t, 1);
           this.searchList.content.splice(inEvent, 1);
-          this.addLists();
+          this.saveLists();
           this.$.songListPane.$.searchList.refresh();
         }
       }
     }
   },
   
-  addLists: function() {
-    if (this.customList.content.length > 0) {
-      for (i in this.savedLists) {
-        if (this.savedLists[i].title === this.customList.title) {
-          this.savedLists[i] = this.customList
-        }
-      }
-    }
-    this.saveLists();
-  },
-  
   addToList: function(inSender, inEvent) {
-    if (this.customList) {
-      this.customList.content.push(this.libraryList.content[inEvent]);
-      this.addLists();
+    if (this.savedLists.data[this.customList]) {
+      this.savedLists.data[this.customList].content.push({"file": this.libraryList.content[inEvent].path.split("/").slice(-1)[0], "title": this.libraryList.content[inEvent].title});
+      this.saveLists();
     } else {
       this.$.songListPane.noList();
     }
   },
   
   removeFromList: function(inSender, inEvent) {
-    this.customList.content.splice(inEvent, 1);
+    this.savedLists.data[this.customList].content.splice(inEvent, 1);
     this.$.songListPane.$.customList.refresh();
-    this.addLists();
+    this.$.songListPane.$.title.setContent(this.savedLists.data[this.customList].title+ " (" + 
+      this.savedLists.data[this.customList].content.length + ")");
+    this.saveLists();
   },
   
   // Select and Remove Lists
   selectCustomList: function(inSender, inEvent) {
-    this.customList = this.savedLists[inEvent.rowIndex];
+    this.customList = inEvent.rowIndex;
+    Helper.setItem("customList", inEvent.rowIndex);
     this.$.listDialog.close();
     this.$.songListPane.$.listToggle.setValue(1);
     this.$.songListPane.toggleList();
   },
   
   rmCustomList: function(inSender, inEvent) {
-    if (this.customList && this.savedLists[inEvent].title === this.customList.title) {
-      this.customList = undefined; // no List selected
-      this.$.songListPane.$.listToggle.setValue(0);
-      this.$.songListPane.toggleLibrary();
-    }
-    this.savedLists.splice(inEvent, 1);
+    this.customList = undefined; // no List selected
+    Helper.setItem("customList", undefined);
+    this.$.songListPane.$.listToggle.setValue(0);
+    this.$.songListPane.toggleLibrary();
+    this.savedLists.data.splice(inEvent, 1);
     this.$.listDialog.$.customListList.refresh();
-    this.addLists();
+    this.saveLists();
   },
   
   // App-Menu
@@ -349,14 +352,10 @@ enyo.kind({
       this.setFont(Helper.getItem("css"));
     }
     this.customList = Helper.getItem("customList");
-    if (Helper.getItem("savedLists")) {
-      this.savedLists = Helper.getItem("savedLists");
-    }
   },
   
   saveLists: function () {
-    Helper.setItem("savedLists", this.savedLists);
-    Helper.setItem("customList", this.customList);
+    this.$.writeFile.call({"path": this.dirPath + 'lists.json', "content": JSON.stringify(this.savedLists, null, 2)});
   },
   
   saveCss: function(inCss) {
@@ -381,6 +380,10 @@ enyo.kind({
   writeFileSuccess: function(inSender, inResponse) {
     this.readDirCall();
     enyo.windows.addBannerMessage($L("Song saved"), "{}");
+  },
+  
+  writeFileSuccess: function(inSender, inResponse) {
+    enyo.windows.addBannerMessage($L("Lists saved"), "{}");
   },
   
   writeFileFail: function(inSender, inResponse) {

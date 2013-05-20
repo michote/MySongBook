@@ -246,9 +246,9 @@ enyo.kind({
     };
     this.$.versehflex.render();
     enyo.log();
-    if (Helper.smScr() && this.button.length > 4) {
+    if (Helper.smScr() && this.button.length > 3) {
       this.$.verseO.setStyle("-webkit-box-orient:vertical;padding:0;margin:-10px;");
-    } else if (this.button.length > 8) {
+    } else if (this.button.length > 6) {
       this.$.verseO.setStyle("-webkit-box-orient:vertical;padding:0;margin:-10px;");
     } else {
       this.$.verseO.setStyle("-webkit-box-orient:horizontal;padding:0;margin:-10px;");

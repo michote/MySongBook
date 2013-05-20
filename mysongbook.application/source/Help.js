@@ -72,7 +72,11 @@ enyo.kind({
       ]},
       {kind: "HFlexBox", components: [
         {kind: "Image", src: "images/lyrics-help.png"},
-        {kind: "HtmlContent", content: $L("searches in lyrics") + "<br><br>"}
+        {kind: "HtmlContent", content: $L("searches in lyrics")}
+      ]},
+      {kind: "HFlexBox", components: [
+        {kind: "Image", src: "images/key-help.png"},
+        {kind: "HtmlContent", content: $L("searches in comments and themes") + "<br><br>"}
       ]},
       
       {kind: "HFlexBox", components: [

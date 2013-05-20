@@ -240,7 +240,7 @@
 .enyo-item.item-selected {
     background-color: #9E0508;
     color: white;
-    background-image: -webkit-gradient(linear,center top,center bottom,from(rgba(1,1,1,0)),to(rgba(1,1,1,0.3)));
+    background-image: -webkit-gradient(linear,center top,center bottom,from(rgba(1,1,1,0.3)),to(rgba(1,1,1,0)));
     border: none;
 }
 
@@ -282,6 +282,15 @@
     padding: 5px 20px;
     background-color: rgba(255,255,255,0.5);
     border-radius: 5px;
+}
+
+.lyric sup {
+    vertical-align: text-top;
+    line-height: 100%;
+}
+
+.lyric small {
+    line-height: 90%;
 }
 
 .cursor {

@@ -160,6 +160,15 @@ enyo.kind({
     //~ this.$.testingToggle.setState(this.testing);
   },
   
+  changeKB: function() {
+    if (enyo.keyboard.isShowing()){
+      enyo.keyboard.forceHide();
+      enyo.keyboard.setManualMode(false);
+    } else {
+      enyo.keyboard.forceShow(0);
+    }
+  },
+  
   savePrefs: function() {
     //~ Helper.setItem("testing", this.testing);
     Helper.setItem("showPrefs", this.showPrefs);

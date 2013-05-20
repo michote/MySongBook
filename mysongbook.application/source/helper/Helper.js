@@ -112,9 +112,16 @@ function Helper() {}
   
   // Search
   Helper.filter = function(filter, term, xml) {
-    if (filter === "titles") {return this.searchTitles(term, xml)};
-    if (filter === "authors") {return this.searchAuthors(term, xml)};
-    if (filter === "lyrics") {return this.searchLyrics(term, xml)};
+    switch (filter) {
+      case "titles":  return this.searchTitles(term, xml);
+                      break;
+      case "authors": return this.searchAuthors(term, xml);
+                      break;
+      case "lyrics":  return this.searchLyrics(term, xml);
+                      break;
+      case "keys":    return this.searchKeys(term, xml);
+                      break;
+    }
   };
   
   Helper.isIn = function(term, item) {
@@ -127,7 +134,7 @@ function Helper() {}
     var t = ParseXml.get_titles(xml)
     var tit = [];
     for (j in t) {
-      tit.push(t[j].title.toLowerCase());
+      tit.push(t[j].title.toLowerCase().replace(/,/g , ""));
     }
     if (this.isIn(term, tit.join())) {
       return true;
@@ -159,11 +166,29 @@ function Helper() {}
     return false;
   };
   
+  Helper.searchKeys = function(term, xml) {
+    var t = ParseXml.get_themes(xml);
+    var c = ParseXml.get_comments(xml);
+    var com = [];
+    for (j in t) {
+      //~ enyo.log(t[j]);
+      com.push(t[j].theme.toLowerCase());
+    }
+    for (k in c) {
+      //~ enyo.log(c[k]);
+      com.push(c[k].toLowerCase());
+    }
+    if (this.isIn(term, com.join())) {
+      return true;
+    }
+    return false;
+  };
+  
+  // LocalStorage
   Helper.setItem = function(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   };
   
   Helper.getItem = function(key) {
-    localStorage.getItem(key)
     return JSON.parse(localStorage.getItem(key));
   }
